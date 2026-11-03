@@ -3,21 +3,25 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#102c47">
-  <title>AI·클라우드 브리핑 · 투자 리서치</title>
-  <meta name="description" content="AI 인프라·클라우드의 사업 변화와 투자에 주는 의미를 원문 근거로 읽습니다.">
+  <meta name="theme-color" content="#162e30">
+  <title>Market Briefing · AI 투자 검증</title>
+  <meta name="description" content="AI 투자 사이클, 기업 이익, 주가의 기대를 기존 실적 리포트·메모리·GPU·뉴스 근거와 연결해 검증합니다.">
   <link rel="stylesheet" href="assets/market.css">
+  <link rel="stylesheet" href="assets/investor.css">
+  <script src="assets/investor-core.js" defer></script>
+  <script src="assets/investor-app.js" defer></script>
   <script src="assets/market.js" defer></script>
 </head>
 <body>
   <a class="skip" href="#content">본문으로 건너뛰기</a>
   <header class="masthead">
-    <div class="mast-inner"><a class="brand" href="#summary"><span class="brand-mark">AI</span><span><small>RESEARCH OS / INVESTOR INTELLIGENCE</small><strong>AI·클라우드 브리핑</strong></span></a><div class="header-links"><a class="investor-entry" href="investor.html">투자 검증 데스크 ↗</a><button id="refresh" type="button" aria-label="데이터 새로고침">새로고침 <span>↻</span></button></div></div>
-    <div class="mast-bottom"><span>사업의 변화를 읽고, 투자 판단의 근거를 찾습니다.</span><span id="today"></span></div>
+    <div class="mast-inner"><a class="brand" href="#desk"><span class="brand-mark">MB</span><span><small>AI CYCLE / EQUITY RESEARCH</small><strong>Market Briefing</strong></span></a><div class="header-links"><a href="#sources">자료·운영 상태</a><button id="refresh" type="button" aria-label="자료 다시 읽기">자료 다시 읽기 <span>↻</span></button></div></div>
+    <div class="mast-bottom"><span>AI 투자 사이클 → 기업 이익 → 주가에 반영된 기대</span><span id="today"></span></div>
   </header>
   <div class="app-wrap">
     <aside id="global-warning" class="warning" role="status" aria-live="polite" hidden></aside>
-    <nav id="tabs" class="tabs" aria-label="브리핑 하부 페이지"></nav>
+    <nav id="tabs" class="tabs" aria-label="주요 투자 검토 화면"></nav>
+    <nav id="subtabs" class="subtabs" aria-label="관련 자료"></nav>
     <main id="content" tabindex="-1" aria-live="polite"><div class="loading">자료를 불러오고 있습니다.</div></main>
     <footer><strong>원문 근거 · 사실과 해석의 구분 · 기준일 표시</strong><a href="#sources">소스·방법론과 운영 상태 →</a></footer>
   </div>

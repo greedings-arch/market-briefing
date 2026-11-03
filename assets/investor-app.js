@@ -1,6 +1,7 @@
 /* global InvestorCore */
 (function () {
   'use strict';
+  if(document.querySelector('[data-investor-redirect]')){location.replace('./'+(location.hash||'#desk'));return;}
   const C = InvestorCore;
   const $ = s => document.querySelector(s);
   const escape = s => String(s ?? '').replace(/[&<>"']/g, x => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[x]));
@@ -8,17 +9,14 @@
   const money = (n,c) => (c.currency === 'KRW' ? '₩' : '$') + num(n,c.currency === 'KRW' ? 0 : 2);
   const pct = n => (n > 0 ? '+' : '') + num(n * 100,1) + '%';
   const states = {supported:'근거 지지',mixed:'상충·점검',unverified:'추가 검증'};
-  let data, sources, activeFilter = 'all';
+  let data, sources, library = {}, current = {view:"desk",id:"sem"}, activeFilter = 'all';
   const drafts = new Map();
   const badge = s => `<span class="badge ${escape(s)}">${states[s] || escape(s)}</span>`;
   const href = (view,id) => `#${view}${id ? '?id='+encodeURIComponent(id) : ''}`;
   function refs(ids) {
     return `<span class="citations">${[...new Set(ids)].map(id => {const s=sources.get(id);return `<a href="${escape(s.url)}" target="_blank" rel="noopener noreferrer" title="${escape(s.title)}">${escape(s.title.split(' · ')[0])} ↗ <span>${escape(s.date)}</span></a>`;}).join('')}</span>`;
   }
-  function route() {
-    const [view='desk',q=''] = location.hash.slice(1).split('?');
-    return {view:view || 'desk',id:new URLSearchParams(q).get('id') || 'sem'};
-  }
+  function route() { return current; }
   function heading(kicker,title,detail='') {return `<div class="page-heading"><p class="eyebrow">${kicker}</p><h1>${title}</h1>${detail ? `<p class="lede">${detail}</p>` : ''}</div>`;}
   function companyPicker(selected,view) {
     return `<div class="company-picker" aria-label="기업 선택">${data.companies.map(c=>`<a href="${href(view,c.id)}" ${c.id===selected?'aria-current="page"':''}>${escape(c.name)}</a>`).join('')}</div>`;
@@ -31,8 +29,8 @@
     const coverage = data.companies.filter(c=>c.metrics.length).length;
     return heading('THE TWO QUESTIONS','AI 투자는 이어지는가.<br><span>지금 가격은 매력적인가.</span>') +
       `<section class="desk-lead"><div><div class="section-tag"><span class="live-dot"></span> 이번 검토의 판단 <span>· ${escape(data.as_of)}</span></div><h2>${escape(data.summary)}</h2><p>${escape(data.summary_detail)}</p><a class="text-link" href="#company?id=sem">삼성전기부터 검토하기 <span>↗</span></a></div><aside class="lead-aside"><span class="eyebrow">COVERAGE / READINESS</span><div><strong>${data.companies.length}<small>개사</small></strong><span>워치리스트</span></div><div><strong>${coverage}<small>개사</small></strong><span>실적 수치 확인</span></div><p>정상화 이익·컨센서스 미확보<br><b>적정가격 판정은 보류</b></p></aside></section>
-      <section class="section"><div class="section-head"><div><p class="eyebrow">01 / CYCLE CHECK</p><h2>사이클을 네 갈래로 검증합니다</h2></div><span class="small-note">상태는 편집 판단 · 매수 신호 아님</span></div><div class="pillar-grid">${data.pillars.map((p,i)=>`<article class="pillar"><div class="card-top"><span class="ordinal">0${i+1}</span>${badge(p.status)}</div><h3>${escape(p.title)}</h3><p>${escape(p.readout)}</p><details><summary>판단을 바꿀 조건</summary><p>${escape(p.break)}</p><small>${escape(p.next)}</small></details>${refs(p.sources)}</article>`).join('')}</div></section>
-      <section class="section"><div class="section-head"><div><p class="eyebrow">02 / WATCHLIST</p><h2>같은 사이클, 다른 이익 구조</h2></div><div class="filters" aria-label="워치리스트 필터">${[['all','전체'],['KR','국내 3개사'],['US','미국 7개사'],['mixed','상충·점검']].map(([id,label])=>`<button type="button" data-filter="${id}" aria-pressed="${activeFilter===id}">${label}</button>`).join('')}</div></div><div class="table-scroll" tabindex="0" aria-label="기업 비교표 가로 스크롤"><table class="watch-table"><thead><tr><th>기업 / 사이클의 연결점</th><th class="numeric">확인한 가격</th><th>사업 가설</th><th>가격 검증</th><th>다음에 확인할 것</th></tr></thead><tbody id="watch-rows">${tableRows()}</tbody></table></div></section>
+      <section class="section"><div class="section-head"><div><p class="eyebrow">01 / CYCLE CHECK</p><h2>사이클을 네 갈래로 검증합니다</h2></div><span class="small-note">상태는 편집 판단 · 매수 신호 아님</span></div><div class="pillar-grid">${data.pillars.map((p,i)=>`<article class="pillar"><div class="card-top"><span class="ordinal">0${i+1}</span>${badge(p.status)}</div><h3>${escape(p.title)}</h3><p>${escape(p.readout)}</p><details><summary>판단을 바꿀 조건</summary><p>${escape(p.break)}</p><small>${escape(p.next)}</small></details>${refs(p.sources)}${pillarLinks(i)}</article>`).join('')}</div></section>
+      <section class="section"><div class="section-head"><div><p class="eyebrow">02 / WATCHLIST</p><h2>같은 사이클, 다른 이익 구조</h2></div><div class="filters" aria-label="워치리스트 필터">${[['all','전체'],['KR','국내 3개사'],['US','미국 7개사'],['mixed','상충·점검']].map(([id,label])=>`<button type="button" data-investor-filter="${id}" aria-pressed="${activeFilter===id}">${label}</button>`).join('')}</div></div><div class="table-scroll" tabindex="0" aria-label="기업 비교표 가로 스크롤"><table class="watch-table"><thead><tr><th>기업 / 사이클의 연결점</th><th class="numeric">확인한 가격</th><th>사업 가설</th><th>가격 검증</th><th>다음에 확인할 것</th></tr></thead><tbody id="watch-rows">${tableRows()}</tbody></table></div></section>
       <section class="cash-section"><div><p class="eyebrow">03 / FOLLOW THE CASH</p><h2>매출 성장 다음에는<br>투자 회수를 봅니다.</h2><p>회사 공표 FCF입니다. 기간과 리스 처리 기준이 달라 합산하거나 순위를 매기지 않습니다.</p></div><div class="cash-grid">${data.cashflows.map(x=>{const c=data.companies.find(c=>c.id===x.company);return `<article><span>${escape(c.name)}</span><strong class="${x.value>=0?'up':'down'}">${x.value>0?'+':''}${num(x.value,3)}<small>십억 USD</small></strong><p>${escape(x.period)}</p><small>${escape(x.basis)}</small>${refs([x.source])}</article>`;}).join('')}</div></section>`;
   }
   function company(c) {
@@ -66,45 +64,60 @@
     return heading('EVIDENCE & REVIEW','무엇을 확인했고,<br><span>무엇이 아직 비어 있습니까?</span>')+
       `<section class="section two-col"><div><h2>이번 버전의 판단 범위</h2><ul class="limitations">${data.limitations.map(s=>`<li>${escape(s)}</li>`).join('')}</ul></div><div><h2>검토 이력</h2>${data.review_log.map(x=>`<article class="review-entry"><time>${escape(x.date)}</time><h3>${escape(x.title)}</h3><p>${escape(x.body)}</p></article>`).join('')}</div></section><section class="section"><div class="section-head"><h2>출처 목록</h2><span class="small-note">${data.sources.length}개 · 사실과 편집 판단을 구분</span></div><div class="source-ledger">${data.sources.map(s=>`<article><span class="source-type">${s.kind==='primary'?'회사·공시':'시장가격'}</span><div><a href="${escape(s.url)}" target="_blank" rel="noopener noreferrer">${escape(s.title)} ↗</a><p>${escape(s.note)}</p></div><time>${escape(s.date)}</time></article>`).join('')}</div></section>`;
   }
+  function matchesCompany(record,c) {
+    const aliases=library.config?.workspace?.companies.find(x=>x.id===c.id)?.aliases||[c.name];
+    const value=[record.company,record.title,record.overview,...(Array.isArray(record.summary)?record.summary:[record.summary])].filter(x=>typeof x==='string').join(' ').toLowerCase();
+    return aliases.some(alias=>value.includes(alias.toLowerCase()));
+  }
+  function researchCard(r,companyID) {
+    const target='#reports?'+new URLSearchParams({id:r.id,...(companyID?{company:companyID}:{})});
+    return `<article class="research-card"><small>실적·심층 리포트 · ${escape(r.source_date)}</small><h3><a href="${escape(target)}">${escape(r.title)}</a></h3><p>${escape(r.overview)}</p><a href="${escape(target)}">근거와 이익 분석 읽기 →</a></article>`;
+  }
+  function pillarLinks(i) {
+    const links=[
+      [['reports','실적·수요 대조'],['ai-state','AI 활용의 진전과 한계']],
+      [['reports','투자·현금흐름 분석'],['finance','금융권 반론']],
+      [['memory','메모리 업황·점유율'],['company?id=hynix','기업 이익으로 연결']],
+      [['gpu','GPU 임대시장'],['indicators','산업 지표']]
+    ][i]||[];
+    return `<nav class="research-links" aria-label="이 질문의 관련 자료">${links.map(([route,label])=>`<a href="#${escape(route)}">${escape(label)} →</a>`).join('')}</nav>`;
+  }
+  function researchOverview() {
+    const reports=library.reports?.items||[];
+    const seen=new Set(),latest=[...reports].sort((a,b)=>b.source_date.localeCompare(a.source_date)||Number(b.id.endsWith('-deep'))-Number(a.id.endsWith('-deep'))).filter(r=>{if(seen.has(r.company))return false;seen.add(r.company);return true;}).slice(0,3);
+    return `<section class="section related-research"><div class="section-head"><div><p class="eyebrow">RESEARCH → DECISION</p><h2>축적한 리서치로 가설을 대조합니다</h2></div><a class="text-link" href="#reports">전체 실적 리포트 ${reports.length}편 →</a></div><p class="small-note">각 자료의 작성 당시 근거와 해석입니다. 기업 검증에서 연결해 읽고 현재 가설과의 차이를 확인합니다.</p><div class="research-grid">${latest.map(r=>researchCard(r)).join('')||'<p class="empty">실적 리포트를 불러오지 못했습니다. 리서치 메뉴에서 다시 확인하실 수 있습니다.</p>'}</div><nav class="research-links"><a href="#news">누적 뉴스 →</a><a href="#weekly">주간 논점과 점검 이력 →</a><a href="#interviews">경영진·투자자 인터뷰 →</a><a href="#finance">금융권의 찬반 논거 →</a></nav></section>`;
+  }
+  function relatedResearch(c) {
+    const reports=(library.reports?.items||[]).filter(r=>matchesCompany(r,c)).sort((a,b)=>b.source_date.localeCompare(a.source_date)||Number(b.id.endsWith('-deep'))-Number(a.id.endsWith('-deep')));
+    const news=(library.news?.items||[]).filter(r=>matchesCompany(r,c)).sort((a,b)=>b.source_date.localeCompare(a.source_date)).slice(0,4);
+    return `<section class="section related-research" data-company-research="${escape(c.id)}"><div class="section-head"><div><p class="eyebrow">CONNECTED RESEARCH</p><h2>${escape(c.name)}의 기존 자료로 검증을 이어갑니다</h2></div><a class="text-link" href="#reports">전체 리포트 →</a></div><p class="small-note">기업명으로 연결한 관련 자료입니다. 단순 언급과 직접 실적 분석을 구분해서 읽어야 하며, 연결 자체가 가설을 지지한다는 뜻은 아닙니다.</p><div class="related-grid">${reports.map(r=>researchCard(r,c.id)).join('')||`<div class="empty">${library.reports?'이 기업과 직접 연결한 실적 리포트가 아직 없습니다.':'실적 리포트를 불러오지 못했습니다.'} 이 공백은 기업 검증 과제로 남깁니다.</div>`}</div>${news.length?`<h3 style="margin-top:28px">관련 뉴스와 당시 해석</h3><div class="related-grid">${news.map(r=>`<article class="research-card"><small>${escape(r.source_date)} · ${r.legacy?'기존 사업 브리핑':'뉴스'}</small><h3><a href="#news?id=${encodeURIComponent(r.id)}&company=${encodeURIComponent(c.id)}">${escape(r.title)}</a></h3><p>${escape((r.summary||[])[0]||'')}</p><a href="#news?id=${encodeURIComponent(r.id)}&company=${encodeURIComponent(c.id)}">기사·출처 확인 →</a></article>`).join('')}</div>`:''}${library.news===null?'<p class="small-note">관련 뉴스 연결을 확인하지 못했습니다. 뉴스 메뉴에서 다시 확인하실 수 있습니다.</p>':''}<nav class="research-links"><a href="#memory">메모리 업황·점유율 →</a><a href="#gpu">GPU 임대시장 →</a><a href="#weekly">주간 검토 →</a><a href="#company?id=${escape(c.id)}">기업 가설 →</a><a href="#valuation?id=${escape(c.id)}">가격 검토 →</a></nav></section>`;
+  }
   function render() {
-    const r=route(), c=data.companies.find(c=>c.id===r.id);
-    document.querySelectorAll('[data-nav]').forEach(a=>{if(a.dataset.nav===r.view)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
-    if(['company','valuation'].includes(r.view)&&!c){$('#main').innerHTML='<div class="empty"><h1>등록되지 않은 기업입니다</h1><a href="#desk">워치리스트로 돌아가기 →</a></div>';return;}
-    $('#main').innerHTML=r.view==='desk'?desk():r.view==='company'?company(c):r.view==='valuation'?valuation(c):r.view==='evidence'?evidence():'<div class="empty"><h1>화면을 찾지 못했습니다</h1><a href="#desk">투자 데스크로 →</a></div>';
-    if(r.view==='valuation') updateValuation(c);
-    document.title=`${c&&r.view==='company'?c.name+' · ':''}${r.view==='valuation'?'가격 역산 · ':''}Market Briefing`;
+    const r=route(),c=data.companies.find(c=>c.id===r.id),host=$('#content');
+    if(['company','valuation'].includes(r.view)&&!c){host.innerHTML='<div class="empty"><h1>등록되지 않은 기업입니다</h1><a href="#desk">워치리스트로 돌아가기 →</a></div>';return;}
+    const stamp=`<p class="snapshot-label">검토 ${escape(data.as_of)} · 주가·실적은 각각 표시된 기준일 · 수동 검토 자료</p>`;
+    const stale=C.isStale(data.as_of+'T00:00:00+09:00')?`<p class="snapshot-alert">${escape(data.as_of)}에 검토한 자료입니다. 최신 가격과 가설을 다시 확인해야 합니다.</p>`:'';
+    host.innerHTML=stamp+stale+(r.view==='desk'?desk()+researchOverview():r.view==='company'?company(c)+relatedResearch(c):r.view==='valuation'?valuation(c)+relatedResearch(c):evidence());
+    if(r.view==='valuation')updateValuation(c);
+    document.title=`${c&&r.view==='company'?c.name+' · ':''}${r.view==='valuation'?'가격 검토 · ':''}Market Briefing`;
   }
-  async function load() {
-    try {
-      const response=await fetch('data/investor-desk.json',{cache:'no-store'});
-      if(!response.ok)throw new Error('HTTP '+response.status);
-      data=C.validate(await response.json());sources=new Map(data.sources.map(s=>[s.id,s]));
-      $('#snapshot-date').textContent=data.as_of+' 검토';
-      const stale=C.isStale(data.as_of+'T00:00:00+09:00');
-      $('#stale-warning').hidden=!stale;
-      $('#stale-warning').textContent=`${data.as_of}에 검토한 자료입니다. 가격과 가설을 갱신하기 전까지 현재 시점의 투자 판단으로 사용하지 마세요.`;
-      render();
-    } catch {
-      data=null;sources=null;
-      $('#main').innerHTML='<div class="empty error" role="alert"><h1>검증 자료를 불러오지 못했습니다</h1><p>자료 다시 읽기로 재시도하실 수 있습니다. 이전 값을 현재 자료처럼 표시하지 않습니다.</p></div>';
-    }
-  }
+  window.InvestorDesk={
+    views:['desk','company','valuation','evidence'],
+    mount(snapshot,route,related){data=C.validate(snapshot);sources=new Map(data.sources.map(s=>[s.id,s]));current=route;library=related;render();},
+    reset(){data=null;sources=null;library={};drafts.clear();},
+    deactivate(){current={view:null,id:null};}
+  };
   document.addEventListener('click',event=>{
-    if(!data)return;
-    const filter=event.target.closest('[data-filter]');
-    if(filter){activeFilter=filter.dataset.filter;render();return;}
+    if(!data||!current.view)return;
+    const filter=event.target.closest('[data-investor-filter]');
+    if(filter&&current.view==='desk'){activeFilter=filter.dataset.investorFilter;render();return;}
     if(event.target.closest('#reset-scenario')){drafts.delete(route().id);render();return;}
-    if(event.target.closest('#load-quarter')) {const c=data.companies.find(c=>c.id===route().id);if(c.eps){const d=draft(c);d.eps=c.eps.value*4;d.basis='분기 EPS 단순 연환산';$('#eps').value=d.eps;updateValuation(c);}}
+    if(event.target.closest('#load-quarter')){const c=data.companies.find(c=>c.id===route().id);if(c?.eps){const d=draft(c);d.eps=c.eps.value*4;d.basis='분기 EPS 단순 연환산';$('#eps').value=d.eps;updateValuation(c);}}
   });
   document.addEventListener('input',event=>{
-    if(!data||!event.target.closest('#scenario-form'))return;
-    const c=data.companies.find(c=>c.id===route().id),d=draft(c);
-    d[event.target.name]=event.target.value;
-    if(event.target.name==='eps')d.basis='사용자 입력 가정';
-    updateValuation(c);
+    if(!data||current.view!=='valuation'||!event.target.closest('#scenario-form'))return;
+    const c=data.companies.find(c=>c.id===route().id),d=draft(c);d[event.target.name]=event.target.value;
+    if(event.target.name==='eps')d.basis='사용자 입력 가정';updateValuation(c);
   });
   document.addEventListener('submit',event=>{if(event.target.id==='scenario-form')event.preventDefault();});
-  window.addEventListener('hashchange',()=>{if(data){render();$('#main').focus({preventScroll:true});window.scrollTo(0,0);}});
-  $('#reload').addEventListener('click',load);
-  load();
 })();

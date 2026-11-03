@@ -3,7 +3,7 @@
   const $=s=>document.querySelector(s),esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const list=x=>Array.isArray(x)?x:[],fmt=(x,d=2)=>Number.isFinite(x)?x.toLocaleString('ko-KR',{maximumFractionDigits:d}):'—';
   const cache=new Map(),filters={},palette=['#224d72','#b38346','#528874','#b46e59','#89749c','#597f8a'];
-  let config,status,active='summary',generation=0;
+  let config,status,active='summary',generation=0,selectedCompany='sem';
   function url(value,label='원문 ↗') {try{const u=new URL(value);if(!['http:','https:'].includes(u.protocol))return esc(label);return `<a href="${esc(u.href)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`;}catch{return esc(label);}}
   const href=(tab,id,extra={})=>'#'+tab+(id||Object.keys(extra).length?'?'+new URLSearchParams({...extra,...(id?{id}:{})}).toString():'');
   const anchor=(tab,id,label)=>`<a href="${esc(href(tab,id))}">${esc(label)}</a>`;
@@ -11,17 +11,30 @@
   const source=x=>`<p class="source">${esc(x.source_name||x.company||x.institution||'원문')} · ${esc(x.source_date||'원문 날짜 미확인')} · ${url(x.source_url)}</p>`;
   const empty=(title='아직 수집된 자료가 없습니다',body='원문을 확인한 자료가 반영되면 이곳에 표시됩니다.')=>`<div class="empty"><div class="empty-mark">—</div><strong>${esc(title)}</strong><p>${esc(body)}</p><a href="#sources">수집 범위와 운영 상태 확인 →</a></div>`;
   function select(key,label,values,value='전체') {return `<label>${esc(label)} <select data-filter="${key}" aria-label="${esc(label)}">${values.map(v=>`<option value="${esc(v)}" ${v===value?'selected':''}>${esc(v)}</option>`).join('')}</select></label>`;}
-  function route() {const raw=location.hash.slice(1),[name,q='']=raw.split('?');return {tab:config?.tabs.some(t=>t.id===name)?name:'summary',params:new URLSearchParams(q)};}
-  async function json(name) {if(!cache.has(name))cache.set(name,fetch('data/'+name+'.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('자료 응답 오류');return r.json();}).catch(e=>{cache.delete(name);throw e;}));return cache.get(name);}
+  function route() {const raw=location.hash.slice(1),[name,q='']=raw.split('?'),investor=window.InvestorDesk;return {tab:config?.tabs.some(t=>t.id===name)||investor?.views.includes(name)?name:investor?(config?.workspace?.home||'desk'):'summary',params:new URLSearchParams(q)};}
+  async function json(name) {if(!cache.has(name)){const request=fetch('data/'+name+'.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('자료 응답 오류');return r.json();}).catch(e=>{if(cache.get(name)===request)cache.delete(name);throw e;});cache.set(name,request);}return cache.get(name);}
   function title(tab,data,description='') {const t=config.tabs.find(x=>x.id===tab),meta=data.meta||status.tabs[tab];return `<header class="page-title"><div><p class="eyebrow">AI & CLOUD / ${esc(tab.replace(/-/g,' '))}</p><h1>${esc(t.label)}</h1>${description?`<p class="subtitle">${esc(description)}</p>`:''}</div><div class="stamp"><span>기준일 ${esc(meta?.as_of||'수집 전')}</span><span>${fmt(meta?.count||0,0)}건</span><span>생성 ${esc(meta?.generated_at||'아직 없음')}</span></div></header>`;}
   function globalWarning() {
     const messages=[];
-    if(!status.latest_daily||status.latest_daily<status.expected_daily)messages.push(`최신 일간 회차 ${status.latest_daily||'없음'} · 예정 기준 ${status.expected_daily}. 갱신이 늦었습니다.`);
+    if(status.automation_enabled&&(!status.latest_daily||status.latest_daily<status.expected_daily))messages.push(`최신 일간 회차 ${status.latest_daily||'없음'} · 예정 기준 ${status.expected_daily}. 갱신이 늦었습니다.`);
     if(status.last_run&&status.last_run.status!=='success')messages.push(`마지막 실행에 문제가 있습니다 (${status.last_run.status==='failed'?'실패':status.last_run.status==='partial'?'일부 미완료':'보류'}).`);
-    if(!status.automation_enabled)messages.push('새 탭의 예약 수집은 연결 전입니다. 기존 일정은 소스·방법론에서 확인하실 수 있습니다.');
+    if(!status.automation_enabled)messages.push(`자동 갱신 중지 · 마지막 일간 회차 ${status.latest_daily||'없음'}. 자료마다 표시된 기준일을 확인해 주세요.`);
     $('#global-warning').hidden=!messages.length;$('#global-warning').innerHTML=messages.map(esc).join(' ')+' <a href="#sources">실행 기록 보기 →</a>';
   }
-  function navigation() {$('#tabs').innerHTML=config.tabs.map(t=>`<a href="#${esc(t.id)}" ${t.id===active?'class="active" aria-current="page"':''}>${esc(t.label)}</a>`).join('');}
+  function navigation() {
+    if(!window.InvestorDesk||!config.workspace){$('#tabs').innerHTML=config.tabs.map(t=>`<a href="#${esc(t.id)}" ${t.id===active?'class="active" aria-current="page"':''}>${esc(t.label)}</a>`).join('');return;}
+    const ws=config.workspace,group=ws.groups.find(g=>g.views.includes(active));
+    $('#tabs').innerHTML=ws.groups.map(g=>`<a data-nav="${esc(g.id)}" href="${['company','valuation'].includes(g.id)?href(g.id,selectedCompany):'#'+esc(g.route)}" ${g===group?'class="active" aria-current="page"':''}>${esc(g.label)}</a>`).join('');
+    $('#subtabs').innerHTML=(group?.views.length>1?group.views:[]).map(id=>`<a href="#${esc(id)}" ${id===active?'class="active" aria-current="page"':''}>${esc(ws.labels.find(x=>x.id===id)?.label||config.tabs.find(t=>t.id===id)?.label||id)}</a>`).join('');
+  }
+  function contextStrip(tab,params) {
+    if(!window.InvestorDesk)return '';
+    const companies=config.workspace.companies,c=companies.find(c=>c.id===params.get('company'));
+    if(c)return `<aside class="context-strip"><div><small>기업 검증</small><p>${esc(c.name)}의 가설과 연결해 읽는 자료입니다. 자료의 기준일과 현재 검토일을 구분해 주세요.</p></div><nav>${anchor('company',c.id,'기업 가설로 돌아가기 →')}${anchor('valuation',c.id,'가격 검토 →')}</nav></aside>`;
+    const contexts={memory:['메모리 가격·제품 구성·점유율이 이익에 어떻게 전달되는지 검증합니다.',['hynix','samsung']],gpu:['임대 요금의 변화와 AI 인프라 투자 회수를 연결해 검토합니다.',['nvda','msft','amzn']],reports:['실적과 현금흐름을 기업 가설·가격 가정과 대조합니다.',[]],finance:['낙관과 경계의 논거를 함께 읽고 가설을 바꿀 조건을 찾습니다.',[]],'ai-state':['기술의 진전과 제약이 실제 수요·수익화로 이어지는지 검토합니다.',[]]};
+    const item=contexts[tab];if(!item)return '';
+    return `<aside class="context-strip"><div><small>투자 판단을 위한 근거</small><p>${esc(item[0])}</p></div><nav>${item[1].map(id=>anchor('company',id,companies.find(c=>c.id===id).name+' →')).join('')}${anchor('desk',null,'투자 판단 →')}</nav></aside>`;
+  }
   function article(r) {return `<article class="story" tabindex="-1" data-item="${esc(r.id)}"><div class="meta">${badge(r.category)}<span>중요도 ${esc(r.importance)}/5</span><span>원문 ${esc(r.source_date)}</span>${r.date&&r.date!==r.source_date?`<span>회차 ${esc(r.date)}</span>`:""}${r.followup?badge('후속'):''}${r.paywall?badge('유료'):''}${!r.verified?badge('확인 필요'):''}${r.legacy?badge('기존 회차'):''}</div><h2>${url(r.source_url,r.title)}</h2>${list(r.summary).map(x=>`<p>${esc(x)}</p>`).join('')}<div class="impact"><strong>${r.legacy?'당시 사업 시사점':'업계 의미'}</strong>${esc(r.impact)}</div>${r.investment_impact?`<div class="impact investment"><strong>투자에 주는 의미 · 편집 해석</strong>${esc(r.investment_impact)}</div>`:r.legacy?'<p class="note">기존 사업 브리핑입니다. 투자 관점으로 재검토한 원고는 아닙니다.</p>':''}${source(r)}${r.verification_basis?`<p class="note">${esc(r.verification_basis)}</p>`:''}<a class="source" href="${esc(href('news',r.id))}">이 기사 주소</a></article>`;}
   function renderNews(data,params) {
     const f=filters.news||={},target=data.items.find(x=>x.id===params.get('id'));
@@ -102,11 +115,12 @@
     if(b.type==='chart')html=`<figure class="report-figure"><figcaption>${esc(b.title)}</figcaption>${chart([{label:b.title,points:b.points}],{unit:b.unit})}${table(['기간·구분',b.unit],b.points.map(p=>[p.label,p.value]))}</figure>`;
     return `<div class="report-block">${html}${citation}</div>`;
   }
-  function reportBody(r) {
+  function reportBody(r,params=new URLSearchParams()) {
+    const company=config.workspace?.companies.find(c=>c.id===params.get("company")),context=company?{company:company.id}:{};
     const e=r.editorial;
     const intro=e?`<div class="report-takeaways"><p class="eyebrow">한눈에 보기</p><ul>${e.key_takeaways.map(p=>`<li>${esc(p)}</li>`).join('')}</ul></div><div class="report-intro">${e.introduction.map(p=>`<p>${esc(p)}</p>`).join('')}</div>${list(e.related_reports).length?`<div class="report-related"><b>함께 읽기</b>${e.related_reports.map(x=>anchor('reports',x.id,x.title)).join('')}</div>`:''}`:'';
     const references=list(r.references).map(ref=>`<li>${url(ref.url,ref.label)} · ${esc(ref.date)}</li>`).join('');
-    return `<a class="back" href="#reports">← 리포트 목록</a><article class="report-body" tabindex="-1" data-item="${esc(r.id)}"><div class="meta">${badge(r.format)}${e?badge(r.format==='실적 종합'?'실적 연결':e.template==='earnings'?'실적 심층':'인터뷰 심층'):''}<span>${esc(r.company)} · ${esc(r.sector)} · ${esc(r.period)}</span></div><h1>${esc(r.title)}</h1><p class="report-deck">${esc(r.overview)}</p>${source(r)}<p class="note">${reportCoverage(r)}${r.written_on?` · 작성 ${esc(r.written_on)}`:''}</p>${intro}<nav class="toc" aria-label="리포트 목차"><strong>목차</strong><ol>${r.sections.map(s=>`<li><a href="${esc(href('reports',r.id,{section:s.id}))}">${esc(s.title)}</a></li>`).join('')}</ol></nav>${list(e?.glossary).length?`<details class="report-glossary"><summary>먼저 알아둘 용어</summary><dl>${e.glossary.map(x=>`<dt>${esc(x.term)}</dt><dd>${esc(x.definition)}</dd>`).join('')}</dl></details>`:''}${r.sections.map((s,i)=>`<section id="section-${esc(s.id)}" class="report-section ${s.role?'report-'+esc(s.role):''}">${e?`<p class="eyebrow">${String(i+1).padStart(2,'0')}</p>`:''}<h2>${esc(s.title)}</h2>${s.blocks?s.blocks.map(reportBlock).join(''):list(s.paragraphs).map(p=>`<p>${esc(p)}</p>`).join('')+list(s.comments).map(reportComment).join('')}</section>`).join('')}${list(r.charts).map(x=>`<section><h2>${esc(x.title)}</h2>${chart([{label:x.title,points:x.points}],{unit:x.unit})}${source(x)}</section>`).join('')}${list(r.tables).map(x=>`<section><h2>${esc(x.title)}</h2>${table(x.columns,x.rows)}${source(x)}</section>`).join('')}${r.comparison?`<section><h2>이전 자료와 달라진 점</h2><p>${esc(r.comparison.guidance_change)}</p>${r.comparison.previous_report_id?anchor('reports',r.comparison.previous_report_id,'이전 리포트 →'):''}</section>`:''}${r.investment_impact?`<div class="impact investment"><b>투자에 주는 의미 · 편집 해석</b><p>${esc(r.investment_impact)}</p></div>`:''}${e?`<section><h2>다음에 확인할 것</h2>${table(['관측 지표','판단이 달라지는 조건','확인 시점'],e.watchpoints.map(x=>[x.metric,x.condition,x.timing]))}</section>`:''}${references?`<section><h2>근거 자료</h2><ul class="report-references">${references}</ul></section>`:''}</article>`;
+    return `<a class="back" href="${esc(href('reports',null,context))}">← 리포트 목록</a><article class="report-body" tabindex="-1" data-item="${esc(r.id)}"><div class="meta">${badge(r.format)}${e?badge(r.format==='실적 종합'?'실적 연결':e.template==='earnings'?'실적 심층':'인터뷰 심층'):''}<span>${esc(r.company)} · ${esc(r.sector)} · ${esc(r.period)}</span></div><h1>${esc(r.title)}</h1><p class="report-deck">${esc(r.overview)}</p>${source(r)}<p class="note">${reportCoverage(r)}${r.written_on?` · 작성 ${esc(r.written_on)}`:''}</p>${intro}<nav class="toc" aria-label="리포트 목차"><strong>목차</strong><ol>${r.sections.map(s=>`<li><a href="${esc(href('reports',r.id,{...context,section:s.id}))}">${esc(s.title)}</a></li>`).join('')}</ol></nav>${list(e?.glossary).length?`<details class="report-glossary"><summary>먼저 알아둘 용어</summary><dl>${e.glossary.map(x=>`<dt>${esc(x.term)}</dt><dd>${esc(x.definition)}</dd>`).join('')}</dl></details>`:''}${r.sections.map((s,i)=>`<section id="section-${esc(s.id)}" class="report-section ${s.role?'report-'+esc(s.role):''}">${e?`<p class="eyebrow">${String(i+1).padStart(2,'0')}</p>`:''}<h2>${esc(s.title)}</h2>${s.blocks?s.blocks.map(reportBlock).join(''):list(s.paragraphs).map(p=>`<p>${esc(p)}</p>`).join('')+list(s.comments).map(reportComment).join('')}</section>`).join('')}${list(r.charts).map(x=>`<section><h2>${esc(x.title)}</h2>${chart([{label:x.title,points:x.points}],{unit:x.unit})}${source(x)}</section>`).join('')}${list(r.tables).map(x=>`<section><h2>${esc(x.title)}</h2>${table(x.columns,x.rows)}${source(x)}</section>`).join('')}${r.comparison?`<section><h2>이전 자료와 달라진 점</h2><p>${esc(r.comparison.guidance_change)}</p>${r.comparison.previous_report_id?anchor('reports',r.comparison.previous_report_id,'이전 리포트 →'):''}</section>`:''}${r.investment_impact?`<div class="impact investment"><b>투자에 주는 의미 · 편집 해석</b><p>${esc(r.investment_impact)}</p></div>`:''}${e?`<section><h2>다음에 확인할 것</h2>${table(['관측 지표','판단이 달라지는 조건','확인 시점'],e.watchpoints.map(x=>[x.metric,x.condition,x.timing]))}</section>`:''}${references?`<section><h2>근거 자료</h2><ul class="report-references">${references}</ul></section>`:''}</article>`;
   }
   function table(columns,rows) {return `<div class="table-scroll"><table><thead><tr>${columns.map(c=>`<th scope="col">${esc(c)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;}
   function priceChange(points,days) {if(points.length<2)return null;const latest=points.at(-1),cutoff=Date.parse(latest.date)-days*86400000,base=points.filter(p=>Date.parse(p.date)<=cutoff&&Date.parse(p.date)>=cutoff-7*86400000).at(-1);return base?(latest.value/base.value-1)*100:null;}
@@ -202,9 +216,9 @@
   }
 
   function renderSources(data) {
-    const scheduleState=x=>({ACTIVE:'활성',PAUSED:'중지'}[x]||'확인 필요');
+    const scheduleState=x=>({ACTIVE:'과거 활성 관측',PAUSED:'중지',UNVERIFIED:'설정 미확인'}[x]||'확인 필요');
     let html=title('sources',data,'무엇을 보고, 어떻게 만들며, 지금 어디까지 갱신됐는지 공개합니다.');
-    html+=`<section class="panel"><h2>운영 방식</h2><div class="two-cols"><div><p>일간: 평일 09:00 KST<br>주간: 월요일 09:40 KST<br>월간: 1일 10:00 KST</p><p class="note">새 탭의 예약 수집은 아직 연결하지 않았습니다. ${esc(config.existing_schedules?.checked_on||'기준일 미확인')} 확인 기준으로 기존 일간 작업은 ${scheduleState(config.existing_schedules?.daily?.status)}, 주간 작업은 ${scheduleState(config.existing_schedules?.weekly?.status)} 상태입니다. 기존 일정은 변경하지 않았습니다. 표시한 시간은 운영 계획이며 실행 완료를 뜻하지 않습니다.</p></div><div><p>수집 → 편집·작성 → 독립 검증 → 형식 검사 → 게시</p><p class="note">수치·날짜·발언자·고유명사를 원문과 대조합니다. 추정·전망·전언은 구분하고 미확인은 확인 필요로 표시합니다. 정정은 원래 항목 ID와 사유를 보존합니다.</p></div></div></section>`;
+    html+=`<section class="panel"><h2>운영 방식</h2><div class="two-cols"><div><p>일간: 평일 09:00 KST<br>주간: 월요일 09:40 KST<br>월간: 1일 10:00 KST</p><p class="note">${esc(config.existing_schedules?.policy||'자동 갱신은 중지 상태입니다.')} 마지막 기록(${esc(config.existing_schedules?.checked_on||'기준일 미확인')}): 일간 ${scheduleState(config.existing_schedules?.daily?.status)} · 주간 ${scheduleState(config.existing_schedules?.weekly?.status)}. ${esc(config.existing_schedules?.weekly?.note||'')} 위 시간은 과거 운영 계획이며 현재 실행 예약이 아닙니다.</p></div><div><p>수집 → 편집·작성 → 독립 검증 → 형식 검사 → 게시</p><p class="note">수치·날짜·발언자·고유명사를 원문과 대조합니다. 추정·전망·전언은 구분하고 미확인은 확인 필요로 표시합니다. 정정은 원래 항목 ID와 사유를 보존합니다.</p></div></div></section>`;
     html+='<section class="panel"><h2>최근 실행 10건</h2>';
     html+=data.runs.length?`<div class="table-scroll"><table><thead><tr><th>시각</th><th>유형</th><th>상태</th><th>건수</th><th>0건 영역</th><th>메모</th></tr></thead><tbody>${data.runs.map(r=>`<tr class="${r.status==='success'?'':'problem'}"><td>${esc(r.at)}</td><td>${esc(r.type)}</td><td>${r.status==='success'?'정상':r.status==='failed'?'실패':r.status==='partial'?'일부 미완료':'보류'}</td><td>${Object.entries(r.counts).map(([k,n])=>`${esc(k)} ${n}`).join('<br>')||'0'}</td><td>${list(r.zero_areas).map(z=>`${esc(z.area)}<br><small>${esc(z.reason)} · 검색 ${esc(z.queries.join(' / '))}</small>`).join('<br>')||'—'}</td><td>${list(r.notes).map(esc).join('<br>')}</td></tr>`).join('')}</tbody></table></div>`:'<p class="quiet">새 파이프라인의 실행 기록이 없습니다. 기존 회차의 생성 시각은 아래 갱신 현황에 표시합니다.</p>';
     html+='</section><section class="panel"><h2>탭별 마지막 갱신</h2><div class="table-scroll"><table><thead><tr><th>탭</th><th>주기</th><th>기준일</th><th>상태</th><th>건수</th></tr></thead><tbody>'+config.tabs.map(t=>{const x=data.tabs[t.id];return `<tr class="${x.stale?'problem':''}"><td>${anchor(t.id,null,t.label)}</td><td>${esc({daily:'일간',weekly:'주간',monthly:'월간'}[t.period])}</td><td>${esc(x.as_of||'수집 전')}</td><td>${x.stale?'⚠ 갱신 지연':x.status==='empty'?'초기 수집 대기':'정상'}</td><td>${fmt(x.count,0)}</td></tr>`;}).join('')+'</tbody></table></div></section>';
@@ -328,10 +342,22 @@
     const target=section?document.getElementById('section-'+section):id?[...document.querySelectorAll('[data-item]')].find(x=>x.dataset.item===id):null;
     if(target){target.classList.add('item-highlight');target.tabIndex=-1;target.focus({preventScroll:true});target.scrollIntoView({block:'start',behavior:'instant'});}
   }
+  function viewTop(){ $('#content').focus?.({preventScroll:true});window.scrollTo?.(0,0); }
   async function show() {
-    const token=++generation,{tab,params}=route();active=tab;navigation();$('#content').innerHTML='<div class="loading">자료를 불러오고 있습니다.</div>';
-    try{const data=await json(tab);if(token!==generation)return;
-      if(tab==='reports'&&params.get('id')){if(!data.items.some(r=>r.id===params.get('id')))throw Error('목록에 없는 리포트');const report=await json('reports/'+encodeURIComponent(params.get('id')));if(token!==generation)return;$('#content').innerHTML=title('reports',data)+reportBody(report);}
+    const token=++generation,{tab,params}=route();active=tab;
+    const investor=window.InvestorDesk,isInvestor=investor?.views.includes(tab),companyID=isInvestor?params.get('id'):params.get('company');
+    if(config.workspace?.companies.some(c=>c.id===companyID))selectedCompany=companyID;
+    investor?.deactivate();navigation();$('#content').className=isInvestor?'investor-view':'';$('#content').innerHTML='<div class="loading">자료를 불러오고 있습니다.</div>';
+    try{
+      if(isInvestor){
+        const names=['investor-desk',...(tab==='desk'||tab==='company'||tab==='valuation'?['reports']:[]),...(tab==='company'||tab==='valuation'?['news']:[])];
+        const results=await Promise.allSettled(names.map(json));if(token!==generation)return;
+        if(results[0].status!=='fulfilled')throw results[0].reason;
+        const related={config,status};names.slice(1).forEach((name,i)=>{related[name]=results[i+1].status==='fulfilled'?results[i+1].value:null;});
+        investor.mount(results[0].value,{view:tab,id:params.get('id')||selectedCompany},related);viewTop();return;
+      }
+      const data=await json(tab);if(token!==generation)return;
+      if(tab==='reports'&&params.get('id')){if(!data.items.some(r=>r.id===params.get('id')))throw Error('목록에 없는 리포트');const report=await json('reports/'+encodeURIComponent(params.get('id')));if(token!==generation)return;$('#content').innerHTML=title('reports',data)+reportBody(report,params);}
       else if(tab==='weekly'){
         const selected=params.get('id')||data.items.slice().sort((a,b)=>b.id.localeCompare(a.id))[0]?.id;
         let week=null;
@@ -339,14 +365,16 @@
           week=await json('weekly/'+encodeURIComponent(selected));if(token!==generation)return;
           if(!params.get('id'))history.replaceState(null,'',href('weekly',selected));
         }
-        $('#content').innerHTML=renderWeekly(data,params,week);
-        document.title=(week?week.id+' · ':'')+'주간 시사점 · AI·클라우드 브리핑';if(params.get('section'))highlight(params);return;
+        $('#content').innerHTML=contextStrip(tab,params)+renderWeekly(data,params,week);
+        document.title=(week?week.id+' · ':'')+'주간 시사점 · Market Briefing';if(params.get('section'))highlight(params);else viewTop();return;
       }
       else $('#content').innerHTML=renderers[tab]?renderers[tab](data,params):renderGeneric(tab,data);
-      document.title=config.tabs.find(x=>x.id===tab).label+' · AI·클라우드 브리핑';highlight(params);
-    }catch(e){if(token===generation)$('#content').innerHTML=empty('자료를 불러오지 못했습니다','잠시 후 새로고침해 주세요. 다른 탭은 계속 이용하실 수 있습니다.')+'<button data-retry type="button">다시 불러오기</button>';}
+      $('#content').innerHTML=contextStrip(tab,params)+$('#content').innerHTML;
+      document.title=(config.workspace?.labels.find(x=>x.id===tab)?.label||config.tabs.find(x=>x.id===tab).label)+' · Market Briefing';
+      if(params.get('section')||(params.get('id')&&tab!=='reports'))highlight(params);else viewTop();
+    }catch(e){if(token===generation){if(isInvestor)investor.reset();$('#content').innerHTML=`<div class="empty error" role="alert"><h1>${isInvestor?'검증 자료를 불러오지 못했습니다':'자료를 불러오지 못했습니다'}</h1><p>자료 다시 읽기로 재시도해 주세요. 다른 자료 화면은 계속 이용하실 수 있습니다.</p></div><button data-retry type="button">다시 불러오기</button>`;}}
   }
-  function redraw(){const {params}=route();return cache.get(active)?.then(data=>{$('#content').innerHTML=renderers[active]?renderers[active](data,params):renderGeneric(active,data);});}
+  function redraw(){const {params}=route();return cache.get(active)?.then(data=>{$('#content').innerHTML=contextStrip(active,params)+(renderers[active]?renderers[active](data,params):renderGeneric(active,data));});}
   document.addEventListener('change',e=>{
     if(e.target.dataset.weeklyEdition!==undefined&&e.target.value){location.hash=href('weekly',e.target.value);return;}
     if(e.target.dataset.filter){filters[active]||={};filters[active][e.target.dataset.filter]=e.target.value;if(route().params.get('id'))history.replaceState(null,'','#'+active);redraw();}
@@ -366,6 +394,6 @@
     if(active==='interviews'&&route().params.get('id')&&link?.getAttribute('href')===location.hash){e.preventDefault();show();}
   });
   window.addEventListener('hashchange',show);
-  $('#refresh').addEventListener('click',async()=>{cache.clear();try{status=await json('status');globalWarning();await show();}catch{$('#global-warning').hidden=false;$('#global-warning').textContent='갱신 상태를 확인하지 못했습니다. 마지막으로 읽은 자료를 표시합니다.';}});
+  $('#refresh').addEventListener('click',async()=>{const token=++generation;window.InvestorDesk?.reset();cache.clear();try{const nextStatus=await json('status');if(token!==generation)return;status=nextStatus;globalWarning();await show();}catch{if(token!==generation)return;$('#global-warning').hidden=false;$('#global-warning').textContent='갱신 상태를 확인하지 못했습니다. 자료 다시 읽기로 재시도해 주세요.';$('#content').innerHTML=empty('자료를 불러오지 못했습니다','이전 값을 현재 자료로 표시하지 않습니다.');}});
   (async()=>{try{[config,status]=await Promise.all([json('config'),json('status')]);$('#today').textContent=new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',dateStyle:'medium'}).format(new Date())+' KST';globalWarning();await show();}catch{$('#content').innerHTML=empty('브리핑을 불러오지 못했습니다','설정과 데이터가 함께 게시됐는지 확인해 주세요.');}})();
 })();
