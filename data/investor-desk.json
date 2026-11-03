@@ -1,0 +1,1117 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-11-03",
+  "title": "AI 투자는 이어지는가. 지금 가격은 매력적인가.",
+  "summary": "수요 확대는 확인됩니다. 투자 회수와 주가 매력은 더 검증해야 합니다.",
+  "summary_detail": "클라우드 성장과 국내 부품·메모리 실적은 사이클을 지지합니다. 다만 투자 이후 현금 회수와 정상화 이익을 확인하기 전에는, 산업의 성장만으로 주식이 싸다고 판단하지 않습니다.",
+  "sources": [
+    {
+      "id": "sem-q3",
+      "title": "삼성전기 · 2026 Q3 실적",
+      "url": "https://www.samsungsem.com/global/newsroom/news/view.do?id=10628",
+      "date": "2026-10-28",
+      "kind": "primary",
+      "note": "회사 발표 · 연결 잠정 실적과 전망을 구분"
+    },
+    {
+      "id": "hynix-q3",
+      "title": "SK hynix · 2026 Q3 실적",
+      "url": "https://news.skhynix.com/en/q3-2026-business-results/",
+      "date": "2026-10-28",
+      "kind": "primary",
+      "note": "회사 발표 · 잠정 연결 실적, 장기계약은 회사 설명"
+    },
+    {
+      "id": "samsung-q3",
+      "title": "삼성전자 · 2026 Q3 실적",
+      "url": "https://news.samsungsemiconductor.com/kr/삼성전자-2026년-3분기-실적-발표/",
+      "date": "2026-10-29",
+      "kind": "primary",
+      "note": "회사 발표 · 연결 실적, EPS는 보통주 기준"
+    },
+    {
+      "id": "msft-q3",
+      "title": "Microsoft · FY2027 Q1 ended 2026-09-30",
+      "url": "https://www.microsoft.com/en-us/Investor/earnings/FY-2027-Q1/press-release-webcast",
+      "date": "2026-10-28",
+      "kind": "primary",
+      "note": "회사 실적 발표 · GAAP EPS; 회계연도와 달력연도 구분"
+    },
+    {
+      "id": "amzn-q3",
+      "title": "Amazon · Q3 2026 ended 2026-09-30",
+      "url": "https://ir.aboutamazon.com/news-release/news-release-details/2026/Amazon-com-Announces-Third-Quarter-Results/default.aspx",
+      "date": "2026-10-29",
+      "kind": "primary",
+      "note": "회사 실적 발표 · GAAP EPS; 회계연도와 달력연도 구분"
+    },
+    {
+      "id": "meta-q3",
+      "title": "Meta Platforms · Q3 2026 ended 2026-09-30",
+      "url": "https://investor.atmeta.com/investor-news/press-release-details/2026/Meta-Reports-Third-Quarter-2026-Results/",
+      "date": "2026-10-21",
+      "kind": "primary",
+      "note": "회사 실적 발표 · GAAP EPS; 회계연도와 달력연도 구분"
+    },
+    {
+      "id": "googl-q3",
+      "title": "Alphabet · Q3 2026 ended 2026-09-30",
+      "url": "https://www.sec.gov/Archives/edgar/data/1652044/000165204426000080/googexhibit991q32026.htm",
+      "date": "2026-10-28",
+      "kind": "primary",
+      "note": "회사 실적 발표 · GAAP EPS; 회계연도와 달력연도 구분"
+    },
+    {
+      "id": "nvda-q2",
+      "title": "NVIDIA · FY2027 Q2 실적 목록",
+      "url": "https://investor.nvidia.com/financial-info/financial-reports/default.aspx",
+      "date": "2026-08-26",
+      "kind": "primary",
+      "note": "공식 IR 실적 목록 · 2026년 7월 종료 분기"
+    },
+    {
+      "id": "sem-price",
+      "title": "009150 · 정규장 전일 가격 확인",
+      "url": "https://mbnmoney.mbn.co.kr/stock/item?code=009150",
+      "date": "2026-11-03",
+      "kind": "market",
+      "note": "11월 3일 장 시작 전 표시된 전일가. 기준 거래일 11월 2일. NXT 야간 가격과 구분"
+    },
+    {
+      "id": "hynix-price",
+      "title": "000660 · 정규장 전일 가격 확인",
+      "url": "https://mbnmoney.mbn.co.kr/stock/item?code=000660",
+      "date": "2026-11-03",
+      "kind": "market",
+      "note": "11월 3일 장 시작 전 표시된 전일가. 기준 거래일 11월 2일. NXT 야간 가격과 구분"
+    },
+    {
+      "id": "samsung-price",
+      "title": "005930 · 정규장 전일 가격 확인",
+      "url": "https://mbnmoney.mbn.co.kr/stock/item?code=005930",
+      "date": "2026-11-03",
+      "kind": "market",
+      "note": "11월 3일 장 시작 전 표시된 전일가. 기준 거래일 11월 2일. NXT 야간 가격과 구분"
+    },
+    {
+      "id": "msft-price",
+      "title": "MSFT · Google Finance 정규장 종가",
+      "url": "https://www.google.com/finance/quote/MSFT:NASDAQ",
+      "date": "2026-11-02",
+      "kind": "market",
+      "note": "11월 2일 16:00 미국 동부시간. 시간외 가격 제외. 웹 금융 도구와 가격 대조"
+    },
+    {
+      "id": "amzn-price",
+      "title": "AMZN · Google Finance 정규장 종가",
+      "url": "https://www.google.com/finance/quote/AMZN:NASDAQ",
+      "date": "2026-11-02",
+      "kind": "market",
+      "note": "11월 2일 16:00 미국 동부시간. 시간외 가격 제외. 웹 금융 도구와 가격 대조"
+    },
+    {
+      "id": "googl-price",
+      "title": "GOOGL · Google Finance 정규장 종가",
+      "url": "https://www.google.com/finance/quote/GOOGL:NASDAQ",
+      "date": "2026-11-02",
+      "kind": "market",
+      "note": "11월 2일 16:00 미국 동부시간. 시간외 가격 제외. 웹 금융 도구와 가격 대조"
+    },
+    {
+      "id": "meta-price",
+      "title": "META · Google Finance 정규장 종가",
+      "url": "https://www.google.com/finance/quote/META:NASDAQ",
+      "date": "2026-11-02",
+      "kind": "market",
+      "note": "11월 2일 16:00 미국 동부시간. 시간외 가격 제외. 웹 금융 도구와 가격 대조"
+    },
+    {
+      "id": "nvda-price",
+      "title": "NVDA · Google Finance 정규장 종가",
+      "url": "https://www.google.com/finance/quote/NVDA:NASDAQ",
+      "date": "2026-11-02",
+      "kind": "market",
+      "note": "11월 2일 16:00 미국 동부시간. 시간외 가격 제외. 웹 금융 도구와 가격 대조"
+    },
+    {
+      "id": "aapl-price",
+      "title": "AAPL · Google Finance 정규장 종가",
+      "url": "https://www.google.com/finance/quote/AAPL:NASDAQ",
+      "date": "2026-11-02",
+      "kind": "market",
+      "note": "11월 2일 16:00 미국 동부시간. 시간외 가격 제외. 웹 금융 도구와 가격 대조"
+    },
+    {
+      "id": "tsla-price",
+      "title": "TSLA · Google Finance 정규장 종가",
+      "url": "https://www.google.com/finance/quote/TSLA:NASDAQ",
+      "date": "2026-11-02",
+      "kind": "market",
+      "note": "11월 2일 16:00 미국 동부시간. 시간외 가격 제외. 웹 금융 도구와 가격 대조"
+    },
+    {
+      "id": "aapl-q4",
+      "title": "Apple · FY2026 Q4 실적",
+      "url": "https://www.apple.com/newsroom/2026/11/apple-reports-fourth-quarter-results/",
+      "date": "2026-11-02",
+      "kind": "primary",
+      "note": "공식 발표 · 2026-09-26 종료 분기. 관세 환급 EPS 영향 0.05 USD 포함"
+    },
+    {
+      "id": "msft-call",
+      "title": "Microsoft · FY2027 Q1 공식 실적 콜",
+      "url": "https://www.microsoft.com/en-us/Investor/events/fy-2027/earnings-fy-2027-q1",
+      "date": "2026-10-28",
+      "kind": "primary",
+      "note": "CFO 설명 · OCF 58.0, 현금 PPE 취득 39.4, FCF 18.6 십억 USD"
+    }
+  ],
+  "companies": [
+    {
+      "id": "sem",
+      "name": "삼성전기",
+      "ticker": "009150",
+      "market": "KR",
+      "currency": "KRW",
+      "role": "MLCC · 패키지 기판",
+      "focus": "핵심",
+      "status": "supported",
+      "thesis": "AI 서버의 부품 사용량 증가가 고부가 MLCC와 FCBGA의 이익률 개선으로 이어지는가?",
+      "counter": "AI 관련 매출 확대와 고객 장기계약만으로 높은 마진의 지속성을 보장할 수는 없습니다.",
+      "transmission": [
+        "미국 데이터센터 투자",
+        "GPU·ASIC당 부품 수요",
+        "MLCC·FCBGA 믹스",
+        "가동률·영업이익"
+      ],
+      "evidence": [
+        {
+          "relation": "supports",
+          "text": "3분기 패키지 매출은 전년 대비 58% 증가했습니다. 회사는 AI 데이터센터용 고부가 제품 공급 확대를 설명합니다.",
+          "sources": [
+            "sem-q3"
+          ]
+        },
+        {
+          "relation": "challenges",
+          "text": "장기 공급 대응 계획은 있지만 계약 가격·보장 물량·설비 증설 이후의 수익률은 추가 확인이 필요합니다.",
+          "sources": [
+            "sem-q3"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "label": "매출",
+          "value": 3.7633,
+          "unit": "조원",
+          "source": "sem-q3",
+          "period": "2026 Q3"
+        },
+        {
+          "label": "영업이익",
+          "value": 0.691,
+          "unit": "조원",
+          "source": "sem-q3",
+          "period": "2026 Q3"
+        },
+        {
+          "label": "패키지 매출 성장",
+          "value": 58,
+          "unit": "% YoY",
+          "source": "sem-q3",
+          "period": "2026 Q3"
+        }
+      ],
+      "checks": [
+        {
+          "metric": "패키지 매출·가동률·마진",
+          "confirm": "고부가 제품 매출과 이익률이 함께 개선",
+          "break": "증설 뒤 가동률 하락 또는 가격·제품 구성 악화",
+          "next": "다음 분기 실적 발표에서 점검 · 날짜 미확정"
+        },
+        {
+          "metric": "MLCC 장기계약의 경제성",
+          "confirm": "보장 물량·가격 조건과 실제 출하 확인",
+          "break": "계약 확대에도 재고가 늘고 현금 회수가 지연",
+          "next": "다음 분기 실적 발표에서 점검 · 날짜 미확정"
+        }
+      ],
+      "gaps": [
+        "정상화 연간 EPS와 최근 4개 분기 이익 대조",
+        "FCBGA 증설 투자·감가상각·가동률",
+        "제품별 AI 매출 및 계약 조건"
+      ],
+      "price_caveat": "분기 영업이익을 EPS로 바꾸지 않습니다. 보통주 귀속 이익·희석주식수와 정상화 마진 확인이 먼저입니다.",
+      "eps": null,
+      "multiple": 15,
+      "quote": {
+        "value": 1193000,
+        "date": "2026-11-02",
+        "source": "sem-price",
+        "session": "정규장 기준 · KRX 전일가",
+        "time": "15:30 KST"
+      },
+      "next_check": "패키지 매출·가동률·마진",
+      "assessment": "가격 판단 보류"
+    },
+    {
+      "id": "hynix",
+      "name": "SK hynix",
+      "ticker": "000660",
+      "market": "KR",
+      "currency": "KRW",
+      "role": "HBM · DRAM · NAND",
+      "focus": "핵심",
+      "status": "supported",
+      "thesis": "HBM 경쟁력과 장기계약이 메모리 가격 사이클의 변동을 줄일 수 있는가?",
+      "counter": "계약 물량의 가시성과 판매가격의 방어력은 다릅니다. 높은 현재 이익률을 장기 정상 수준으로 두지 않습니다.",
+      "transmission": [
+        "AI 가속기 출하",
+        "HBM·서버 DDR5 수요",
+        "판매가격·제품 구성",
+        "증설·현금흐름"
+      ],
+      "evidence": [
+        {
+          "relation": "supports",
+          "text": "회사는 2027~2028년 생산능력의 절반을 넘는 장기계약을 확보했다고 밝혔습니다. HBM4와 서버 DDR5 판매도 확대됐습니다.",
+          "sources": [
+            "hynix-q3"
+          ]
+        },
+        {
+          "relation": "challenges",
+          "text": "장기계약 가격은 시장 상황을 반영합니다. 생산 확대와 투자 부담, 비영업 손익을 함께 봐야 합니다.",
+          "sources": [
+            "hynix-q3"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "label": "매출",
+          "value": 104.6155,
+          "unit": "조원",
+          "source": "hynix-q3",
+          "period": "2026 Q3"
+        },
+        {
+          "label": "영업이익",
+          "value": 83.3338,
+          "unit": "조원",
+          "source": "hynix-q3",
+          "period": "2026 Q3"
+        },
+        {
+          "label": "순이익",
+          "value": 39.7756,
+          "unit": "조원",
+          "source": "hynix-q3",
+          "period": "2026 Q3"
+        }
+      ],
+      "checks": [
+        {
+          "metric": "HBM 출하·가격과 장기계약 이행",
+          "confirm": "실제 출하·수금 증가 및 계약 수익성 유지",
+          "break": "가격 재협상·출하 연기 또는 계약 취소 확인",
+          "next": "다음 분기 실적 발표에서 점검 · 날짜 미확정"
+        },
+        {
+          "metric": "증설과 현금 회수",
+          "confirm": "투자 확대에도 영업현금흐름이 뒷받침",
+          "break": "공급 증가와 재고 누적으로 현금 회수 악화",
+          "next": "다음 분기 실적 발표에서 점검 · 날짜 미확정"
+        }
+      ],
+      "gaps": [
+        "보통주 귀속 EPS와 일회성·평가손익 조정",
+        "장기계약의 가격 하한·취소 조항",
+        "향후 공급 증가 및 고객별 집중도"
+      ],
+      "price_caveat": "투자·평가손익 때문에 순이익과 영업이익의 차이가 큽니다. 보고 순이익의 단순 연환산으로 저평가를 판정하지 않습니다.",
+      "eps": null,
+      "multiple": 15,
+      "quote": {
+        "value": 1472000,
+        "date": "2026-11-02",
+        "source": "hynix-price",
+        "session": "정규장 기준 · KRX 전일가",
+        "time": "15:30 KST"
+      },
+      "next_check": "HBM 출하·가격과 장기계약 이행",
+      "assessment": "가격 판단 보류"
+    },
+    {
+      "id": "samsung",
+      "name": "삼성전자",
+      "ticker": "005930",
+      "market": "KR",
+      "currency": "KRW",
+      "role": "메모리 · 파운드리 · 세트",
+      "focus": "핵심",
+      "status": "mixed",
+      "thesis": "메모리의 이익 확대가 세트 사업 부담을 넘고, HBM·파운드리 경쟁력 개선까지 이어지는가?",
+      "counter": "메모리 가격 상승은 세트 사업에는 원가 부담입니다. 전사 이익을 AI 매출 하나로 설명하지 않습니다.",
+      "transmission": [
+        "AI 메모리 수요",
+        "HBM·DRAM·SSD 이익",
+        "DX 원가 부담·파운드리",
+        "전사 EPS·FCF"
+      ],
+      "evidence": [
+        {
+          "relation": "supports",
+          "text": "HBM4·서버 SSD 판매 확대와 함께 DS 영업이익은 106.5조원을 기록했습니다.",
+          "sources": [
+            "samsung-q3"
+          ]
+        },
+        {
+          "relation": "challenges",
+          "text": "같은 분기 DX는 0.8조원 영업손실을 기록했습니다. 메모리 호황의 이익과 부품 원가 부담이 함께 나타납니다.",
+          "sources": [
+            "samsung-q3"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "label": "매출",
+          "value": 195.3,
+          "unit": "조원",
+          "source": "samsung-q3",
+          "period": "2026 Q3"
+        },
+        {
+          "label": "DS 영업이익",
+          "value": 106.5,
+          "unit": "조원",
+          "source": "samsung-q3",
+          "period": "2026 Q3"
+        },
+        {
+          "label": "DX 영업이익",
+          "value": -0.8,
+          "unit": "조원",
+          "source": "samsung-q3",
+          "period": "2026 Q3"
+        }
+      ],
+      "checks": [
+        {
+          "metric": "HBM 출하와 전사 이익 구성",
+          "confirm": "HBM 확대와 DX 수익성 회복을 함께 확인",
+          "break": "메모리 이익 둔화에 DX 손실이 겹침",
+          "next": "다음 분기 실적 발표에서 점검 · 날짜 미확정"
+        },
+        {
+          "metric": "파운드리 주문의 매출 전환",
+          "confirm": "확보한 고객 주문이 가동률과 손익 개선으로 연결",
+          "break": "수주 발표 뒤 양산·수익성 개선 지연",
+          "next": "다음 분기 실적 발표에서 점검 · 날짜 미확정"
+        }
+      ],
+      "gaps": [
+        "메모리 가격 정상화 시 이익 민감도",
+        "파운드리 손익과 투자 회수",
+        "일회성 조정 및 향후 연간 EPS"
+      ],
+      "price_caveat": "분기 EPS ×4는 호황이 1년 지속된다는 기계적 비교입니다. 향후 12개월 전망이나 정상 이익이 아닙니다.",
+      "eps": {
+        "value": 11462,
+        "frequency": "quarter",
+        "period": "2026 Q3",
+        "basis": "회사 공표 보통주 EPS · 연결",
+        "source": "samsung-q3"
+      },
+      "multiple": 15,
+      "quote": {
+        "value": 229000,
+        "date": "2026-11-02",
+        "source": "samsung-price",
+        "session": "정규장 기준 · KRX 전일가",
+        "time": "15:30 KST"
+      },
+      "next_check": "HBM 출하와 전사 이익 구성",
+      "assessment": "가격 판단 보류"
+    },
+    {
+      "id": "msft",
+      "name": "Microsoft",
+      "ticker": "MSFT",
+      "market": "US",
+      "currency": "USD",
+      "role": "클라우드 · 기업 AI",
+      "focus": "핵심",
+      "status": "supported",
+      "thesis": "Azure 수요가 투자 집행 이후에도 매출과 현금흐름으로 전환되는가?",
+      "counter": "수요와 계약 잔액은 시설 인도·가동률·현금 회수와 다릅니다.",
+      "transmission": [
+        "기업 AI 사용",
+        "Azure 용량 공급",
+        "Cloud 매출·마진",
+        "투자 이후 FCF"
+      ],
+      "evidence": [
+        {
+          "relation": "supports",
+          "text": "Azure 매출은 전년 대비 48% 증가했습니다. Cloud 매출은 639억 달러입니다.",
+          "sources": [
+            "msft-q3"
+          ]
+        },
+        {
+          "relation": "challenges",
+          "text": "투자 효과는 시설 인도 뒤의 이용률·Cloud 마진·현금 회수로 검증해야 합니다.",
+          "sources": [
+            "msft-q3"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "label": "Azure 성장",
+          "value": 48,
+          "unit": "% YoY",
+          "source": "msft-q3",
+          "period": "FY2027 Q1"
+        },
+        {
+          "label": "Cloud 매출",
+          "value": 63.9,
+          "unit": "십억 USD",
+          "source": "msft-q3",
+          "period": "FY2027 Q1"
+        },
+        {
+          "label": "분기 EPS",
+          "value": 4.92,
+          "unit": "USD",
+          "source": "msft-q3",
+          "period": "FY2027 Q1"
+        }
+      ],
+      "checks": [
+        {
+          "metric": "Azure 성장·시설 인도·현금 회수",
+          "confirm": "용량 공급 뒤 매출과 현금 회수가 동반 증가",
+          "break": "공급 확충 후 성장 둔화·Cloud 마진 하락",
+          "next": "다음 분기 실적 발표에서 점검 · 날짜 미확정"
+        }
+      ],
+      "gaps": [
+        "AI 매출의 별도 기여도",
+        "가동률·감가상각 민감도",
+        "정상화 연간 EPS"
+      ],
+      "price_caveat": "분기 EPS의 일회성 항목과 투자 이후 현금흐름을 별도로 확인해야 합니다. 비교 배수는 적정 배수 판단이 아닙니다.",
+      "eps": {
+        "value": 4.92,
+        "frequency": "quarter",
+        "period": "FY2027 Q1 ended 2026-09-30",
+        "basis": "GAAP 희석 EPS · OpenAI 투자이익 제외 조정 EPS는 4.89 USD",
+        "source": "msft-q3"
+      },
+      "multiple": 25,
+      "quote": {
+        "value": 507.12,
+        "date": "2026-11-02",
+        "source": "msft-price",
+        "session": "정규장 종가 · NASDAQ",
+        "time": "16:00 EST"
+      },
+      "next_check": "Azure 성장·시설 인도·현금 회수",
+      "assessment": "가격 판단 보류"
+    },
+    {
+      "id": "amzn",
+      "name": "Amazon",
+      "ticker": "AMZN",
+      "market": "US",
+      "currency": "USD",
+      "role": "AWS · 유통",
+      "focus": "핵심",
+      "status": "mixed",
+      "thesis": "AWS 성장 가속이 선행 투자에 따른 현금 유출을 회수할 수 있는가?",
+      "counter": "클라우드 성장과 전사 FCF는 별도 확인이 필요합니다.",
+      "transmission": [
+        "AI 워크로드",
+        "AWS 매출·이익",
+        "서버·전력 투자",
+        "전사 FCF"
+      ],
+      "evidence": [
+        {
+          "relation": "supports",
+          "text": "AWS 매출은 전년 대비 39.3% 증가했습니다.",
+          "sources": [
+            "amzn-q3"
+          ]
+        },
+        {
+          "relation": "challenges",
+          "text": "최근 12개월 FCF는 -423.57억 달러입니다. 수요 성장만으로 투자 회수를 확정할 수 없습니다.",
+          "sources": [
+            "amzn-q3"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "label": "AWS 성장",
+          "value": 39.3,
+          "unit": "% YoY",
+          "source": "amzn-q3",
+          "period": "2026 Q3"
+        },
+        {
+          "label": "AWS 매출",
+          "value": 45.984,
+          "unit": "십억 USD",
+          "source": "amzn-q3",
+          "period": "2026 Q3"
+        },
+        {
+          "label": "FCF",
+          "value": -42.357,
+          "unit": "십억 USD",
+          "source": "amzn-q3",
+          "period": "2026-09 종료 최근 12개월"
+        }
+      ],
+      "checks": [
+        {
+          "metric": "AWS 성장과 투자 이후 FCF",
+          "confirm": "AWS 이익 증가와 투자 대비 현금 회수 개선",
+          "break": "설비 확대 후 성장 둔화·현금 유출 지속",
+          "next": "다음 분기 실적 발표에서 점검 · 날짜 미확정"
+        }
+      ],
+      "gaps": [
+        "AWS AI 매출 별도 기여도",
+        "유통·AWS별 투자 부담",
+        "정상화 연간 EPS"
+      ],
+      "price_caveat": "분기 EPS의 일회성 항목과 투자 이후 현금흐름을 별도로 확인해야 합니다. 비교 배수는 적정 배수 판단이 아닙니다.",
+      "eps": {
+        "value": 1.89,
+        "frequency": "quarter",
+        "period": "Q3 2026 ended 2026-09-30",
+        "basis": "GAAP 희석 EPS · 비영업 손익 별도 확인 필요",
+        "source": "amzn-q3"
+      },
+      "multiple": 25,
+      "quote": {
+        "value": 245.63,
+        "date": "2026-11-02",
+        "source": "amzn-price",
+        "session": "정규장 종가 · NASDAQ",
+        "time": "16:00 EST"
+      },
+      "next_check": "AWS 성장과 투자 이후 FCF",
+      "assessment": "가격 판단 보류"
+    },
+    {
+      "id": "googl",
+      "name": "Alphabet",
+      "ticker": "GOOGL",
+      "market": "US",
+      "currency": "USD",
+      "role": "Google Cloud · 검색",
+      "focus": "핵심",
+      "status": "mixed",
+      "thesis": "Cloud 성장이 반복적인 서비스 매출과 투자 회수로 이어지는가?",
+      "counter": "TPU 판매가 포함된 Cloud 성장률을 순수 반복 서비스 성장으로 읽지 않습니다.",
+      "transmission": [
+        "AI 검색·Cloud 수요",
+        "서비스·TPU 매출",
+        "인프라 투자",
+        "현금 회수"
+      ],
+      "evidence": [
+        {
+          "relation": "supports",
+          "text": "Cloud 매출은 전년 대비 103% 증가했으며 TPU 시스템 판매도 기여했습니다.",
+          "sources": [
+            "googl-q3"
+          ]
+        },
+        {
+          "relation": "challenges",
+          "text": "분기 FCF는 -90.65억 달러입니다. 서비스·하드웨어 구성과 지출 시차를 확인해야 합니다.",
+          "sources": [
+            "googl-q3"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "label": "Cloud 성장",
+          "value": 103,
+          "unit": "% YoY",
+          "source": "googl-q3",
+          "period": "2026 Q3"
+        },
+        {
+          "label": "Cloud 매출",
+          "value": 30.7,
+          "unit": "십억 USD",
+          "source": "googl-q3",
+          "period": "2026 Q3"
+        },
+        {
+          "label": "FCF",
+          "value": -9.065,
+          "unit": "십억 USD",
+          "source": "googl-q3",
+          "period": "2026 Q3"
+        }
+      ],
+      "checks": [
+        {
+          "metric": "Cloud 매출 구성·투자 이후 FCF",
+          "confirm": "서비스 성장과 현금 회수가 함께 개선",
+          "break": "TPU 일시 매출 소멸·투자 부담 지속",
+          "next": "다음 분기 실적 발표에서 점검 · 날짜 미확정"
+        }
+      ],
+      "gaps": [
+        "Cloud 서비스·하드웨어 구성",
+        "일회성 손익과 EPS 정상화",
+        "리스·투자 현금 지출"
+      ],
+      "price_caveat": "분기 EPS의 일회성 항목과 투자 이후 현금흐름을 별도로 확인해야 합니다. 비교 배수는 적정 배수 판단이 아닙니다.",
+      "eps": {
+        "value": 2.12,
+        "frequency": "quarter",
+        "period": "Q3 2026 ended 2026-09-30",
+        "basis": "GAAP 희석 EPS · 일회성 손익 정상화 미완료",
+        "source": "googl-q3"
+      },
+      "multiple": 25,
+      "quote": {
+        "value": 278.99,
+        "date": "2026-11-02",
+        "source": "googl-price",
+        "session": "정규장 종가 · NASDAQ",
+        "time": "16:00 EST"
+      },
+      "next_check": "Cloud 매출 구성·투자 이후 FCF",
+      "assessment": "가격 판단 보류"
+    },
+    {
+      "id": "meta",
+      "name": "Meta",
+      "ticker": "META",
+      "market": "US",
+      "currency": "USD",
+      "role": "광고 · AI 추천",
+      "focus": "핵심",
+      "status": "mixed",
+      "thesis": "AI가 개선한 광고 수익성이 확대되는 인프라 비용을 감당하는가?",
+      "counter": "광고 성장 전부를 AI 효과로 귀속할 수 없습니다. 법적 비용과 지속 비용을 분리합니다.",
+      "transmission": [
+        "광고 추천·전환",
+        "광고 노출·단가",
+        "AI 설비·운영비",
+        "투자 이후 FCF"
+      ],
+      "evidence": [
+        {
+          "relation": "supports",
+          "text": "매출은 26%, 광고 단가는 14% 증가했습니다.",
+          "sources": [
+            "meta-q3"
+          ]
+        },
+        {
+          "relation": "challenges",
+          "text": "분기 FCF는 -21.2억 달러입니다. GAAP EPS에는 법적 합의 비용이 포함되어 있습니다.",
+          "sources": [
+            "meta-q3"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "label": "매출 성장",
+          "value": 26,
+          "unit": "% YoY",
+          "source": "meta-q3",
+          "period": "2026 Q3"
+        },
+        {
+          "label": "광고 단가 상승",
+          "value": 14,
+          "unit": "% YoY",
+          "source": "meta-q3",
+          "period": "2026 Q3"
+        },
+        {
+          "label": "FCF",
+          "value": -2.12,
+          "unit": "십억 USD",
+          "source": "meta-q3",
+          "period": "2026 Q3"
+        }
+      ],
+      "checks": [
+        {
+          "metric": "광고 단가·노출과 FCF",
+          "confirm": "광고 현금 창출이 인프라 지출을 다시 상회",
+          "break": "광고 성장 둔화와 투자·감가상각 증가가 동반",
+          "next": "다음 분기 실적 발표에서 점검 · 날짜 미확정"
+        }
+      ],
+      "gaps": [
+        "AI의 광고 개선 기여도",
+        "합의금 조정과 정상 EPS",
+        "2027년 인프라 비용"
+      ],
+      "price_caveat": "분기 EPS의 일회성 항목과 투자 이후 현금흐름을 별도로 확인해야 합니다. 비교 배수는 적정 배수 판단이 아닙니다.",
+      "eps": {
+        "value": 3.83,
+        "frequency": "quarter",
+        "period": "Q3 2026 ended 2026-09-30",
+        "basis": "GAAP 희석 EPS · 법적 합의 비용 포함; 회사 조정 EPS 7.40 USD",
+        "source": "meta-q3"
+      },
+      "multiple": 25,
+      "quote": {
+        "value": 606.73,
+        "date": "2026-11-02",
+        "source": "meta-price",
+        "session": "정규장 종가 · NASDAQ",
+        "time": "16:00 EST"
+      },
+      "next_check": "광고 단가·노출과 FCF",
+      "assessment": "가격 판단 보류"
+    },
+    {
+      "id": "nvda",
+      "name": "NVIDIA",
+      "ticker": "NVDA",
+      "market": "US",
+      "currency": "USD",
+      "role": "AI 가속기 · 네트워크",
+      "focus": "핵심",
+      "status": "supported",
+      "thesis": "GPU 수요와 마진이 고객의 투자 회수 이후에도 유지되는가?",
+      "counter": "고객의 CapEx와 NVIDIA의 매출은 같은 지출의 양면이므로 독립적인 최종 수요 증거로 중복 계산하지 않습니다.",
+      "transmission": [
+        "고객 AI 투자",
+        "GPU·네트워크 인도",
+        "매출·매출총이익",
+        "고객의 재투자"
+      ],
+      "evidence": [
+        {
+          "relation": "supports",
+          "text": "공식 IR은 FY2027 Q2 매출 962억 달러, 전년 대비 106% 증가를 공표했습니다.",
+          "sources": [
+            "nvda-q2"
+          ]
+        },
+        {
+          "relation": "challenges",
+          "text": "공급사의 매출 증가와 고객의 현금 회수는 다른 지표입니다. AWS의 현금 유출도 함께 관찰합니다.",
+          "sources": [
+            "amzn-q3"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "label": "매출",
+          "value": 96.2,
+          "unit": "십억 USD",
+          "source": "nvda-q2",
+          "period": "FY2027 Q2"
+        },
+        {
+          "label": "매출 성장",
+          "value": 106,
+          "unit": "% YoY",
+          "source": "nvda-q2",
+          "period": "FY2027 Q2"
+        }
+      ],
+      "checks": [
+        {
+          "metric": "데이터센터 성장·마진·고객 투자",
+          "confirm": "공급 확대 뒤 출하와 마진 유지",
+          "break": "고객 투자 축소·주문 연기·마진 하락",
+          "next": "다음 분기 실적 발표에서 점검 · 날짜 미확정"
+        }
+      ],
+      "gaps": [
+        "최신 분기 상세 EPS·현금흐름 대조",
+        "고객 집중도와 주문의 취소 조건",
+        "자체 ASIC의 대체 효과"
+      ],
+      "price_caveat": "높은 성장률을 장기 지속 가능한 EPS로 자동 변환하지 않습니다.",
+      "eps": null,
+      "multiple": 25,
+      "quote": {
+        "value": 202.06,
+        "date": "2026-11-02",
+        "source": "nvda-price",
+        "session": "정규장 종가 · NASDAQ",
+        "time": "16:00 EST"
+      },
+      "next_check": "데이터센터 성장·마진·고객 투자",
+      "assessment": "가격 판단 보류"
+    },
+    {
+      "id": "aapl",
+      "name": "Apple",
+      "ticker": "AAPL",
+      "market": "US",
+      "currency": "USD",
+      "role": "디바이스 · 서비스",
+      "focus": "보조 관찰",
+      "status": "unverified",
+      "thesis": "AI 기능이 교체 수요와 서비스 수익성을 높이는가?",
+      "counter": "실적 성장은 확인했지만 AI 기능의 독립적인 매출 기여도는 확인하지 못했습니다. 디바이스 교체 수요와 구분합니다.",
+      "transmission": [
+        "AI 기능·서비스",
+        "사용·판매 증거",
+        "증분 이익",
+        "주가에 반영된 기대"
+      ],
+      "evidence": [
+        {
+          "relation": "context",
+          "text": "공식 발표에서 분기 매출 1,145억 달러와 EPS 2.10달러를 확인했습니다. EPS에는 관세 환급 0.05달러가 포함됩니다.",
+          "sources": [
+            "aapl-q4"
+          ]
+        }
+      ],
+      "metrics": [
+        {
+          "label": "매출",
+          "value": 114.5,
+          "unit": "십억 USD",
+          "source": "aapl-q4",
+          "period": "FY2026 Q4"
+        },
+        {
+          "label": "매출 성장",
+          "value": 12,
+          "unit": "% YoY",
+          "source": "aapl-q4",
+          "period": "FY2026 Q4"
+        },
+        {
+          "label": "분기 EPS",
+          "value": 2.1,
+          "unit": "USD",
+          "source": "aapl-q4",
+          "period": "FY2026 Q4"
+        }
+      ],
+      "checks": [
+        {
+          "metric": "제품별 성장·AI 사용과 서비스 마진",
+          "confirm": "사용 확대가 실제 매출·현금 창출로 연결",
+          "break": "상업화 지연 또는 기존 사업 이익 훼손",
+          "next": "다음 분기 실적 발표에서 점검 · 날짜 미확정"
+        }
+      ],
+      "gaps": [
+        "AI 기능이 유발한 교체·서비스 매출 기여도",
+        "계절성과 환급을 제외한 정상화 EPS",
+        "향후 제품별 수익성"
+      ],
+      "price_caveat": "11월 2일 정규장 종가는 같은 날 장마감 후 발표된 실적을 반영하기 전 가격입니다. 분기 EPS에는 관세 환급 효과가 포함되며, AI 매출 기여도는 별도 확인이 필요합니다.",
+      "eps": {
+        "value": 2.1,
+        "frequency": "quarter",
+        "period": "FY2026 Q4 · 2026-09-26 종료",
+        "basis": "GAAP 희석 EPS · 관세 환급 효과 0.05 USD 포함",
+        "source": "aapl-q4"
+      },
+      "multiple": 25,
+      "quote": {
+        "value": 338.32,
+        "date": "2026-11-02",
+        "source": "aapl-price",
+        "session": "정규장 종가 · 이번 실적 발표 전 가격",
+        "time": "16:00 EST"
+      },
+      "next_check": "제품별 성장·AI 사용과 서비스 마진",
+      "assessment": "가격 판단 보류"
+    },
+    {
+      "id": "tsla",
+      "name": "Tesla",
+      "ticker": "TSLA",
+      "market": "US",
+      "currency": "USD",
+      "role": "자동차 · 자율주행 · 로봇",
+      "focus": "보조 관찰",
+      "status": "unverified",
+      "thesis": "AI 사업의 기대가 실제 매출과 현금 창출로 전환되는가?",
+      "counter": "이번 검토에서는 실적 원문 전체와 AI 기여도를 아직 대조하지 않았습니다. 사이클 판정의 근거로 사용하지 않습니다.",
+      "transmission": [
+        "AI 기능·서비스",
+        "사용·판매 증거",
+        "증분 이익",
+        "주가에 반영된 기대"
+      ],
+      "evidence": [],
+      "metrics": [],
+      "checks": [
+        {
+          "metric": "자동차 수익성·AI 서비스 상업화·현금흐름",
+          "confirm": "사용 확대가 실제 매출·현금 창출로 연결",
+          "break": "상업화 지연 또는 기존 사업 이익 훼손",
+          "next": "다음 분기 실적 발표에서 점검 · 날짜 미확정"
+        }
+      ],
+      "gaps": [
+        "최신 공식 실적 본문·EPS 검증",
+        "AI 기여 매출과 비용",
+        "정상화 이익 및 가치평가"
+      ],
+      "price_caveat": "관찰 대상에 포함했지만 AI 가설과 적정가격 판단은 아직 검증 전입니다.",
+      "eps": null,
+      "multiple": 25,
+      "quote": {
+        "value": 403.82,
+        "date": "2026-11-02",
+        "source": "tsla-price",
+        "session": "정규장 종가 · NASDAQ",
+        "time": "16:00 EST"
+      },
+      "next_check": "자동차 수익성·AI 서비스 상업화·현금흐름",
+      "assessment": "가격 판단 보류"
+    }
+  ],
+  "pillars": [
+    {
+      "id": "demand",
+      "title": "수요는 매출로 이어지는가",
+      "status": "supported",
+      "readout": "Azure와 AWS의 성장은 수요 확대를 지지합니다. Google Cloud는 TPU 판매 기여를 분리해서 봐야 합니다.",
+      "sources": [
+        "msft-q3",
+        "amzn-q3",
+        "googl-q3"
+      ],
+      "companies": [
+        "msft",
+        "amzn",
+        "googl"
+      ],
+      "break": "용량 공급이 늘어난 뒤에도 성장과 계약 전환이 함께 둔화",
+      "next": "다음 실적: 서비스 매출 구성·수주 전환·가동률"
+    },
+    {
+      "id": "funding",
+      "title": "투자 재원은 유지되는가",
+      "status": "mixed",
+      "readout": "Microsoft의 FCF는 양수지만 다른 3개사는 인프라 지출이 현금 회수를 앞섭니다. 업체별 투자 재원과 현금 유출의 지속 기간을 나눠 봅니다.",
+      "sources": [
+        "amzn-q3",
+        "meta-q3",
+        "googl-q3",
+        "msft-call"
+      ],
+      "companies": [
+        "msft",
+        "amzn",
+        "meta",
+        "googl"
+      ],
+      "break": "성장 둔화와 현금 유출이 지속되고 투자 축소가 실제 공표됨",
+      "next": "OCF·현금 CapEx·리스·조달비용을 같은 기간으로 비교"
+    },
+    {
+      "id": "transmission",
+      "title": "한국 기업 이익으로 연결되는가",
+      "status": "supported",
+      "readout": "삼성전기의 기판, SK hynix와 삼성전자의 AI 메모리 실적에서 연결이 확인됩니다. 업체별 점유율과 정상 마진은 별도 검증 대상입니다.",
+      "sources": [
+        "sem-q3",
+        "hynix-q3",
+        "samsung-q3"
+      ],
+      "companies": [
+        "sem",
+        "hynix",
+        "samsung"
+      ],
+      "break": "매출 확대에도 가동률·마진·현금 회수가 악화",
+      "next": "제품 구성·판매가격·증설·재고·고객별 매출"
+    },
+    {
+      "id": "durability",
+      "title": "호황 이후에도 이익이 남는가",
+      "status": "unverified",
+      "readout": "장기계약과 높은 현재 실적만으로 공급 증가 이후의 가격·수익률을 확정할 수 없습니다.",
+      "sources": [
+        "hynix-q3",
+        "sem-q3"
+      ],
+      "companies": [
+        "hynix",
+        "sem",
+        "samsung",
+        "nvda"
+      ],
+      "break": "보장 가격·계약 이행이 흔들리고 공급 증가가 수요를 초과",
+      "next": "장기계약 조건과 정상화 EPS 모델을 우선 확보"
+    }
+  ],
+  "cashflows": [
+    {
+      "company": "msft",
+      "value": 18.6,
+      "unit": "USD bn",
+      "period": "FY2027 Q1 · 3개월",
+      "basis": "회사 정의 FCF · OCF − 현금 PPE 취득",
+      "source": "msft-call"
+    },
+    {
+      "company": "amzn",
+      "value": -42.357,
+      "unit": "USD bn",
+      "period": "최근 12개월 · 2026-09 종료",
+      "basis": "회사 정의 FCF · OCF − 순유형자산 취득",
+      "source": "amzn-q3"
+    },
+    {
+      "company": "googl",
+      "value": -9.065,
+      "unit": "USD bn",
+      "period": "2026 Q3 · 3개월",
+      "basis": "회사 정의 FCF · OCF − 유형자산 취득",
+      "source": "googl-q3"
+    },
+    {
+      "company": "meta",
+      "value": -2.12,
+      "unit": "USD bn",
+      "period": "2026 Q3 · 3개월",
+      "basis": "회사 정의 FCF · 금융리스 원금 포함",
+      "source": "meta-q3"
+    }
+  ],
+  "review_log": [
+    {
+      "date": "2026-11-03",
+      "title": "최초 검증 기준선",
+      "body": "국내 3개사와 미국 7개사를 등록했습니다. 실적 근거는 9개사, 가격 스냅샷은 10개사입니다. 과거 판단 변화는 소급 생성하지 않았습니다."
+    }
+  ],
+  "limitations": [
+    "컨센서스와 정상화 연간 EPS는 아직 확보하지 않았습니다. 적정가격 판정은 보류합니다.",
+    "가격 역산의 배수·요구수익률은 사용자가 바꾸는 분석 가정입니다. 애널리스트 목표주가나 시장 컨센서스가 아닙니다.",
+    "분기 FCF와 최근 12개월 FCF는 합산·순위화하지 않습니다.",
+    "자료는 수동 검토 스냅샷입니다. 가격과 실적의 기준일을 각각 확인하세요."
+  ]
+}
