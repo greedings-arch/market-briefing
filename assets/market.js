@@ -12,7 +12,8 @@
   const empty=(title='아직 수집된 자료가 없습니다',body='원문을 확인한 자료가 반영되면 이곳에 표시됩니다.')=>`<div class="empty"><div class="empty-mark">—</div><strong>${esc(title)}</strong><p>${esc(body)}</p><a href="#sources">수집 범위와 운영 상태 확인 →</a></div>`;
   function select(key,label,values,value='전체') {return `<label>${esc(label)} <select data-filter="${key}" aria-label="${esc(label)}">${values.map(v=>`<option value="${esc(v)}" ${v===value?'selected':''}>${esc(v)}</option>`).join('')}</select></label>`;}
   function route() {const raw=location.hash.slice(1),[name,q='']=raw.split('?'),investor=window.InvestorDesk;return {tab:config?.tabs.some(t=>t.id===name)||investor?.views.includes(name)?name:investor?(config?.workspace?.home||'desk'):'summary',params:new URLSearchParams(q)};}
-  async function json(name) {if(!cache.has(name)){const request=fetch('data/'+name+'.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('자료 응답 오류');return r.json();}).catch(e=>{if(cache.get(name)===request)cache.delete(name);throw e;});cache.set(name,request);}return cache.get(name);}
+  function clearItemRoute(tab){const {params}=route();if(params.has('id')){params.delete('id');params.delete('section');history.replaceState(null,'','#'+tab+(params.size?'?'+params.toString():''));}}
+  async function json(name) {if(!cache.has(name)){const request=fetch('data/'+name+'.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('자료 응답 오류');return r.json();}).then(data=>name==='telegram'&&window.ResearchSignals?window.ResearchSignals.prepareTelegram(data):data).catch(e=>{if(cache.get(name)===request)cache.delete(name);throw e;});cache.set(name,request);}return cache.get(name);}
   function title(tab,data,description='') {const t=config.tabs.find(x=>x.id===tab),meta=data.meta||status.tabs[tab];return `<header class="page-title"><div><p class="eyebrow">AI & CLOUD / ${esc(tab.replace(/-/g,' '))}</p><h1>${esc(t.label)}</h1>${description?`<p class="subtitle">${esc(description)}</p>`:''}</div><div class="stamp"><span>기준일 ${esc(meta?.as_of||'수집 전')}</span><span>${fmt(meta?.count||0,0)}건</span><span>생성 ${esc(meta?.generated_at||'아직 없음')}</span></div></header>`;}
   function globalWarning() {
     const messages=[];
@@ -26,7 +27,7 @@
     const ws=config.workspace,label=id=>ws.labels.find(x=>x.id===id)?.label||config.tabs.find(t=>t.id===id)?.label||id;
     $('#tabs').innerHTML=ws.primary.map(id=>`<a data-nav="${esc(id)}" href="${['company','valuation'].includes(id)?href(id,selectedCompany):'#'+esc(id)}" ${id===active?'class="active" aria-current="page"':''}>${esc(label(id))}</a>`).join('');
     // The whole existing library stays visible on every screen, including phones.
-    $('#subtabs').innerHTML=ws.resources.map(id=>`<a data-library-tab="${esc(id)}" href="#${esc(id)}" ${id===active?'class="active" aria-current="page"':''}>${esc(label(id))}</a>`).join('');
+    $('#subtabs').innerHTML=ws.resources.map(id=>`<a data-library-tab="${esc(id)}" href="#${esc(id)}" ${id===active?'class="active" aria-current="page"':''}>${esc(label(id))}</a>`).join('')+'<a href="#archive?section=legacy-tools">Word·인쇄·이전 도구</a>';
   }
   function contextStrip(tab,params) {
     if(!window.InvestorDesk)return '';
@@ -115,8 +116,24 @@
   function reportComment(x) {
     return `<aside class="comment ${esc(x.kind)}"><b>${x.kind==='calculation'?'(계산)':'(해석)'}</b><p>${esc(x.text)}</p>${x.kind==='calculation'?`<p class="note">입력 ${x.inputs.map((v,i)=>`${x.input_labels?.[i]?esc(x.input_labels[i])+': ':''}${fmt(v,6)}`).join(' · ')} → 계산값 ${fmt(x.result,4)} ${esc(x.unit||(['percentage','growth'].includes(x.operation)?'%':''))}</p>`:''}${x.assumptions?`<p class="note">가정·한계: ${esc(x.assumptions)}</p>`:''}</aside>`;
   }
+  function reportBars(b) {
+    let running=0;
+    const bridge=b.kind==='bridge',bars=b.points.map((p,i)=>{
+      const total=!bridge||i===0||i===b.points.length-1;
+      const start=total?0:running,end=total?p.value:running+p.value;
+      running=end;return {...p,start,end,total};
+    });
+    const low=Math.min(0,...bars.flatMap(p=>[p.start,p.end])),high=Math.max(0,...bars.flatMap(p=>[p.start,p.end])),span=high-low||1;
+    const position=v=>(v-low)/span*100,zero=position(0);
+    return `<div class="report-bars" role="img" aria-label="${esc(b.title)}. ${bars.map(p=>esc(p.label)+': '+fmt(p.value)+' '+esc(b.unit)).join('; ')}"><p class="report-chart-unit">${esc(b.unit)}${bridge?' · 시작값에서 항목별 증감을 거쳐 끝값으로 연결':''}</p>${bars.map(p=>`<div class="report-bar-row"><span class="report-bar-label">${esc(p.label)}</span><div class="report-bar-track"><i class="report-bar-zero" style="left:${zero}%"></i><span class="report-bar ${p.total?'total':p.value<0?'negative':'positive'}" style="left:${Math.min(position(p.start),position(p.end))}%;width:${Math.abs(p.end-p.start)/span*100}%"></span></div><b>${bridge&&!p.total&&p.value>0?'+':''}${fmt(p.value,3)}</b></div>`).join('')}</div>`;
+  }
+  function reportCitation(b) {
+    if(!b.source_url)return '';
+    let name='출처';try{name=new URL(b.source_url).hostname.replace(/^www\./,'');}catch{}
+    return `<p class="source report-citation">${url(b.source_url,name+' ↗')}<span> · ${esc(b.source_date)}${b.locator?' · '+esc(b.locator):''}</span></p>`;
+  }
   function reportBlock(b) {
-    const citation=b.source_url?source(b)+(b.locator?`<p class="source">위치 ${esc(b.locator)}</p>`:''):'';
+    const citation=reportCitation(b);
     let html='';
     if(b.type==='paragraph')html=`<p>${esc(b.text)}</p>`;
     if(b.type==='subheading')html=`<h3>${esc(b.text)}</h3>`;
@@ -124,12 +141,20 @@
     if(b.type==='dialogue')html=`<div class="report-dialogue ${esc(b.role)}"><p class="dialogue-speaker"><b>${esc(b.speaker)}</b><span>${b.role==='question'?'질문 요지':'답변 요지'}</span></p>${b.paragraphs.map(p=>`<p>${esc(p)}</p>`).join('')}</div>`;
     if(b.type==='comment')html=reportComment(b);
     if(b.type==='table')html=`<figure class="report-figure"><figcaption>${esc(b.title)}</figcaption>${table(b.columns,b.rows)}</figure>`;
-    if(b.type==='chart')html=`<figure class="report-figure"><figcaption>${esc(b.title)}</figcaption>${chart([{label:b.title,points:b.points}],{unit:b.unit})}${table(['기간·구분',b.unit],b.points.map(p=>[p.label,p.value]))}</figure>`;
+    if(b.type==='chart')html=`<figure class="report-figure report-chart"><figcaption>${esc(b.title)}</figcaption>${b.kind?reportBars(b):chart([{label:b.title,points:b.points}],{unit:b.unit})}${b.caption?`<p class="report-figure-caption">${esc(b.caption)}</p>`:''}<details class="report-chart-data"><summary>숫자 표 보기</summary>${table(['기간·구분',b.unit],b.points.map(p=>[p.label,p.value]))}</details></figure>`;
+    if(b.type==='diagram')html=`<figure class="report-figure report-diagram ${b.layout==='parallel'?'report-parallel':'report-sequence'}"><figcaption>${esc(b.title)}</figcaption><${b.layout==='parallel'?'ul':'ol'}>${b.steps.map((step,i)=>`<li>${b.layout==='parallel'?'':`<span class="report-step-number">${String(i+1).padStart(2,'0')}</span>`}<div><strong>${esc(step.title)}</strong><p>${esc(step.text)}</p></div></li>`).join('')}</${b.layout==='parallel'?'ul':'ol'}><p class="report-figure-caption">${esc(b.caption)}</p></figure>`;
     return `<div class="report-block">${html}${citation}</div>`;
+  }
+  function reportEssay(r,context) {
+    const e=r.editorial,link=s=>href('reports',r.id,{...context,section:s.id});
+    const toc=`<nav class="toc report-essay-toc" aria-label="리포트 목차"><p class="eyebrow">CONTENTS</p><ol>${r.sections.map((s,i)=>`<li><a href="${esc(link(s))}"><span>${String(i+1).padStart(2,'0')}</span>${esc(s.title)}</a></li>`).join('')}</ol></nav>`;
+    const related=list(e.related_reports).map(x=>`<a href="${esc(href('reports',x.id,context))}">${esc(x.title)} <span aria-hidden="true">↗</span></a>`).join('');
+    return `<div class="report-reader-tools"><a href="${esc(href('reports',null,context))}">← 심층 리포트</a><button type="button" data-report-print>인쇄 / PDF 저장</button></div><article class="report-body report-essay" tabindex="-1" data-item="${esc(r.id)}"><header class="report-opening"><p class="eyebrow">MARKET BRIEFING · ${r.format==='실적 종합'?'AI INFRASTRUCTURE':e.template==='interview'?'LONGFORM INTERVIEW':'EARNINGS REVIEW'}</p><h1>${esc(r.title)}</h1><p class="report-deck">${esc(r.overview)}</p><div class="report-dateline"><span>${esc(r.period)}</span><span>원문 ${esc(r.source_date)}</span><span>개정 ${esc(r.updated_on||r.written_on||r.source_date)}</span></div></header><div class="report-intro">${e.introduction.map(p=>`<p>${esc(p)}</p>`).join('')}</div><aside class="report-reading-thesis"><strong>이 글에서 짚을 변화</strong><ul>${e.key_takeaways.map(p=>`<li>${esc(p)}</li>`).join('')}</ul></aside>${toc}${r.sections.map((s,i)=>`<section id="section-${esc(s.id)}" class="report-section report-${esc(s.role)}"><div class="report-chapter"><span>${String(i+1).padStart(2,'0')}</span><h2>${esc(s.title)}</h2></div>${s.blocks.map(reportBlock).join('')}</section>`).join('')}<section class="report-watch"><p class="eyebrow">NEXT CHECK</p><h2>다음 실적에서 이어서 볼 질문</h2>${e.watchpoints.map((x,i)=>`<div class="report-watchpoint"><span>${String(i+1).padStart(2,'0')}</span><div><h3>${esc(x.metric)}</h3><p>${esc(x.condition)}</p><small>${esc(x.timing)}</small></div></div>`).join('')}</section><section class="report-methodology"><h2>자료와 읽은 범위</h2><p>${reportCoverage(r)}</p>${r.comparison?`<p><b>직전 자료와의 연결</b> ${esc(r.comparison.guidance_change)}</p>${r.comparison.previous_report_id?`<p><a href="${esc(href('reports',r.comparison.previous_report_id,context))}">이전 리포트 →</a></p>`:''}`:''}${list(e.glossary).length?`<details class="report-glossary"><summary>용어 풀이</summary><dl>${e.glossary.map(x=>`<dt>${esc(x.term)}</dt><dd>${esc(x.definition)}</dd>`).join('')}</dl></details>`:''}<details class="report-source-ledger"><summary>근거 자료 ${list(r.references).length}건</summary><ol class="report-references">${list(r.references).map(ref=>`<li>${url(ref.url,ref.label)} <span>· ${esc(ref.date)}</span></li>`).join('')}</ol></details></section>${related?`<section class="report-related report-essay-related"><h2>함께 읽을 분석</h2>${related}</section>`:''}</article>`;
   }
   function reportBody(r,params=new URLSearchParams()) {
     const company=config.workspace?.companies.find(c=>c.id===params.get("company")),context=company?{company:company.id}:{};
     const e=r.editorial;
+    if(e?.layout==='essay')return reportEssay(r,context);
     const intro=e?`<div class="report-takeaways"><p class="eyebrow">한눈에 보기</p><ul>${e.key_takeaways.map(p=>`<li>${esc(p)}</li>`).join('')}</ul></div><div class="report-intro">${e.introduction.map(p=>`<p>${esc(p)}</p>`).join('')}</div>${list(e.related_reports).length?`<div class="report-related"><b>함께 읽기</b>${e.related_reports.map(x=>anchor('reports',x.id,x.title)).join('')}</div>`:''}`:'';
     const references=list(r.references).map(ref=>`<li>${url(ref.url,ref.label)} · ${esc(ref.date)}</li>`).join('');
     return `<a class="back" href="${esc(href('reports',null,context))}">← 리포트 목록</a><article class="report-body" tabindex="-1" data-item="${esc(r.id)}"><div class="meta">${badge(r.format)}${e?badge(r.format==='실적 종합'?'실적 연결':e.template==='earnings'?'실적 심층':'인터뷰 심층'):''}<span>${esc(r.company)} · ${esc(r.sector)} · ${esc(r.period)}</span></div><h1>${esc(r.title)}</h1><p class="report-deck">${esc(r.overview)}</p>${source(r)}<p class="note">${reportCoverage(r)}${r.written_on?` · 작성 ${esc(r.written_on)}`:''}</p>${intro}<nav class="toc" aria-label="리포트 목차"><strong>목차</strong><ol>${r.sections.map(s=>`<li><a href="${esc(href('reports',r.id,{...context,section:s.id}))}">${esc(s.title)}</a></li>`).join('')}</ol></nav>${list(e?.glossary).length?`<details class="report-glossary"><summary>먼저 알아둘 용어</summary><dl>${e.glossary.map(x=>`<dt>${esc(x.term)}</dt><dd>${esc(x.definition)}</dd>`).join('')}</dl></details>`:''}${r.sections.map((s,i)=>`<section id="section-${esc(s.id)}" class="report-section ${s.role?'report-'+esc(s.role):''}">${e?`<p class="eyebrow">${String(i+1).padStart(2,'0')}</p>`:''}<h2>${esc(s.title)}</h2>${s.blocks?s.blocks.map(reportBlock).join(''):list(s.paragraphs).map(p=>`<p>${esc(p)}</p>`).join('')+list(s.comments).map(reportComment).join('')}</section>`).join('')}${list(r.charts).map(x=>`<section><h2>${esc(x.title)}</h2>${chart([{label:x.title,points:x.points}],{unit:x.unit})}${source(x)}</section>`).join('')}${list(r.tables).map(x=>`<section><h2>${esc(x.title)}</h2>${table(x.columns,x.rows)}${source(x)}</section>`).join('')}${r.comparison?`<section><h2>이전 자료와 달라진 점</h2><p>${esc(r.comparison.guidance_change)}</p>${r.comparison.previous_report_id?anchor('reports',r.comparison.previous_report_id,'이전 리포트 →'):''}</section>`:''}${r.investment_impact?`<div class="impact investment"><b>투자에 주는 의미 · 편집 해석</b><p>${esc(r.investment_impact)}</p></div>`:''}${e?`<section><h2>다음에 확인할 것</h2>${table(['관측 지표','판단이 달라지는 조건','확인 시점'],e.watchpoints.map(x=>[x.metric,x.condition,x.timing]))}</section>`:''}${references?`<section><h2>근거 자료</h2><ul class="report-references">${references}</ul></section>`:''}</article>`;
@@ -329,9 +354,10 @@
     html+=`<section class="interview-library" aria-labelledby="interview-library-title"><header class="interview-section-head"><h2 id="interview-library-title">전체 인터뷰</h2><p>선정에서 빠져도 기존 본문과 원문 날짜를 보존합니다. 제목을 눌러 전체 해설을 읽으실 수 있습니다.</p><label class="interview-search">인터뷰 검색 <input type="search" data-search="interviews" value="${esc(search)}" placeholder="인물·방송·주제 검색" aria-label="인터뷰 검색"></label><p class="note">${items.length} / ${data.items.length}편 · 원문 최신순</p></header>${items.length?items.map(x=>interviewEntry(x,x.id===target)).join(''):empty('검색 조건에 맞는 인터뷰가 없습니다')}</section>`;
     return html;
   }
+  function legacyTools(){return `<section class="panel" id="section-legacy-tools"><p class="eyebrow">기존 브리핑 도구</p><h2>Word 복사·인쇄와 이전 상세 화면</h2><p>보존된 회차를 기존 형식으로 열어 사용할 수 있습니다. 아래 Word·인쇄는 당시 브리핑 원고에 적용되며 현재 투자판단 화면의 출력 기능은 아닙니다.</p><nav class="signal-company-links"><a href="legacy.html#report">일간 보고서형 · Word 복사·인쇄 →</a><a href="legacy.html#weekly-report">주간 보고서형 · Word 복사·인쇄 →</a><a href="legacy.html#insights">전략 시사점 →</a><a href="legacy.html#gpu">GPU 과거 카탈로그 →</a><a href="legacy.html#compare-edit">편집 비교 기록 →</a></nav></section>`;}
   function renderArchive(data) {
     const f=filters.archive||={},q=f.search?.toLowerCase()||'',items=data.items.filter(x=>(!f.kind||f.kind==='전체'||x.collection===f.kind)&&(!q||(x.title||x.oneliner||'').toLowerCase().includes(q)));
-    return title('archive',data,'기존 회차와 새로운 누적 자료, 정정 이력을 함께 찾습니다.')+`<div class="filters">${select('kind','종류',['전체',...new Set(data.items.map(x=>x.collection))],f.kind)}<input type="search" data-search="archive" aria-label="아카이브 검색" placeholder="제목 검색" value="${esc(f.search||'')}"></div><section class="panel"><div class="table-scroll"><table><thead><tr><th>날짜</th><th>종류</th><th>제목</th></tr></thead><tbody>${items.map(x=>`<tr data-item="${esc(x.id)}" tabindex="-1"><td>${esc(x.source_date||x.date)}</td><td>${esc(x.collection)}</td><td>${anchor(({articles:'news',editions:'news',weeklies:'weekly',reports:'reports',corrections:'archive'})[x.collection]||'archive',x.collection==='editions'?x.article_ids?.[0]:x.id,x.title||x.oneliner||x.id)}</td></tr>`).join('')}</tbody></table></div>${items.length?'':'<p class="quiet">조건에 맞는 기록이 없습니다.</p>'}</section>`;
+    return title('archive',data,'기존 회차와 새로운 누적 자료, 정정 이력을 함께 찾습니다.')+`<div class="filters">${select('kind','종류',['전체',...new Set(data.items.map(x=>x.collection))],f.kind)}<input type="search" data-search="archive" aria-label="아카이브 검색" placeholder="제목 검색" value="${esc(f.search||'')}"></div><section class="panel"><div class="table-scroll"><table><thead><tr><th>날짜</th><th>종류</th><th>제목</th></tr></thead><tbody>${items.map(x=>`<tr data-item="${esc(x.id)}" tabindex="-1"><td>${esc(x.source_date||x.date)}</td><td>${esc(x.collection)}</td><td>${anchor(({articles:'news',editions:'news',weeklies:'weekly',reports:'reports',corrections:'archive'})[x.collection]||'archive',x.collection==='editions'?x.article_ids?.[0]:x.id,x.title||x.oneliner||x.id)}</td></tr>`).join('')}</tbody></table></div>${items.length?'':'<p class="quiet">조건에 맞는 기록이 없습니다.</p>'}</section>`+legacyTools();
   }
   function renderAIState(data,params) {
     const f=filters['ai-state']||{},target=data.items.find(x=>x.id===params.get('id'));
@@ -357,6 +383,7 @@
   function viewTop(){ $('#content').focus?.({preventScroll:true});window.scrollTo?.(0,0); }
   async function show() {
     const token=++generation,{tab,params}=route();active=tab;
+    let openedReport=null;
     const investor=window.InvestorDesk,isInvestor=investor?.views.includes(tab),companyID=isInvestor?params.get('id'):params.get('company');
     if(config.workspace?.companies.some(c=>c.id===companyID))selectedCompany=companyID;
     investor?.deactivate();navigation();$('#content').className=isInvestor?'investor-view':'';$('#content').innerHTML='<div class="loading">자료를 불러오고 있습니다.</div>';
@@ -369,7 +396,7 @@
         investor.mount(results[0].value,{view:tab,id:params.get('id')||selectedCompany},related);viewTop();return;
       }
       const data=await json(tab);if(token!==generation)return;
-      if(tab==='reports'&&params.get('id')){if(!data.items.some(r=>r.id===params.get('id')))throw Error('목록에 없는 리포트');const report=await json('reports/'+encodeURIComponent(params.get('id')));if(token!==generation)return;$('#content').innerHTML=title('reports',data)+reportBody(report,params);}
+      if(tab==='reports'&&params.get('id')){if(!data.items.some(r=>r.id===params.get('id')))throw Error('목록에 없는 리포트');const report=await json('reports/'+encodeURIComponent(params.get('id')));if(token!==generation)return;openedReport=report;$('#content').className=report.editorial?.layout==='essay'?'report-reading-view':'';$('#content').innerHTML=(report.editorial?.layout==='essay'?'':title('reports',data))+reportBody(report,params);}
       else if(tab==='weekly'){
         const selected=params.get('id')||data.items.slice().sort((a,b)=>b.id.localeCompare(a.id))[0]?.id;
         let week=null;
@@ -382,25 +409,36 @@
       }
       else $('#content').innerHTML=tab==='telegram'?renderTelegram(data,params):renderers[tab]?renderers[tab](data,params):renderGeneric(tab,data);
       $('#content').innerHTML=researchContext(tab,data,params,$('#content').innerHTML);
-      document.title=(config.workspace?.labels.find(x=>x.id===tab)?.label||config.tabs.find(x=>x.id===tab).label)+' · Market Briefing';
-      if(params.get('section')||(params.get('id')&&tab!=='reports'))highlight(params);else viewTop();
+      document.title=(openedReport?.title||config.workspace?.labels.find(x=>x.id===tab)?.label||config.tabs.find(x=>x.id===tab).label)+' · Market Briefing';
+      if(params.get('section')||(params.get('id')&&tab!=='reports'))highlight(params);else if(openedReport?.editorial?.layout==='essay'){$('.report-essay')?.focus?.({preventScroll:true});$('.report-reader-tools')?.scrollIntoView?.({block:'start',behavior:'instant'});}else viewTop();
     }catch(e){if(token===generation){if(isInvestor)investor.reset();$('#content').innerHTML=`<div class="empty error" role="alert"><h1>${isInvestor?'검증 자료를 불러오지 못했습니다':'자료를 불러오지 못했습니다'}</h1><p>자료 다시 읽기로 재시도해 주세요. 다른 자료 화면은 계속 이용하실 수 있습니다.</p></div><button data-retry type="button">다시 불러오기</button>`;}}
   }
   function redraw(){const {params}=route(),tab=active;return cache.get(tab)?.then(data=>{if(active!==tab)return;$('#content').innerHTML=researchContext(tab,data,params,tab==='telegram'?renderTelegram(data,params):renderers[tab]?renderers[tab](data,params):renderGeneric(tab,data));});}
   document.addEventListener('change',e=>{
     if(e.target.dataset.weeklyEdition!==undefined&&e.target.value){location.hash=href('weekly',e.target.value);return;}
-    if(e.target.dataset.filter){filters[active]||={};filters[active][e.target.dataset.filter]=e.target.value;if(route().params.get('id'))history.replaceState(null,'','#'+active);redraw();}
+    if(e.target.dataset.filter){filters[active]||={};filters[active][e.target.dataset.filter]=e.target.value;clearItemRoute(active);redraw();}
     if(e.target.dataset.memorySeries){filters.memory||={};filters.memory.selected=[...document.querySelectorAll('[data-memory-series]:checked')].map(x=>x.dataset.memorySeries);redraw();}
   });
   let searchTimer;document.addEventListener('input',e=>{if(e.target.dataset.search){
-    const tab=e.target.dataset.search,value=e.target.value;clearTimeout(searchTimer);
+    const tab=e.target.dataset.search,value=e.target.value,searchGeneration=generation;clearTimeout(searchTimer);
     searchTimer=setTimeout(()=>{
-      const keepFocus=['interviews','telegram'].includes(tab)&&document.activeElement===e.target,start=e.target.selectionStart,end=e.target.selectionEnd;
-      filters[tab]||={};filters[tab].search=value;
+      if(active!==tab||generation!==searchGeneration)return;
+      const keepFocus=document.activeElement===e.target,start=e.target.selectionStart,end=e.target.selectionEnd;
+      filters[tab]||={};filters[tab].search=value;clearItemRoute(tab);
       redraw()?.then(()=>{if(keepFocus&&active===tab){const input=$('[data-search="'+tab+'"]');input?.focus();input?.setSelectionRange(start,end);}});
     },150);
   }});
+  let reportPrintDetails=[];
+  window.addEventListener('beforeprint',()=>{
+    if(reportPrintDetails.length)return;
+    reportPrintDetails=[...document.querySelectorAll('.report-essay details')].map(node=>({node,open:node.open}));
+    reportPrintDetails.forEach(({node})=>{node.open=true;});
+  });
+  window.addEventListener('afterprint',()=>{
+    reportPrintDetails.forEach(({node,open})=>{node.open=open;});reportPrintDetails=[];
+  });
   document.addEventListener('click',e=>{
+    if(e.target.closest('[data-report-print]'))window.print?.();
     if(e.target.closest('[data-retry]'))show();
     const link=e.target.closest('a[href]');
     if(active==='interviews'&&route().params.get('id')&&link?.getAttribute('href')===location.hash){e.preventDefault();show();}

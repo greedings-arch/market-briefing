@@ -39,7 +39,7 @@
     const strings = xs => require(Array.isArray(xs) && xs.every(x=>typeof x==='string'), '공개 문장 배열 필요');
     const textFields = (obj,names) => require(names.split(' ').every(k=>typeof obj[k]==='string'), '공개 문장 필드 필요');
     const date = x => typeof x === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(x) && !Number.isNaN(Date.parse(x)) && new Date(x).toISOString().slice(0,10) === x;
-    keys(data, 'schema_version as_of title summary summary_detail sources companies pillars cashflows review_log limitations');
+    keys(data, 'schema_version as_of title summary summary_detail sources companies pillars cashflows review_log limitations research_reviews');
     textFields(data,'title summary summary_detail');strings(data.limitations);
     require(data.schema_version === 1 && date(data.as_of), '투자 데스크 형식/기준일 오류');
     require(Array.isArray(data.sources) && Array.isArray(data.companies) && data.companies.length > 0, '소스/기업 배열 필요');
@@ -80,6 +80,14 @@
     }
     for (const x of data.cashflows) {keys(x,'company value unit period basis source');textFields(x,'company unit period basis source');require(ids.has(x.company) && Number.isFinite(x.value) && x.period && x.basis && x.unit === 'USD bn', '현금흐름 기준 오류'); refs([x.source]);}
     for (const x of data.review_log) {keys(x,'date title body');textFields(x,'date title body');require(date(x.date) && x.date<=data.as_of && x.title && x.body, '검토 이력 오류');}
+    require(data.research_reviews===undefined||Array.isArray(data.research_reviews),'검토 목록 형식 오류');
+    const reviewURLs=new Set();
+    for(const r of data.research_reviews||[]){
+      keys(r,'source_url source_hash reviewed_on companies state reading model next');textFields(r,'source_url source_hash reviewed_on state reading model next');
+      require(/^https:\/\/t\.me\/[A-Za-z][A-Za-z0-9_]{3,31}\/[1-9]\d*$/.test(r.source_url)&&!reviewURLs.has(r.source_url),'공개 텔레그램 검토 URL 또는 중복 오류');reviewURLs.add(r.source_url);
+      require(/^[a-f0-9]{64}$/.test(r.source_hash)&&date(r.reviewed_on)&&r.reviewed_on<=data.as_of,'검토 내용 해시·날짜 오류');
+      require(['support','caution','context'].includes(r.state),'검토 방향 오류');require(['reading','model','next'].every(k=>r[k].trim()),'검토 해석과 확인 조건 누락');strings(r.companies);require(r.companies.length>0&&r.companies.every(id=>ids.has(id)),'검토 기업 참조 오류');
+    }
     return data;
   }
   return {number, reverse, scenario, sensitivity, isStale, validate};
