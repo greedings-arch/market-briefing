@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "as_of": "2026-11-03",
+  "as_of": "2026-11-04",
   "title": "AI 투자는 이어지는가. 지금 가격은 매력적인가.",
   "summary": "수요 확대는 확인됩니다. 투자 회수와 주가 매력은 더 검증해야 합니다.",
   "summary_detail": "클라우드 성장과 국내 부품·메모리 실적은 사이클을 지지합니다. 다만 투자 이후 현금 회수와 정상화 이익을 확인하기 전에는, 산업의 성장만으로 주식이 싸다고 판단하지 않습니다.",
@@ -71,83 +71,83 @@
     },
     {
       "id": "sem-price",
-      "title": "009150 · 정규장 전일 가격 확인",
-      "url": "https://mbnmoney.mbn.co.kr/stock/item?code=009150",
+      "title": "삼성전기 009150 시세",
+      "url": "https://company.mbnmoney.co.kr/stock/item?code=009150",
       "date": "2026-11-03",
       "kind": "market",
-      "note": "11월 3일 장 시작 전 표시된 전일가. 기준 거래일 11월 2일. NXT 야간 가격과 구분"
+      "note": "11월 3일 15:30 정규장 표시. 이투데이 장종료 시세와 대조했습니다."
     },
     {
       "id": "hynix-price",
-      "title": "000660 · 정규장 전일 가격 확인",
-      "url": "https://mbnmoney.mbn.co.kr/stock/item?code=000660",
+      "title": "SK hynix Inc (KRX:000660) price history",
+      "url": "https://stockanalysis.com/quote/krx/000660/",
       "date": "2026-11-03",
       "kind": "market",
-      "note": "11월 3일 장 시작 전 표시된 전일가. 기준 거래일 11월 2일. NXT 야간 가격과 구분"
+      "note": "11월 3일 15:30 KST KRX 1,398,000원. 이데일리와 대조. 타 공급자 1,388,000원 및 통합 KRX/NXT 1,414,000원은 불일치로 제외했습니다."
     },
     {
       "id": "samsung-price",
-      "title": "005930 · 정규장 전일 가격 확인",
-      "url": "https://mbnmoney.mbn.co.kr/stock/item?code=005930",
+      "title": "삼성전자 · 정규장 가격 이력",
+      "url": "https://kr.investing.com/equities/samsung-electronics-co-ltd-historical-data",
       "date": "2026-11-03",
       "kind": "market",
-      "note": "11월 3일 장 시작 전 표시된 전일가. 기준 거래일 11월 2일. NXT 야간 가격과 구분"
+      "note": "11월 3일 15:29:59 KST 종가 219,500원. 한국경제 장마감·FnGuide 공개 표와 대조했습니다."
     },
     {
       "id": "msft-price",
-      "title": "MSFT · Google Finance 정규장 종가",
-      "url": "https://www.google.com/finance/quote/MSFT:NASDAQ",
-      "date": "2026-11-02",
+      "title": "MSFT · StockAnalysis 정규장 종가·일별 이력",
+      "url": "https://stockanalysis.com/stocks/msft/history/",
+      "date": "2026-11-03",
       "kind": "market",
-      "note": "11월 2일 16:00 미국 동부시간. 시간외 가격 제외. 웹 금융 도구와 가격 대조"
+      "note": "11월 3일 16:00 EST 정규장 종가와 일별 이력의 Close를 대조했습니다. 시간외 가격은 제외했습니다. 확인일 11월 4일 KST. 수집 DB의 수정주가와 센트 단위로 일치하나, 가격 기준은 원문 정규장 Close입니다."
     },
     {
       "id": "amzn-price",
-      "title": "AMZN · Google Finance 정규장 종가",
-      "url": "https://www.google.com/finance/quote/AMZN:NASDAQ",
-      "date": "2026-11-02",
+      "title": "AMZN · StockAnalysis 정규장 종가·일별 이력",
+      "url": "https://stockanalysis.com/stocks/amzn/history/",
+      "date": "2026-11-03",
       "kind": "market",
-      "note": "11월 2일 16:00 미국 동부시간. 시간외 가격 제외. 웹 금융 도구와 가격 대조"
+      "note": "11월 3일 16:00 EST 정규장 종가와 일별 이력의 Close를 대조했습니다. 시간외 가격은 제외했습니다. 확인일 11월 4일 KST. 수집 DB의 수정주가와 센트 단위로 일치하나, 가격 기준은 원문 정규장 Close입니다."
     },
     {
       "id": "googl-price",
-      "title": "GOOGL · Google Finance 정규장 종가",
-      "url": "https://www.google.com/finance/quote/GOOGL:NASDAQ",
-      "date": "2026-11-02",
+      "title": "GOOGL · StockAnalysis 정규장 종가·일별 이력",
+      "url": "https://stockanalysis.com/stocks/googl/history/",
+      "date": "2026-11-03",
       "kind": "market",
-      "note": "11월 2일 16:00 미국 동부시간. 시간외 가격 제외. 웹 금융 도구와 가격 대조"
+      "note": "11월 3일 16:00 EST 정규장 종가와 일별 이력의 Close를 대조했습니다. 시간외 가격은 제외했습니다. 확인일 11월 4일 KST. 수집 DB의 수정주가와 센트 단위로 일치하나, 가격 기준은 원문 정규장 Close입니다."
     },
     {
       "id": "meta-price",
-      "title": "META · Google Finance 정규장 종가",
-      "url": "https://www.google.com/finance/quote/META:NASDAQ",
-      "date": "2026-11-02",
+      "title": "META · StockAnalysis 정규장 종가·일별 이력",
+      "url": "https://stockanalysis.com/stocks/meta/history/",
+      "date": "2026-11-03",
       "kind": "market",
-      "note": "11월 2일 16:00 미국 동부시간. 시간외 가격 제외. 웹 금융 도구와 가격 대조"
+      "note": "11월 3일 16:00 EST 정규장 종가와 일별 이력의 Close를 대조했습니다. 시간외 가격은 제외했습니다. 확인일 11월 4일 KST. 수집 DB의 수정주가와 센트 단위로 일치하나, 가격 기준은 원문 정규장 Close입니다."
     },
     {
       "id": "nvda-price",
-      "title": "NVDA · Google Finance 정규장 종가",
-      "url": "https://www.google.com/finance/quote/NVDA:NASDAQ",
-      "date": "2026-11-02",
+      "title": "NVDA · StockAnalysis 정규장 종가·일별 이력",
+      "url": "https://stockanalysis.com/stocks/nvda/history/",
+      "date": "2026-11-03",
       "kind": "market",
-      "note": "11월 2일 16:00 미국 동부시간. 시간외 가격 제외. 웹 금융 도구와 가격 대조"
+      "note": "11월 3일 16:00 EST 정규장 종가와 일별 이력의 Close를 대조했습니다. 시간외 가격은 제외했습니다. 확인일 11월 4일 KST. 수집 DB의 수정주가와 센트 단위로 일치하나, 가격 기준은 원문 정규장 Close입니다."
     },
     {
       "id": "aapl-price",
-      "title": "AAPL · Google Finance 정규장 종가",
-      "url": "https://www.google.com/finance/quote/AAPL:NASDAQ",
-      "date": "2026-11-02",
+      "title": "AAPL · StockAnalysis 정규장 종가·일별 이력",
+      "url": "https://stockanalysis.com/stocks/aapl/history/",
+      "date": "2026-11-03",
       "kind": "market",
-      "note": "11월 2일 16:00 미국 동부시간. 시간외 가격 제외. 웹 금융 도구와 가격 대조"
+      "note": "11월 3일 16:00 EST 정규장 종가와 일별 이력의 Close를 대조했습니다. 시간외 가격은 제외했습니다. 확인일 11월 4일 KST. 수집 DB의 수정주가와 센트 단위로 일치하나, 가격 기준은 원문 정규장 Close입니다."
     },
     {
       "id": "tsla-price",
-      "title": "TSLA · Google Finance 정규장 종가",
-      "url": "https://www.google.com/finance/quote/TSLA:NASDAQ",
-      "date": "2026-11-02",
+      "title": "TSLA · StockAnalysis 정규장 종가·일별 이력",
+      "url": "https://stockanalysis.com/stocks/tsla/history/",
+      "date": "2026-11-03",
       "kind": "market",
-      "note": "11월 2일 16:00 미국 동부시간. 시간외 가격 제외. 웹 금융 도구와 가격 대조"
+      "note": "11월 3일 16:00 EST 정규장 종가와 일별 이력의 Close를 대조했습니다. 시간외 가격은 제외했습니다. 확인일 11월 4일 KST. 수집 DB의 수정주가와 센트 단위로 일치하나, 가격 기준은 원문 정규장 Close입니다."
     },
     {
       "id": "aapl-q4",
@@ -246,11 +246,11 @@
       "eps": null,
       "multiple": 15,
       "quote": {
-        "value": 1193000,
-        "date": "2026-11-02",
+        "value": 1105000,
+        "date": "2026-11-03",
         "source": "sem-price",
-        "session": "정규장 기준 · KRX 전일가",
-        "time": "15:30 KST"
+        "time": "15:30 KST",
+        "session": "KRX 정규장 종가"
       },
       "next_check": "패키지 매출·가동률·마진",
       "assessment": "가격 판단 보류"
@@ -334,11 +334,11 @@
       "eps": null,
       "multiple": 15,
       "quote": {
-        "value": 1472000,
-        "date": "2026-11-02",
+        "value": 1398000,
+        "date": "2026-11-03",
         "source": "hynix-price",
-        "session": "정규장 기준 · KRX 전일가",
-        "time": "15:30 KST"
+        "time": "15:30 KST",
+        "session": "KRX 정규장 종가"
       },
       "next_check": "HBM 출하·가격과 장기계약 이행",
       "assessment": "가격 판단 보류"
@@ -428,11 +428,11 @@
       },
       "multiple": 15,
       "quote": {
-        "value": 229000,
-        "date": "2026-11-02",
+        "value": 219500,
+        "date": "2026-11-03",
         "source": "samsung-price",
-        "session": "정규장 기준 · KRX 전일가",
-        "time": "15:30 KST"
+        "time": "15:29:59 KST",
+        "session": "KRX 정규장 종가"
       },
       "next_check": "HBM 출하와 전사 이익 구성",
       "assessment": "가격 판단 보류"
@@ -516,11 +516,11 @@
       },
       "multiple": 25,
       "quote": {
-        "value": 507.12,
-        "date": "2026-11-02",
+        "value": 520.99,
+        "date": "2026-11-03",
         "source": "msft-price",
-        "session": "정규장 종가 · NASDAQ",
-        "time": "16:00 EST"
+        "time": "16:00 EST",
+        "session": "정규장 종가 · NASDAQ"
       },
       "next_check": "Azure 성장·시설 인도·현금 회수",
       "assessment": "가격 판단 보류"
@@ -604,11 +604,11 @@
       },
       "multiple": 25,
       "quote": {
-        "value": 245.63,
-        "date": "2026-11-02",
+        "value": 250.69,
+        "date": "2026-11-03",
         "source": "amzn-price",
-        "session": "정규장 종가 · NASDAQ",
-        "time": "16:00 EST"
+        "time": "16:00 EST",
+        "session": "정규장 종가 · NASDAQ"
       },
       "next_check": "AWS 성장과 투자 이후 FCF",
       "assessment": "가격 판단 보류"
@@ -692,11 +692,11 @@
       },
       "multiple": 25,
       "quote": {
-        "value": 278.99,
-        "date": "2026-11-02",
+        "value": 280.03,
+        "date": "2026-11-03",
         "source": "googl-price",
-        "session": "정규장 종가 · NASDAQ",
-        "time": "16:00 EST"
+        "time": "16:00 EST",
+        "session": "정규장 종가 · NASDAQ"
       },
       "next_check": "Cloud 매출 구성·투자 이후 FCF",
       "assessment": "가격 판단 보류"
@@ -780,11 +780,11 @@
       },
       "multiple": 25,
       "quote": {
-        "value": 606.73,
-        "date": "2026-11-02",
+        "value": 621.03,
+        "date": "2026-11-03",
         "source": "meta-price",
-        "session": "정규장 종가 · NASDAQ",
-        "time": "16:00 EST"
+        "time": "16:00 EST",
+        "session": "정규장 종가 · NASDAQ"
       },
       "next_check": "광고 단가·노출과 FCF",
       "assessment": "가격 판단 보류"
@@ -855,11 +855,11 @@
       "eps": null,
       "multiple": 25,
       "quote": {
-        "value": 202.06,
-        "date": "2026-11-02",
+        "value": 206.69,
+        "date": "2026-11-03",
         "source": "nvda-price",
-        "session": "정규장 종가 · NASDAQ",
-        "time": "16:00 EST"
+        "time": "16:00 EST",
+        "session": "정규장 종가 · NASDAQ"
       },
       "next_check": "데이터센터 성장·마진·고객 투자",
       "assessment": "가격 판단 보류"
@@ -936,11 +936,11 @@
       },
       "multiple": 25,
       "quote": {
-        "value": 338.32,
-        "date": "2026-11-02",
+        "value": 331.9,
+        "date": "2026-11-03",
         "source": "aapl-price",
-        "session": "정규장 종가 · 이번 실적 발표 전 가격",
-        "time": "16:00 EST"
+        "time": "16:00 EST",
+        "session": "정규장 종가 · NASDAQ"
       },
       "next_check": "제품별 성장·AI 사용과 서비스 마진",
       "assessment": "가격 판단 보류"
@@ -981,11 +981,11 @@
       "eps": null,
       "multiple": 25,
       "quote": {
-        "value": 403.82,
-        "date": "2026-11-02",
+        "value": 398.5,
+        "date": "2026-11-03",
         "source": "tsla-price",
-        "session": "정규장 종가 · NASDAQ",
-        "time": "16:00 EST"
+        "time": "16:00 EST",
+        "session": "정규장 종가 · NASDAQ"
       },
       "next_check": "자동차 수익성·AI 서비스 상업화·현금흐름",
       "assessment": "가격 판단 보류"
@@ -1103,6 +1103,11 @@
   ],
   "review_log": [
     {
+      "date": "2026-11-04",
+      "title": "수동 수집 · 가격과 메모리 전망 검토",
+      "body": "공개 텔레그램의 4분기 품목별 메모리 전망을 세 국내 기업의 후속 확인 조건에 연결했습니다. 원문 리포트는 읽지 않았으며 실제 계약가격과 회사 실적을 확인한 뒤 이익 가정을 재검토합니다. 미국 7개 종목은 11월 3일 16:00 EST 정규장 종가로 갱신했고 국내 3사는 기존 11월 3일 KRX 종가를 재확인했습니다. 기존 실적·컨센서스의 기준일과 EPS·PER 기본값은 유지했습니다. 자동화는 중지 상태입니다."
+    },
+    {
       "date": "2026-11-03",
       "title": "최초 검증 기준선",
       "body": "국내 3개사와 미국 7개사를 등록했습니다. 실적 근거는 9개사, 가격 스냅샷은 10개사입니다. 과거 판단 변화는 소급 생성하지 않았습니다."
@@ -1162,6 +1167,20 @@
       "reading": "장기 고객 계약과 자금조달의 연결을 검토합니다. 공개 단기 임대료를 CoreWeave 장기 계약의 실현 단가로 대입하지 않고, 가동 시점·검수·차입비용을 함께 확인합니다.",
       "model": "계약된 용량 → 가동·검수 → 매출 → 현금 회수의 시차를 검토합니다. GPU 임대 단가만으로 고객의 투자 여력이나 공급망 매출을 추정하지 않습니다.",
       "next": "공식 공시와 계약 설명에서 가동 지연·해지·선급금 반환 조건을 확인합니다. 장기 계약이 있어도 회수가 지연되면 고객 재주문과 공급망 매출 인식 가정을 낮출 근거가 됩니다."
+    },
+    {
+      "source_url": "https://t.me/bumgore/55165",
+      "source_hash": "4cbdbf4b178c79f3fd812de8bbd2a0f5e604992191910d7d432ea44539950d85",
+      "reviewed_on": "2026-11-04",
+      "companies": [
+        "sem",
+        "hynix",
+        "samsung"
+      ],
+      "state": "context",
+      "reading": "공개 정리글이 전한 4Q26 DRAM 가격 전망은 서버·PC 가격 상승과 모바일·NAND 둔화가 갈리는 시나리오를 제공합니다. 이 전망만으로 세 회사의 매출·마진 상향을 확정하지 않고, 제품별 실제 실현가격과 출하 구성을 확인할 맥락 자료로 봅니다.",
+      "model": "삼성전기에는 이 게시물의 DRAM 가격 전망을 직접 적용하지 않습니다. 삼성전자와 SK하이닉스의 메모리 노출은 품목별 ASP·비트 출하·제품 믹스·계약가격을 분리해 분기 매출 및 영업이익 검토에 연결합니다. eMMC/UFS·NAND는 DRAM과 별도 변수로 둡니다.",
+      "next": "다음 분기 공시·실적 설명에서 PC/서버/모바일 DRAM과 NAND의 실현가격·출하량·재고를 확인합니다. 실제 서버·PC DRAM 가격 상승과 공급사 이익률 개선이 함께 확인되면 메모리 업사이드 근거를 강화하고, 가격 전망 미달이나 NAND/모바일 둔화 심화 시 경계합니다."
     }
   ]
 }
