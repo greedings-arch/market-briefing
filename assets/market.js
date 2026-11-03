@@ -23,9 +23,10 @@
   }
   function navigation() {
     if(!window.InvestorDesk||!config.workspace){$('#tabs').innerHTML=config.tabs.map(t=>`<a href="#${esc(t.id)}" ${t.id===active?'class="active" aria-current="page"':''}>${esc(t.label)}</a>`).join('');return;}
-    const ws=config.workspace,group=ws.groups.find(g=>g.views.includes(active));
-    $('#tabs').innerHTML=ws.groups.map(g=>`<a data-nav="${esc(g.id)}" href="${['company','valuation'].includes(g.id)?href(g.id,selectedCompany):'#'+esc(g.route)}" ${g===group?'class="active" aria-current="page"':''}>${esc(g.label)}</a>`).join('');
-    $('#subtabs').innerHTML=(group?.views.length>1?group.views:[]).map(id=>`<a href="#${esc(id)}" ${id===active?'class="active" aria-current="page"':''}>${esc(ws.labels.find(x=>x.id===id)?.label||config.tabs.find(t=>t.id===id)?.label||id)}</a>`).join('');
+    const ws=config.workspace,label=id=>ws.labels.find(x=>x.id===id)?.label||config.tabs.find(t=>t.id===id)?.label||id;
+    $('#tabs').innerHTML=ws.primary.map(id=>`<a data-nav="${esc(id)}" href="${['company','valuation'].includes(id)?href(id,selectedCompany):'#'+esc(id)}" ${id===active?'class="active" aria-current="page"':''}>${esc(label(id))}</a>`).join('');
+    // The whole existing library stays visible on every screen, including phones.
+    $('#subtabs').innerHTML=ws.resources.map(id=>`<a data-library-tab="${esc(id)}" href="#${esc(id)}" ${id===active?'class="active" aria-current="page"':''}>${esc(label(id))}</a>`).join('');
   }
   function contextStrip(tab,params) {
     if(!window.InvestorDesk)return '';
@@ -35,6 +36,10 @@
     const item=contexts[tab];if(!item)return '';
     return `<aside class="context-strip"><div><small>투자 판단을 위한 근거</small><p>${esc(item[0])}</p></div><nav>${item[1].map(id=>anchor('company',id,companies.find(c=>c.id===id).name+' →')).join('')}${anchor('desk',null,'투자 판단 →')}</nav></aside>`;
   }
+  function researchContext(tab,data,params,html){
+    const signal=window.ResearchSignals?.tabHTML(tab,data,params.get('company'))||'';
+    return contextStrip(tab,params)+(signal?html.replace(/(<header class="page-title[^]*?<\/header>)/,match=>match+signal):html);
+  }
   function article(r) {return `<article class="story" tabindex="-1" data-item="${esc(r.id)}"><div class="meta">${badge(r.category)}<span>중요도 ${esc(r.importance)}/5</span><span>원문 ${esc(r.source_date)}</span>${r.date&&r.date!==r.source_date?`<span>회차 ${esc(r.date)}</span>`:""}${r.followup?badge('후속'):''}${r.paywall?badge('유료'):''}${!r.verified?badge('확인 필요'):''}${r.legacy?badge('기존 회차'):''}</div><h2>${url(r.source_url,r.title)}</h2>${list(r.summary).map(x=>`<p>${esc(x)}</p>`).join('')}<div class="impact"><strong>${r.legacy?'당시 사업 시사점':'업계 의미'}</strong>${esc(r.impact)}</div>${r.investment_impact?`<div class="impact investment"><strong>투자에 주는 의미 · 편집 해석</strong>${esc(r.investment_impact)}</div>`:r.legacy?'<p class="note">기존 사업 브리핑입니다. 투자 관점으로 재검토한 원고는 아닙니다.</p>':''}${source(r)}${r.verification_basis?`<p class="note">${esc(r.verification_basis)}</p>`:''}<a class="source" href="${esc(href('news',r.id))}">이 기사 주소</a></article>`;}
   function renderNews(data,params) {
     const f=filters.news||={},target=data.items.find(x=>x.id===params.get('id'));
@@ -42,6 +47,13 @@
     const categories=['전체',...new Set(data.items.map(x=>x.category))],dates=['전체',...new Set(data.items.map(x=>x.date||x.source_date).sort().reverse())];
     const items=data.items.filter(x=>(!f.category||f.category==='전체'||x.category===f.category)&&(!f.date||f.date==='전체'||(x.date||x.source_date)===f.date)).sort((a,b)=>(b.date||b.source_date).localeCompare(a.date||a.source_date)||(b.importance||0)-(a.importance||0));
     return title('news',data,'결론과 사실, 업계 의미와 투자 해석을 나누어 읽습니다.')+`<div class="filters">${select('category','분류',categories,f.category)}${select('date','회차',dates,f.date)}</div>`+(items.length?items.map(article).join(''):empty('선택한 조건의 기사가 없습니다'));
+  }
+  function renderTelegram(data,params) {
+    const f=filters.telegram||={},target=list(data.items).find(x=>x.id===params.get('id'));
+    if(target){f.type='전체';f.search='';}
+    const type=x=>x.source_type==='telegram_summary'?'텔레그램 정리글':x.source_type==='subscriber_article'?'구독 매체 해설':'증권사 원문 해설';
+    const items=list(data.items).filter(x=>(!f.type||f.type==='전체'||type(x)===f.type)&&(!f.search||[x.title,x.broker,x.channel,x.thesis].join(' ').toLowerCase().includes(f.search.toLowerCase()))).sort((a,b)=>b.source_date.localeCompare(a.source_date));
+    return title('telegram',data,'기존에 발행한 텔레그램 정리글·증권사·구독 매체 해설을 다시 읽고 투자 가설과 대조합니다.')+`<p class="library-preservation">공개 해설 ${list(data.items).length}건 중 텔레그램 ${list(data.items).filter(x=>x.source_type==='telegram_summary').length}건입니다. 아래 본문은 당시 삼성SDS 사업 관점의 해설을 보존한 내용입니다. 현재 투자 판단은 별도 표시합니다.</p><div class="filters">${select('type','자료 종류',['전체','텔레그램 정리글','증권사 원문 해설','구독 매체 해설'],f.type)}<label>검색 <input data-search="telegram" aria-label="텔레그램 리서치 검색" value="${esc(f.search||'')}" placeholder="주제·증권사·채널"></label></div>`+(items.length?items.map(r=>`<article class="story telegram-note" data-item="${esc(r.id)}" tabindex="-1"><div class="meta">${badge(type(r))}<span>${esc(r.broker)}${r.channel?' · '+esc(r.channel):''}</span><span>${r.original_date?'원문일':'정리글 게시일'} ${esc(r.source_date)}</span>${r.original_access==='not_read'?badge('원문 미열람'):''}</div><h2>${esc(r.headline||r.title)}</h2><p class="note">${esc(r.title)}</p><p>${esc(r.thesis)}</p>${r.dateNote?`<p class="note">${esc(r.dateNote)}</p>`:''}<div class="signal-sources">${url(r.source_url,r.source_type==='telegram_summary'?'텔레그램 정리글 ↗':'공개 출처 ↗')}</div><p class="research-limit"><b>확인 범위</b> ${esc(r.limitations)}</p><details ${target?.id===r.id?'open':''}><summary>당시 해설 전체 · 근거와 반대 조건</summary>${list(r.sections).map(s=>`<section><p class="eyebrow">${esc(s.role||'당시 해설')}</p><h3>${esc(s.heading)}</h3>${String(s.body||'').split('\n\n').map(p=>`<p>${esc(p)}</p>`).join('')}</section>`).join('')}<h3>당시 정리한 근거</h3>${list(r.facts).map(x=>`<div class="research-fact"><small>${esc(x.kind)} · ${esc(x.page)}</small><p>${esc(x.text)}</p><p class="note">${esc(x.scope)}</p></div>`).join('')}<h3>당시 판단을 바꿀 조건</h3><p>${esc(r.reconsider)}</p>${list(r.connections).map(x=>`<p>${url(x.url,x.title)} · ${esc(x.relation)}</p><p>${esc(x.body)}</p>`).join('')}${list(r.actions).length?'<h3>당시 사업 점검 항목</h3>'+r.actions.map(x=>`<p><b>${esc(x.owner)}</b> ${esc(x.task)}</p><p class="note">${esc(x.check)}</p>`).join(''):''}</details><nav class="research-note-links"><a href="${esc(href('telegram',r.id))}">이 해설 주소 →</a><a href="#desk">현재 투자 판단 →</a><a href="#gpu">GPU 가격 →</a><a href="#reports">기업 실적 리포트 →</a></nav></article>`).join(''):empty('선택한 조건의 해설이 없습니다'));
   }
   function renderSummary(data) {
     let main=title('summary',data,'오늘 바뀐 것부터, 영향이 큰 순서로 읽습니다.');
@@ -350,7 +362,7 @@
     investor?.deactivate();navigation();$('#content').className=isInvestor?'investor-view':'';$('#content').innerHTML='<div class="loading">자료를 불러오고 있습니다.</div>';
     try{
       if(isInvestor){
-        const names=['investor-desk',...(tab==='desk'||tab==='company'||tab==='valuation'?['reports']:[]),...(tab==='company'||tab==='valuation'?['news']:[])];
+        const names=['investor-desk','gpu','memory','telegram',...(tab==='desk'||tab==='company'||tab==='valuation'?['reports']:[]),...(tab==='company'||tab==='valuation'?['news']:[])];
         const results=await Promise.allSettled(names.map(json));if(token!==generation)return;
         if(results[0].status!=='fulfilled')throw results[0].reason;
         const related={config,status};names.slice(1).forEach((name,i)=>{related[name]=results[i+1].status==='fulfilled'?results[i+1].value:null;});
@@ -368,13 +380,13 @@
         $('#content').innerHTML=contextStrip(tab,params)+renderWeekly(data,params,week);
         document.title=(week?week.id+' · ':'')+'주간 시사점 · Market Briefing';if(params.get('section'))highlight(params);else viewTop();return;
       }
-      else $('#content').innerHTML=renderers[tab]?renderers[tab](data,params):renderGeneric(tab,data);
-      $('#content').innerHTML=contextStrip(tab,params)+$('#content').innerHTML;
+      else $('#content').innerHTML=tab==='telegram'?renderTelegram(data,params):renderers[tab]?renderers[tab](data,params):renderGeneric(tab,data);
+      $('#content').innerHTML=researchContext(tab,data,params,$('#content').innerHTML);
       document.title=(config.workspace?.labels.find(x=>x.id===tab)?.label||config.tabs.find(x=>x.id===tab).label)+' · Market Briefing';
       if(params.get('section')||(params.get('id')&&tab!=='reports'))highlight(params);else viewTop();
     }catch(e){if(token===generation){if(isInvestor)investor.reset();$('#content').innerHTML=`<div class="empty error" role="alert"><h1>${isInvestor?'검증 자료를 불러오지 못했습니다':'자료를 불러오지 못했습니다'}</h1><p>자료 다시 읽기로 재시도해 주세요. 다른 자료 화면은 계속 이용하실 수 있습니다.</p></div><button data-retry type="button">다시 불러오기</button>`;}}
   }
-  function redraw(){const {params}=route();return cache.get(active)?.then(data=>{$('#content').innerHTML=contextStrip(active,params)+(renderers[active]?renderers[active](data,params):renderGeneric(active,data));});}
+  function redraw(){const {params}=route(),tab=active;return cache.get(tab)?.then(data=>{if(active!==tab)return;$('#content').innerHTML=researchContext(tab,data,params,tab==='telegram'?renderTelegram(data,params):renderers[tab]?renderers[tab](data,params):renderGeneric(tab,data));});}
   document.addEventListener('change',e=>{
     if(e.target.dataset.weeklyEdition!==undefined&&e.target.value){location.hash=href('weekly',e.target.value);return;}
     if(e.target.dataset.filter){filters[active]||={};filters[active][e.target.dataset.filter]=e.target.value;if(route().params.get('id'))history.replaceState(null,'','#'+active);redraw();}
@@ -383,9 +395,9 @@
   let searchTimer;document.addEventListener('input',e=>{if(e.target.dataset.search){
     const tab=e.target.dataset.search,value=e.target.value;clearTimeout(searchTimer);
     searchTimer=setTimeout(()=>{
-      const keepFocus=tab==='interviews'&&document.activeElement===e.target,start=e.target.selectionStart,end=e.target.selectionEnd;
+      const keepFocus=['interviews','telegram'].includes(tab)&&document.activeElement===e.target,start=e.target.selectionStart,end=e.target.selectionEnd;
       filters[tab]||={};filters[tab].search=value;
-      redraw()?.then(()=>{if(keepFocus&&active===tab){const input=$('[data-search="interviews"]');input?.focus();input?.setSelectionRange(start,end);}});
+      redraw()?.then(()=>{if(keepFocus&&active===tab){const input=$('[data-search="'+tab+'"]');input?.focus();input?.setSelectionRange(start,end);}});
     },150);
   }});
   document.addEventListener('click',e=>{
