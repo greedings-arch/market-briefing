@@ -1,8 +1,8 @@
 (function(root,factory){
   'use strict';
-  const api=factory(typeof module==='object'&&module.exports?require('node:crypto').webcrypto:root.crypto,typeof module==='object'&&module.exports?require('./equity-model'):root.EquityModel);
+  const api=factory(typeof module==='object'&&module.exports?require('node:crypto').webcrypto:root.crypto,typeof module==='object'&&module.exports?require('./equity-model'):root.EquityModel,typeof module==='object'&&module.exports?require('./forward-valuation'):root.ForwardValuation);
   if(typeof module==='object'&&module.exports)module.exports=api;else root.ResearchSignals=api;
-})(typeof globalThis!=='undefined'?globalThis:this,function(cryptoAPI,M){
+})(typeof globalThis!=='undefined'?globalThis:this,function(cryptoAPI,M,F){
   'use strict';
   const rows=x=>Array.isArray(x)?x:[],finite=x=>typeof x==='number'&&Number.isFinite(x);
   const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -98,7 +98,7 @@
     if(gaps)return {headline:'자료 보완·갱신이 필요한 영역은 판단을 보류합니다.',body:`${signals.length}개 산업 신호 중 ${gaps}개가 미확인 또는 갱신 필요 상태입니다. 확인된 자료의 지지·반대 논거만 반영하며 이전 결론을 자동으로 유지하지 않습니다.`};
     const [dram,nand,gpu]=signals;
     return {headline:dram.state==='support'&&nand.state==='caution'?'DRAM 전망은 지지하지만, NAND 위험을 더해 판단합니다.':gpu.state==='caution'?'임대료 하락을 반영해 투자 회수 가정을 다시 점검합니다.':'자료의 방향과 기업 이익을 대조하며 가설을 검증합니다.',
-      body:`DRAM은 ${dram.label}, NAND는 ${nand.label}, GPU는 ${gpu.label} 상태입니다. 텔레그램은 게시물별 검토와 기업별 영향으로 반영하며 공식 확인이 필요합니다. ${M?.get(library['valuation-models'],'sem')?'국내 3사는 공개 EPS 시나리오로 가격을 비교합니다. 산업 자료의 반대 신호는 이익 가정을 다시 검토할 조건입니다.':'정상화 이익·컨센서스가 없어 현재 가격의 매력도는 보류합니다.'}`};
+      body:`DRAM은 ${dram.label}, NAND는 ${nand.label}, GPU는 ${gpu.label} 상태입니다. 텔레그램은 게시물별 검토와 기업별 영향으로 반영하며 공식 확인이 필요합니다. ${F?.get(library['valuation-defaults'],'sem')?'국내 3사는 컨센서스 EPS·역사 배수의 새 기본값으로 가격을 비교합니다. 산업 자료의 반대 신호는 이익 유지 가정을 다시 검토할 조건입니다.':'정상화 이익·컨센서스가 없어 현재 가격의 매력도는 보류합니다.'}`};
   }
   const profiles={
     sem:{name:'삼성전기',readout:'AI 서버 투자 가설은 유지하되, MLCC·기판의 직접 수혜 확인이 우선입니다.',line:'고부가 MLCC·FC-BGA의 출하, ASP, 가동률과 영업이익률',boundary:'GPU 임대료·메모리 가격은 고객 투자 환경입니다. 삼성전기의 수주·이익을 직접 증명하지 않습니다.',next:'다음 실적에서 AI 서버용 MLCC·기판 수요가 실제 매출 구성과 마진 개선으로 이어지는지 확인합니다.'},
@@ -144,7 +144,7 @@
     if(['hynix','samsung'].includes(id))readout=`${p.name}: ${dram?.label||'DRAM 미확인'} · ${nand?.label||'NAND 미확인'}을 분리해 이익 가정을 검토합니다.`;
     if(caution)readout+=' 하방 신호가 있어 이익 상향보다 반대 근거 확인을 우선합니다.';
     if(missingData)readout=`${p.name}: 자료 보완 전에는 가설 유지·강화를 판단할 수 없습니다. 확인된 신호와 미확인 영역을 아래에 구분했습니다.`;
-    return {...p,readout,signals,changes,state:!signals.length||missingData?'gap':caution?'caution':'mixed',label:!signals.length?'직접 근거 부족':missingData?'자료 보완 필요':caution?'하방 조건 추가 점검':'조건부 가설 유지',price:(()=>{const m=M?.get(library['valuation-models'],id);return m?'공개 EPS 기본 가정: 가정 검증 필요 · '+M.evaluate(m,{now}).label+' · 산업 자료의 '+(missingData?'미확인 영역 보완 필요':caution?'하방 조건 검토 필요':'검증 조건 유지'):'가격 매력도 판단 보류 · 정상화 EPS·컨센서스 미확보';})()};
+    return {...p,readout,signals,changes,state:!signals.length||missingData?'gap':caution?'caution':'mixed',label:!signals.length?'직접 근거 부족':missingData?'자료 보완 필요':caution?'하방 조건 추가 점검':'조건부 가설 유지',price:(()=>{const v=F?.evaluate(library['valuation-defaults'],id,{},now);return v?.result?'컨센서스·역사 배수 기본값: '+v.label+' · 산업 자료의 '+(missingData?'미확인 영역 보완 필요':caution?'하방 조건 검토 필요':'검증 조건 유지'):'가격 매력도 판단 보류 · 기본 평가 자료 미확보';})()};
   }
   function refsHTML(refs){return rows(refs).map(r=>{let u;try{u=new URL(r.url);}catch{return '';}
     return /^https?:$/.test(u.protocol)?`<a href="${esc(u.href)}" target="_blank" rel="noopener noreferrer">${esc(r.label)} ↗ <span>${esc(r.date)}</span></a>`:'';}).join('');}

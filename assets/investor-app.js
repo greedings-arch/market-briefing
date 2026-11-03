@@ -16,7 +16,7 @@
   function refs(ids) {
     return `<span class="citations">${[...new Set(ids)].map(id => {const s=sources.get(id);return `<a href="${escape(s.url)}" target="_blank" rel="noopener noreferrer" title="${escape(s.title)}">${escape(s.title.split(' · ')[0])} ↗ <span>${escape(s.date)}</span></a>`;}).join('')}</span>`;
   }
-  function quoteRef(c) {const m=V?.get(library,c.id);if(!m)return refs([c.quote.source]);const s=library['valuation-models'].sources.find(s=>s.id===m.quote.source);return `<a href="${escape(s.url)}" target="_blank" rel="noopener noreferrer">${escape(s.title)} ↗</a>`;}
+  function quoteRef(c) {const m=V?.get(library,c.id);if(!m)return refs([c.quote.source]);const s=library['valuation-defaults'].sources.find(s=>s.id===m.quote.source);return `<a href="${escape(s.url)}" target="_blank" rel="noopener noreferrer">${escape(s.title)} ↗</a>`;}
   function route() { return current; }
   function heading(kicker,title,detail='') {return `<div class="page-heading"><p class="eyebrow">${kicker}</p><h1>${title}</h1>${detail ? `<p class="lede">${detail}</p>` : ''}</div>`;}
   function companyPicker(selected,view) {
@@ -26,7 +26,7 @@
     const assessments=new Map(data.companies.map(c=>[c.id,R?.company(c.id,library)]));
     const cs=data.companies.filter(c=>activeFilter==='all'||c.market===activeFilter||activeFilter==='mixed'&&(c.status==='mixed'||['caution','gap'].includes(assessments.get(c.id)?.state)));
     return cs.map(c=>{const a=assessments.get(c.id),model=V?.get(library,c.id),quote=model?.quote||c.quote,priority=(a?.changes||[]).filter(s=>['caution','gap','stale'].includes(s.state)).map(s=>s.title+' · '+s.action).join(' / ');
-      return `<tr><th scope="row"><a class="company-link" href="${href('company',c.id)}">${escape(c.name)} <span>↗</span></a><small>${escape(c.ticker)} · ${escape(c.role)}</small></th><td class="numeric">${money(quote.value,c)}<small>${escape(quote.date)} · ${c.market==='KR'?'KRX':'NASDAQ'}</small></td><td><small>자료 반영</small><span class="badge ${a?.state==='gap'?'unverified':'mixed'} watch-research-status">${escape(a?.label||'자료 대조 전')}</span><small>직전 실적 기준 · ${escape(states[c.status])}</small></td><td><a class="price-review" href="${href('valuation',c.id)}">${model?escape(V.label(c.id,library)):"가격 역산 →"}</a><small>${model?"공개 손익 가정의 조건부 판단":"정상화 이익 검증 전"}</small></td><td class="table-question">${escape(priority||c.next_check)}</td></tr>`;
+      return `<tr><th scope="row"><a class="company-link" href="${href('company',c.id)}">${escape(c.name)} <span>↗</span></a><small>${escape(c.ticker)} · ${escape(c.role)}</small></th><td class="numeric">${money(quote.value,c)}<small>${escape(quote.date)} · ${c.market==='KR'?'KRX':'NASDAQ'}</small></td><td><small>자료 반영</small><span class="badge ${a?.state==='gap'?'unverified':'mixed'} watch-research-status">${escape(a?.label||'자료 대조 전')}</span><small>직전 실적 기준 · ${escape(states[c.status])}</small></td><td><a class="price-review" href="${href('valuation',c.id)}">${model?escape(V.label(c.id,library)):"가격 역산 →"}</a><small>${model?"컨센서스·역사 배수 기준":"정상화 이익 검증 전"}</small></td><td class="table-question">${escape(priority||c.next_check)}</td></tr>`;
     }).join('');
   }
   function desk() {

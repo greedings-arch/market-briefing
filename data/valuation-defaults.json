@@ -1,0 +1,401 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-11-03",
+  "currency": "KRW",
+  "valuation_basis": "current_NTM_reference",
+  "policy": "컨센서스 NTM EPS 100%와 역사 자료의 보수적 참조 배수. 현재 평가액이며 미래 목표가로 다시 할인하지 않습니다. 안전마진 20%는 사용자 변경 가능한 여유율로, 통계적 신뢰구간이 아닙니다.",
+  "sources": [
+    {
+      "id": "sem-snapshot",
+      "title": "FnGuide 삼성전기 · 시세·12개월 선행 PER",
+      "url": "https://kwcomp.fnguide.com/CompanyInfo/Snapshot?cmp_cd=009150",
+      "date": "2026-11-02",
+      "kind": "provider",
+      "note": "2026-11-03 원제공자 공개 페이지 확인. 시세 기준 11월 2일이며 구성 보고서의 작성일·추정 기간은 서로 다릅니다."
+    },
+    {
+      "id": "sem-consensus",
+      "title": "FnGuide 삼성전기 · 연간 컨센서스·증권사 목표가",
+      "url": "https://kwcomp.fnguide.com/CompanyInfo/Consensus?cmp_cd=009150",
+      "date": "2026-11-02",
+      "kind": "provider",
+      "note": "2026-11-03 원제공자 공개 페이지 확인. 시세 기준 11월 2일이며 구성 보고서의 작성일·추정 기간은 서로 다릅니다."
+    },
+    {
+      "id": "hynix-snapshot",
+      "title": "FnGuide SK하이닉스 · 시세·12개월 선행 PER",
+      "url": "https://kwcomp.fnguide.com/CompanyInfo/Snapshot?cmp_cd=000660",
+      "date": "2026-11-02",
+      "kind": "provider",
+      "note": "2026-11-03 원제공자 공개 페이지 확인. 시세 기준 11월 2일이며 구성 보고서의 작성일·추정 기간은 서로 다릅니다."
+    },
+    {
+      "id": "hynix-consensus",
+      "title": "FnGuide SK하이닉스 · 연간 컨센서스·증권사 목표가",
+      "url": "https://kwcomp.fnguide.com/CompanyInfo/Consensus?cmp_cd=000660",
+      "date": "2026-11-02",
+      "kind": "provider",
+      "note": "2026-11-03 원제공자 공개 페이지 확인. 시세 기준 11월 2일이며 구성 보고서의 작성일·추정 기간은 서로 다릅니다."
+    },
+    {
+      "id": "samsung-snapshot",
+      "title": "FnGuide 삼성전자 · 시세·12개월 선행 PER",
+      "url": "https://kwcomp.fnguide.com/CompanyInfo/Snapshot?cmp_cd=005930",
+      "date": "2026-11-02",
+      "kind": "provider",
+      "note": "2026-11-03 원제공자 공개 페이지 확인. 시세 기준 11월 2일이며 구성 보고서의 작성일·추정 기간은 서로 다릅니다."
+    },
+    {
+      "id": "samsung-consensus",
+      "title": "FnGuide 삼성전자 · 연간 컨센서스·증권사 목표가",
+      "url": "https://kwcomp.fnguide.com/CompanyInfo/Consensus?cmp_cd=005930",
+      "date": "2026-11-02",
+      "kind": "provider",
+      "note": "2026-11-03 원제공자 공개 페이지 확인. 시세 기준 11월 2일이며 구성 보고서의 작성일·추정 기간은 서로 다릅니다."
+    },
+    {
+      "id": "im-sem",
+      "title": "iM증권 · 삼성전기 · 2027년까지 매 분기 QoQ 증익 구간",
+      "url": "https://imfnsec.tistory.com/206",
+      "date": "2026-10-29",
+      "kind": "broker",
+      "note": "증권사 리서치센터 공개 원문과 표 5를 확인했습니다. 12개월 목표가지만 2028년·2027년 사업부 이익을 섞은 SOTP입니다."
+    },
+    {
+      "id": "kiwoom-sem",
+      "title": "키움증권 · 삼성전기 · 중장기 수혜 가시성 상향",
+      "url": "https://invest.kiwoom.com/inv/39345",
+      "date": "2026-10-29",
+      "kind": "broker",
+      "note": "공식 공개 리서치 본문 확인. 2027F 현재가 PER 24.7배는 목표가에 적용한 배수가 아닙니다."
+    },
+    {
+      "id": "kb-samsung",
+      "title": "KB증권 · 삼성전자 · 실적 전망 상향",
+      "url": "https://kbthink.com/securities-view.html?docId=20261030132159147K",
+      "date": "2026-10-30",
+      "kind": "broker",
+      "note": "공식 공개 웹문 확인. FY2027 영업이익 640조원·순이익 508조원·목표가 60만원을 제시하나 EPS와 목표가 산식은 확인하지 못했습니다. 원본 PDF 확인으로 표시하지 않습니다."
+    },
+    {
+      "id": "sem-price",
+      "title": "삼성전기 009150 시세",
+      "url": "https://company.mbnmoney.co.kr/stock/item?code=009150",
+      "date": "2026-11-03",
+      "kind": "market",
+      "note": "11월 3일 15:30 정규장 표시. 이투데이 장종료 시세와 대조했습니다."
+    },
+    {
+      "id": "samsung-price",
+      "title": "삼성전자 · 정규장 가격 이력",
+      "url": "https://kr.investing.com/equities/samsung-electronics-co-ltd-historical-data",
+      "date": "2026-11-03",
+      "kind": "market",
+      "note": "11월 3일 15:29:59 KST 종가 219,500원. 한국경제 장마감·FnGuide 공개 표와 대조했습니다."
+    },
+    {
+      "id": "hynix-price",
+      "title": "SK hynix Inc (KRX:000660) price history",
+      "url": "https://stockanalysis.com/quote/krx/000660/",
+      "date": "2026-11-03",
+      "kind": "market",
+      "note": "11월 3일 15:30 KST KRX 1,398,000원. 이데일리와 대조. 타 공급자 1,388,000원 및 통합 KRX/NXT 1,414,000원은 불일치로 제외했습니다."
+    },
+    {
+      "id": "sem-history",
+      "url": "https://kwcomp.fnguide.com/CompanyInfo/getCnsTrendChart?cmp_cd=009150&consol_typ=C&freq_typ=Y&select_gsym=202612&data_typ=5",
+      "title": "FnGuide 삼성전기 월별 12MF PER",
+      "date": "2026-11-02",
+      "kind": "provider",
+      "note": "2025-12-30~2026-11-02의 월별 12개 점. 원제공자 VAL_AVG를 그대로 보존하며 일별 관측 평균의 산식은 미공개."
+    },
+    {
+      "id": "hynix-history",
+      "url": "https://www.samsungpop.com/common.do?cmd=down&contentType=application%2Fpdf&fileName=2010%2F2025062507085276K_02_04.pdf&inlineYn=Y&saveKey=research.pdf",
+      "title": "삼성증권 SK하이닉스 · 역사 12MF PER",
+      "date": "2025-06-25",
+      "kind": "broker",
+      "note": "2016~2024 차트의 평균 8.6배, +1SD 12.7배, -1SD 4.5배. 50배 초과 관측 제외. 일별 원계열·관측수는 미확보."
+    },
+    {
+      "id": "samsung-history",
+      "url": "https://www.hankyung.com/article/2026071444116",
+      "title": "한국경제 · FnGuide 10년 PER 통계 인용",
+      "date": "2026-07-15",
+      "kind": "secondary",
+      "note": "2026-07-13 기준 직전 10년 삼성전자 12MF PER 평균 11.84배·표준편차 3.86. FnGuide 원시 시계열 재계산이 아닌 기사 인용 통계. 정확한 표본수·빈도·제외 기준 미공개."
+    },
+    {
+      "id": "sem-growth",
+      "url": "https://www.sks.co.kr/data1/research/qna_file/20251124073532741_3_ko.pdf",
+      "title": "SK증권 삼성전기 · 과거 성장기 PER 사례",
+      "date": "2025-11-24",
+      "kind": "broker",
+      "note": "2010~13·2017~19 성장기 평균 PER 30배를 FY2026 EPS에 적용한다고 설명. 같은 기준 12MF 장기 평균이 아니며 여기서는 낙관 가정의 상단 참고 사례로만 사용."
+    }
+  ],
+  "companies": [
+    {
+      "id": "sem",
+      "name": "삼성전기",
+      "ticker": "009150",
+      "quote": {
+        "value": 1105000,
+        "date": "2026-11-03",
+        "source": "sem-price",
+        "time": "15:30 KST",
+        "session": "KRX 정규장 종가"
+      },
+      "consensus": {
+        "as_of": "2026-11-02",
+        "retrieved_on": "2026-11-03",
+        "period": "NTM",
+        "reference_price": 1193000,
+        "reference_date": "2026-11-02",
+        "forward_per": 26.86,
+        "source": "sem-snapshot",
+        "annual_source": "sem-consensus",
+        "fy2026": 22250.45,
+        "fy2027": 46425.57,
+        "actual2025": 9099.32,
+        "target": 2411111,
+        "target_source": "sem-consensus",
+        "count": 18
+      },
+      "history": {
+        "source": "sem-history",
+        "metric": "12MF PER",
+        "period": "2025-12-30~2026-11-02 · 월별 12개 점",
+        "quality": "원제공자 단기 시계열 · 장기 정상배수 아님",
+        "observations": [
+          {
+            "date": "2025-12-30",
+            "per": 20.93
+          },
+          {
+            "date": "2026-01-30",
+            "per": 20.78
+          },
+          {
+            "date": "2026-02-27",
+            "per": 32.16
+          },
+          {
+            "date": "2026-03-31",
+            "per": 28.54
+          },
+          {
+            "date": "2026-04-30",
+            "per": 48.59
+          },
+          {
+            "date": "2026-05-29",
+            "per": 102.61
+          },
+          {
+            "date": "2026-06-30",
+            "per": 88.51
+          },
+          {
+            "date": "2026-07-31",
+            "per": 37.96
+          },
+          {
+            "date": "2026-08-31",
+            "per": 44.89
+          },
+          {
+            "date": "2026-09-30",
+            "per": 44.67
+          },
+          {
+            "date": "2026-10-30",
+            "per": 28.39
+          },
+          {
+            "date": "2026-11-02",
+            "per": 26.86
+          }
+        ],
+        "mean": null,
+        "sd": null,
+        "rule": "lower_quartile",
+        "selected": 28,
+        "sample_count": 12,
+        "exclusions": "제외 없음. 12개 원관측 모두 사용. 11월 값은 11월 2일 관측이며 월말 확정치가 아닙니다.",
+        "rationale": "표본의 하위 25% 지점 28.0075배를 한 자리로 반올림한 28.0배를 기준으로 선택합니다. 중간값 35.06배·최고 102.61배는 이익 추정과 주가 전환기의 영향을 크게 받아 채택하지 않았습니다. 짧은 시계열이라 25% 기준 자체는 보수적 편집 규칙이며 장기 적정배수·확률 하한이 아닙니다."
+      },
+      "defaults": {
+        "safety": 0.2
+      },
+      "scenarios": [
+        {
+          "id": "downside",
+          "label": "이익 증가 정체",
+          "eps": 22250.45,
+          "per": 20.78,
+          "reason": "향후 12개월 EPS가 FY2026E 수준에 머무르고 단기 표본 최저 20.78배를 적용하는 스트레스. 관측 최저는 향후 하한이 아닙니다."
+        },
+        {
+          "id": "upside",
+          "label": "증익·재평가",
+          "eps": 46425.57,
+          "per": 30,
+          "reason": "FY2027E EPS 수준이 향후 12개월에 완전히 반영되고 성장기 PER 30배를 인정하는 경우. 30배는 SK증권의 과거 성장기 사례를 상단 참고한 편집 선택으로, 동일 12MF 장기 통계가 아닙니다."
+        }
+      ],
+      "eps_reason": "기본 EPS는 동일 날짜의 FnGuide 주가 ÷ 12MF PER로 복원한 선행 EPS 100%입니다. 별도 이익 할인·상향 근거가 부족해 컨센서스와 다른 EPS를 임의로 만들지 않았습니다. 반올림된 PER에서 나온 근사치이며 직접 보고 EPS가 아닙니다. 세금·귀속비율·희석을 다시 적용하지 않습니다.",
+      "per_reason": "증권사 목표가 평균을 EPS로 나눈 환산배수를 기본 PER로 채택하지 않습니다. 목표가에는 평가 이익 연도·SOTP/PBR 등 다른 산식이 섞이므로 역사 자료에서 별도로 선택합니다.",
+      "next_check": "MLCC·FC-BGA의 실제 ASP·가동률·수율과 분기별 증익이 컨센서스를 지지하는지 확인합니다. 2028년 이익을 선반영한 목표가를 현재 NTM 이익에 같은 배수로 옮기지 않습니다.",
+      "falsifier": "MLCC/FC-BGA 계약 가격 또는 가동률 하락으로 NTM EPS가 필요 EPS 아래로 낮아지면 기준 평가가 무너집니다. 서버 MLCC 확대만으로 PER 30배 이상을 자동 적용하지 않습니다.",
+      "limits": [
+        "현재 NTM EPS × 현재가/NTM 기준 역사 배수로 구한 현재 평가 참조값입니다. 12개월 후 목표가격이 아니므로 1년 요구수익률로 다시 할인하지 않습니다.",
+        "FY2026E·FY2027E는 연간 EPS입니다. 시나리오에서 미래 EPS가 그 숫자 수준에 도달한다고 가정할 뿐 NTM과 같은 기간 관측으로 취급하지 않습니다.",
+        "2025년 실제 EPS 회귀는 심각한 스트레스입니다. 정상화 이익 추정이나 재현 확률이 아닙니다.",
+        "동일 기간 선행 BPS·ROE로 하는 PBR 교차 검증과 제품별 정상화 이익 모델은 미완료입니다. 따라서 가격 판정은 이익 유지 조건부입니다."
+      ]
+    },
+    {
+      "id": "hynix",
+      "name": "SK하이닉스",
+      "ticker": "000660",
+      "quote": {
+        "value": 1398000,
+        "date": "2026-11-03",
+        "source": "hynix-price",
+        "time": "15:30 KST",
+        "session": "KRX 정규장 종가"
+      },
+      "consensus": {
+        "as_of": "2026-11-02",
+        "retrieved_on": "2026-11-03",
+        "period": "NTM",
+        "reference_price": 1472000,
+        "reference_date": "2026-11-02",
+        "forward_per": 2.88,
+        "source": "hynix-snapshot",
+        "annual_source": "hynix-consensus",
+        "fy2026": 356352.22,
+        "fy2027": 533474.91,
+        "actual2025": 58954.87,
+        "target": 3097000,
+        "target_source": "hynix-consensus",
+        "count": 20
+      },
+      "history": {
+        "source": "hynix-history",
+        "metric": "12MF PER",
+        "period": "2016~2024 · 삼성증권 차트",
+        "quality": "증권사 원문 통계 · 원계열 미확보",
+        "observations": [],
+        "mean": 8.6,
+        "sd": 4.1,
+        "rule": "mean_minus_sd",
+        "selected": 4.5,
+        "sample_count": null,
+        "exclusions": "50배 초과 관측 제외. 적자·결측 추가 처리와 표본수는 미확인.",
+        "rationale": "평균 8.6배에서 표준편차 4.1배를 뺀 하단 참조 4.5배를 채택합니다. 현재 컨센서스 EPS가 2025년 실제 EPS보다 훨씬 높아, 정점 이익과 역사 평균 배수를 동시에 적용하는 낙관을 줄이려는 선택입니다. 평균−1SD가 적정가 또는 손실 하한을 보장하지 않습니다. 두 회사 통계는 기간·제외 방식이 달라 횡단 비교용 동일 표본이 아닙니다."
+      },
+      "defaults": {
+        "safety": 0.2
+      },
+      "scenarios": [
+        {
+          "id": "downside",
+          "label": "이익 증가 정체",
+          "eps": 356352.22,
+          "per": 4.5,
+          "reason": "향후 12개월 EPS가 FY2026E 수준에 머무르고 하단 참조 배수를 유지하는 스트레스. 미래 EPS 예측이나 확률 구간이 아닙니다."
+        },
+        {
+          "id": "upside",
+          "label": "증익·재평가",
+          "eps": 533474.91,
+          "per": 8.6,
+          "reason": "FY2027E EPS 수준을 달성하고 이익 지속성·계약 가시성이 확인되어 역사 평균 배수로 돌아오는 경우. 평균 회귀는 확정 경로가 아닌 별도 낙관 가정입니다."
+        }
+      ],
+      "eps_reason": "기본 EPS는 동일 날짜의 FnGuide 주가 ÷ 12MF PER로 복원한 선행 EPS 100%입니다. 별도 이익 할인·상향 근거가 부족해 컨센서스와 다른 EPS를 임의로 만들지 않았습니다. 반올림된 PER에서 나온 근사치이며 직접 보고 EPS가 아닙니다. 세금·귀속비율·희석을 다시 적용하지 않습니다.",
+      "per_reason": "증권사 목표가 평균을 EPS로 나눈 환산배수를 기본 PER로 채택하지 않습니다. 목표가에는 평가 이익 연도·SOTP/PBR 등 다른 산식이 섞이므로 역사 자료에서 별도로 선택합니다.",
+      "next_check": "HBM 고객 승인·장기 계약·DRAM/RDIMM 계약 ASP와 NAND 수익성이 EPS 유지의 확인 조건입니다. 현물·소매·GPU 카탈로그 가격은 확인 신호이며 회사 EPS에 자동 곱하지 않습니다.",
+      "falsifier": "계약 ASP 하락·공급 증가·수율 악화로 NTM EPS가 필요 EPS 아래로 내려가면 가격 여유가 사라집니다. PER이 낮다는 이유만으로 이익 유지가 증명되지는 않습니다.",
+      "limits": [
+        "현재 NTM EPS × 현재가/NTM 기준 역사 배수로 구한 현재 평가 참조값입니다. 12개월 후 목표가격이 아니므로 1년 요구수익률로 다시 할인하지 않습니다.",
+        "FY2026E·FY2027E는 연간 EPS입니다. 시나리오에서 미래 EPS가 그 숫자 수준에 도달한다고 가정할 뿐 NTM과 같은 기간 관측으로 취급하지 않습니다.",
+        "2025년 실제 EPS 회귀는 심각한 스트레스입니다. 정상화 이익 추정이나 재현 확률이 아닙니다.",
+        "동일 기간 선행 BPS·ROE로 하는 PBR 교차 검증과 제품별 정상화 이익 모델은 미완료입니다. 따라서 가격 판정은 이익 유지 조건부입니다."
+      ]
+    },
+    {
+      "id": "samsung",
+      "name": "삼성전자",
+      "ticker": "005930",
+      "quote": {
+        "value": 219500,
+        "date": "2026-11-03",
+        "source": "samsung-price",
+        "time": "15:29:59 KST",
+        "session": "KRX 정규장 종가"
+      },
+      "consensus": {
+        "as_of": "2026-11-02",
+        "retrieved_on": "2026-11-03",
+        "period": "NTM",
+        "reference_price": 229000,
+        "reference_date": "2026-11-02",
+        "forward_per": 3.25,
+        "source": "samsung-snapshot",
+        "annual_source": "samsung-consensus",
+        "fy2026": 45816.59,
+        "fy2027": 73035.15,
+        "actual2025": 6563.57,
+        "target": 479474,
+        "target_source": "samsung-consensus",
+        "count": 19
+      },
+      "history": {
+        "source": "samsung-history",
+        "metric": "12MF PER",
+        "period": "2026-07-13 기준 직전 10년 · 기사 인용",
+        "quality": "FnGuide 통계의 2차 인용 · 원계열 미확보",
+        "observations": [],
+        "mean": 11.84,
+        "sd": 3.86,
+        "rule": "mean_minus_sd",
+        "selected": 8,
+        "sample_count": null,
+        "exclusions": "표본수·주기·적자·결측·극단값 처리 미공개.",
+        "rationale": "기사 인용 평균 11.84배에서 표준편차 3.86배를 뺀 7.98배를 한 자리로 반올림해 8.0배를 채택합니다. 현재 컨센서스 EPS가 2025년 실제 EPS보다 훨씬 높아, 정점 이익과 역사 평균 배수를 동시에 적용하는 낙관을 줄이려는 선택입니다. 평균−1SD가 적정가 또는 손실 하한을 보장하지 않습니다. 두 회사 통계는 기간·제외 방식이 달라 횡단 비교용 동일 표본이 아닙니다."
+      },
+      "defaults": {
+        "safety": 0.2
+      },
+      "scenarios": [
+        {
+          "id": "downside",
+          "label": "이익 증가 정체",
+          "eps": 45816.59,
+          "per": 8,
+          "reason": "향후 12개월 EPS가 FY2026E 수준에 머무르고 하단 참조 배수를 유지하는 스트레스. 미래 EPS 예측이나 확률 구간이 아닙니다."
+        },
+        {
+          "id": "upside",
+          "label": "증익·재평가",
+          "eps": 73035.15,
+          "per": 11.84,
+          "reason": "FY2027E EPS 수준을 달성하고 이익 지속성·계약 가시성이 확인되어 역사 평균 배수로 돌아오는 경우. 평균 회귀는 확정 경로가 아닌 별도 낙관 가정입니다."
+        }
+      ],
+      "eps_reason": "기본 EPS는 동일 날짜의 FnGuide 주가 ÷ 12MF PER로 복원한 선행 EPS 100%입니다. 별도 이익 할인·상향 근거가 부족해 컨센서스와 다른 EPS를 임의로 만들지 않았습니다. 반올림된 PER에서 나온 근사치이며 직접 보고 EPS가 아닙니다. 세금·귀속비율·희석을 다시 적용하지 않습니다.",
+      "per_reason": "증권사 목표가 평균을 EPS로 나눈 환산배수를 기본 PER로 채택하지 않습니다. 목표가에는 평가 이익 연도·SOTP/PBR 등 다른 산식이 섞이므로 역사 자료에서 별도로 선택합니다.",
+      "next_check": "DS의 HBM·범용 DRAM 계약 ASP와 수율, 파운드리 손실, DX 이익을 나눠 EPS 유지 여부를 확인합니다. 현물·소매·GPU 카탈로그 가격은 확인 신호이며 회사 EPS에 자동 곱하지 않습니다.",
+      "falsifier": "계약 ASP 하락·공급 증가·수율 악화로 NTM EPS가 필요 EPS 아래로 내려가면 가격 여유가 사라집니다. PER이 낮다는 이유만으로 이익 유지가 증명되지는 않습니다.",
+      "limits": [
+        "현재 NTM EPS × 현재가/NTM 기준 역사 배수로 구한 현재 평가 참조값입니다. 12개월 후 목표가격이 아니므로 1년 요구수익률로 다시 할인하지 않습니다.",
+        "FY2026E·FY2027E는 연간 EPS입니다. 시나리오에서 미래 EPS가 그 숫자 수준에 도달한다고 가정할 뿐 NTM과 같은 기간 관측으로 취급하지 않습니다.",
+        "2025년 실제 EPS 회귀는 심각한 스트레스입니다. 정상화 이익 추정이나 재현 확률이 아닙니다.",
+        "동일 기간 선행 BPS·ROE로 하는 PBR 교차 검증과 제품별 정상화 이익 모델은 미완료입니다. 따라서 가격 판정은 이익 유지 조건부입니다."
+      ]
+    }
+  ]
+}
