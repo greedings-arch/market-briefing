@@ -144,7 +144,7 @@
     if(['hynix','samsung'].includes(id))readout=`${p.name}: ${dram?.label||'DRAM 미확인'} · ${nand?.label||'NAND 미확인'}을 분리해 이익 가정을 검토합니다.`;
     if(caution)readout+=' 하방 신호가 있어 이익 상향보다 반대 근거 확인을 우선합니다.';
     if(missingData)readout=`${p.name}: 자료 보완 전에는 가설 유지·강화를 판단할 수 없습니다. 확인된 신호와 미확인 영역을 아래에 구분했습니다.`;
-    return {...p,readout,signals,changes,state:!signals.length||missingData?'gap':caution?'caution':'mixed',label:!signals.length?'직접 근거 부족':missingData?'자료 보완 필요':caution?'하방 조건 추가 점검':'조건부 가설 유지',price:(()=>{const m=M?.get(library['valuation-models'],id);return m?'공개 EPS 기본 가정: '+M.evaluate(m,{now}).label+' · 산업 자료의 '+(missingData?'미확인 영역 보완 필요':caution?'하방 조건 검토 필요':'검증 조건 유지'):'가격 매력도 판단 보류 · 정상화 EPS·컨센서스 미확보';})()};
+    return {...p,readout,signals,changes,state:!signals.length||missingData?'gap':caution?'caution':'mixed',label:!signals.length?'직접 근거 부족':missingData?'자료 보완 필요':caution?'하방 조건 추가 점검':'조건부 가설 유지',price:(()=>{const m=M?.get(library['valuation-models'],id);return m?'공개 EPS 기본 가정: 가정 검증 필요 · '+M.evaluate(m,{now}).label+' · 산업 자료의 '+(missingData?'미확인 영역 보완 필요':caution?'하방 조건 검토 필요':'검증 조건 유지'):'가격 매력도 판단 보류 · 정상화 EPS·컨센서스 미확보';})()};
   }
   function refsHTML(refs){return rows(refs).map(r=>{let u;try{u=new URL(r.url);}catch{return '';}
     return /^https?:$/.test(u.protocol)?`<a href="${esc(u.href)}" target="_blank" rel="noopener noreferrer">${esc(r.label)} ↗ <span>${esc(r.date)}</span></a>`:'';}).join('');}

@@ -1,0 +1,382 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-11-03",
+  "methodology": "기존 편집 가정을 보존한 외부 대조 감사입니다. 최근 분기 연환산 모델과 공급자의 rolling 12개월 EPS는 기간·분모·회계 정의가 완전히 같지 않습니다. 목표가 차이는 EPS 항목과 배수·평가법·기간 잔차로 대칭 분해하며, 컨센서스나 환산배수를 적정가의 사실 또는 실제 채택 PER로 간주하지 않습니다.",
+  "sources": [
+    {
+      "id": "sem-snapshot",
+      "title": "FnGuide 삼성전기 · 시세·12개월 선행 PER",
+      "url": "https://kwcomp.fnguide.com/CompanyInfo/Snapshot?cmp_cd=009150",
+      "date": "2026-11-02",
+      "kind": "provider",
+      "note": "2026-11-03 원제공자 공개 페이지 확인. 시세 기준 11월 2일이며 구성 보고서의 작성일·추정 기간은 서로 다릅니다."
+    },
+    {
+      "id": "sem-consensus",
+      "title": "FnGuide 삼성전기 · 연간 컨센서스·증권사 목표가",
+      "url": "https://kwcomp.fnguide.com/CompanyInfo/Consensus?cmp_cd=009150",
+      "date": "2026-11-02",
+      "kind": "provider",
+      "note": "2026-11-03 원제공자 공개 페이지 확인. 시세 기준 11월 2일이며 구성 보고서의 작성일·추정 기간은 서로 다릅니다."
+    },
+    {
+      "id": "hynix-snapshot",
+      "title": "FnGuide SK하이닉스 · 시세·12개월 선행 PER",
+      "url": "https://kwcomp.fnguide.com/CompanyInfo/Snapshot?cmp_cd=000660",
+      "date": "2026-11-02",
+      "kind": "provider",
+      "note": "2026-11-03 원제공자 공개 페이지 확인. 시세 기준 11월 2일이며 구성 보고서의 작성일·추정 기간은 서로 다릅니다."
+    },
+    {
+      "id": "hynix-consensus",
+      "title": "FnGuide SK하이닉스 · 연간 컨센서스·증권사 목표가",
+      "url": "https://kwcomp.fnguide.com/CompanyInfo/Consensus?cmp_cd=000660",
+      "date": "2026-11-02",
+      "kind": "provider",
+      "note": "2026-11-03 원제공자 공개 페이지 확인. 시세 기준 11월 2일이며 구성 보고서의 작성일·추정 기간은 서로 다릅니다."
+    },
+    {
+      "id": "samsung-snapshot",
+      "title": "FnGuide 삼성전자 · 시세·12개월 선행 PER",
+      "url": "https://kwcomp.fnguide.com/CompanyInfo/Snapshot?cmp_cd=005930",
+      "date": "2026-11-02",
+      "kind": "provider",
+      "note": "2026-11-03 원제공자 공개 페이지 확인. 시세 기준 11월 2일이며 구성 보고서의 작성일·추정 기간은 서로 다릅니다."
+    },
+    {
+      "id": "samsung-consensus",
+      "title": "FnGuide 삼성전자 · 연간 컨센서스·증권사 목표가",
+      "url": "https://kwcomp.fnguide.com/CompanyInfo/Consensus?cmp_cd=005930",
+      "date": "2026-11-02",
+      "kind": "provider",
+      "note": "2026-11-03 원제공자 공개 페이지 확인. 시세 기준 11월 2일이며 구성 보고서의 작성일·추정 기간은 서로 다릅니다."
+    },
+    {
+      "id": "im-sem",
+      "title": "iM증권 · 삼성전기 · 2027년까지 매 분기 QoQ 증익 구간",
+      "url": "https://imfnsec.tistory.com/206",
+      "date": "2026-10-29",
+      "kind": "broker",
+      "note": "증권사 리서치센터 공개 원문과 표 5를 확인했습니다. 12개월 목표가지만 2028년·2027년 사업부 이익을 섞은 SOTP입니다."
+    },
+    {
+      "id": "kiwoom-sem",
+      "title": "키움증권 · 삼성전기 · 중장기 수혜 가시성 상향",
+      "url": "https://invest.kiwoom.com/inv/39345",
+      "date": "2026-10-29",
+      "kind": "broker",
+      "note": "공식 공개 리서치 본문 확인. 2027F 현재가 PER 24.7배는 목표가에 적용한 배수가 아닙니다."
+    },
+    {
+      "id": "kb-samsung",
+      "title": "KB증권 · 삼성전자 · 실적 전망 상향",
+      "url": "https://kbthink.com/securities-view.html?docId=20261030132159147K",
+      "date": "2026-10-30",
+      "kind": "broker",
+      "note": "공식 공개 웹문 확인. FY2027 영업이익 640조원·순이익 508조원·목표가 60만원을 제시하나 EPS와 목표가 산식은 확인하지 못했습니다. 원본 PDF 확인으로 표시하지 않습니다."
+    }
+  ],
+  "companies": [
+    {
+      "id": "sem",
+      "ticker": "009150",
+      "verdict": "needs_underwriting",
+      "summary": "기존 EPS는 컨센서스 근사치보다 낮고, 목표가 차이에는 이익뿐 아니라 더 먼 이익 연도와 사업부 평가법이 크게 작용합니다. 25배가 중립 적정배수라는 근거는 아직 부족합니다.",
+      "findings": [
+        {
+          "subject": "매출·이익률",
+          "severity": "high",
+          "detail": "최근 분기 매출 ×4에 매출 +10%, 영업이익률 18.5%를 놓았습니다. MLCC·FC-BGA의 분기별 물량·ASP·수율 전망으로 검증한 중립 추정이 아닙니다."
+        },
+        {
+          "subject": "PER 25배",
+          "severity": "high",
+          "detail": "과거 정상 이익의 배수 범위나 동종기업 비교로 25배를 도출하지 않았습니다. iM증권의 25배는 2028년 컴포넌트·패키지 이익에 적용한 값이어서 기존 향후 12개월 EPS ×25와 같지 않습니다."
+        },
+        {
+          "subject": "EPS 분모",
+          "severity": "medium",
+          "detail": "상반기 보고 보통주 EPS와 지배주주순이익의 환산 관계를 고정했습니다. 미래 주식수·우선주 배분을 완결한 희석 EPS가 아닙니다."
+        }
+      ],
+      "next_check": [
+        "MLCC·FC-BGA 분기별 물량·단가·마진으로 FY2027~2028 이익을 재구성하고, SOTP의 연도와 할인 조건을 맞춰 비교합니다.",
+        "동종기업·과거 정상화 배수와 대조해 25배를 유지할지 결정합니다."
+      ],
+      "consensus": {
+        "provider": "FnGuide",
+        "as_of": "2026-11-02",
+        "retrieved_on": "2026-11-03",
+        "currency": "KRW",
+        "date_note": "공개 페이지의 시세 기준일은 11월 2일, 조회일은 11월 3일입니다. 컨센서스 구성 보고서는 작성일이 서로 다르고 일부는 3분기 실적 발표 전 자료입니다.",
+        "quote": {
+          "value": 1193000,
+          "date": "2026-11-02",
+          "source": "sem-snapshot"
+        },
+        "forward": {
+          "per": 26.86,
+          "decimals": 2,
+          "period": "NTM",
+          "as_of": "2026-11-02",
+          "source": "sem-snapshot"
+        },
+        "target": {
+          "mean": 2411111,
+          "count": 18,
+          "count_scope": "목표가·투자의견 표의 추정기관수. EPS 항목별 기여 기관수는 미확인.",
+          "low": 1900000,
+          "high": 3000000,
+          "horizon_note": "목표가 평균은 기관별 평가법·추정 이익 연도·목표 기간이 같다고 검증되지 않았습니다. 일률적으로 12개월 후 적정가로 보거나 재할인하지 않습니다.",
+          "source": "sem-consensus"
+        },
+        "annual": [
+          {
+            "year": 2026,
+            "period": "FY",
+            "eps": 22250.45,
+            "revenue": 14.413789000000001,
+            "operating": 2.252317,
+            "owner": 1.72665,
+            "source": "sem-consensus"
+          },
+          {
+            "year": 2027,
+            "period": "FY",
+            "eps": 46425.57,
+            "revenue": 19.231450000000002,
+            "operating": 4.669567,
+            "owner": 3.602656,
+            "source": "sem-consensus"
+          }
+        ],
+        "eps_note": "12개월 선행 EPS는 같은 공급자의 기준일 주가 ÷ 소수 둘째 자리 선행 PER로 복원한 근사치입니다. 직접 보고된 EPS가 아닙니다. 연간 EPS는 지배주주순이익/수정평균발행주식수 기준이며 기본·희석 여부가 별도로 표시되지 않았습니다.",
+        "gaps": [
+          "연간 EPS·12개월 선행 EPS 각각의 기여 기관수·최저·최고 추정치는 확인하지 못했습니다. 목표가 기관수를 EPS 표본수로 대신 쓰지 않습니다.",
+          "보고 EPS가 기본·희석 중 어느 것인지 별도 표기가 없고, 수정평균주식수·우선주 배분은 기존 모델의 분모와 일치한다고 검증하지 못했습니다.",
+          "개별 목표가의 평가법·평가 이익 연도·목표 도달 기간이 섞여 있습니다. 목표가 평균 ÷ 12개월 선행 EPS는 실제 증권사 채택 PER이 아닙니다."
+        ]
+      },
+      "broker_checks": [
+        {
+          "broker": "iM증권",
+          "date": "2026-10-29",
+          "target": 2100000,
+          "eps_year": 2027,
+          "eps": 51444,
+          "method": "SOTP · 사업부별 이익가치 합산",
+          "applied_multiple": null,
+          "horizon_months": 12,
+          "basis": "2028년 컴포넌트·패키지 이익에 약 25배(글로벌 peer 21배에 20% 프리미엄), 2027년 광학 이익에 10배를 적용했습니다. FY2027 EPS 51,444원을 하나의 PER에 곱한 산식이 아닙니다.",
+          "verification": "증권사 공개 원문·표 5 확인. 12개월 목표가의 평가 이익 연도가 2027~2028년으로 섞입니다.",
+          "source": "im-sem"
+        },
+        {
+          "broker": "키움증권",
+          "date": "2026-10-29",
+          "target": 2800000,
+          "eps_year": null,
+          "eps": null,
+          "method": "목표가 평가법 미확인",
+          "applied_multiple": null,
+          "horizon_months": null,
+          "basis": "본문의 2027F PER 24.7배는 당시 현재가 기준입니다. 목표가에 적용한 배수·EPS·평가 기간은 공개 본문에서 확인하지 못했습니다.",
+          "verification": "증권사 공식 공개 리서치 본문 확인. 원문에서 확인되지 않은 수치는 역산해 채택 배수로 표시하지 않습니다.",
+          "source": "kiwoom-sem"
+        }
+      ]
+    },
+    {
+      "id": "hynix",
+      "ticker": "000660",
+      "verdict": "needs_underwriting",
+      "summary": "기존 EPS가 컨센서스 근사치보다 크게 낮습니다. 목표가와의 차이는 EPS 항목이 키우고 배수·평가법·기간 잔차는 줄입니다. 영업외손익 0과 정상화 마진 50%부터 재검증해야 합니다.",
+      "findings": [
+        {
+          "subject": "매출·이익률",
+          "severity": "high",
+          "detail": "분기 매출 ×4 대비 매출 -10%, 영업이익률 50%는 편집자가 고른 정상화 가정입니다. HBM·서버 DRAM·NAND 물량과 계약 ASP로 FY2027 컨센서스와의 차이를 설명한 모델이 아닙니다."
+        },
+        {
+          "subject": "영업외손익 0",
+          "severity": "high",
+          "detail": "최근 분기 영업외손실을 향후 연간 0으로 바꾼 근거가 부족합니다. 최근 분기 손익을 4회 반복한 스트레스에서는 계산가격이 크게 낮아집니다. 반복 가능성과 비경상 여부를 확인해야 합니다."
+        },
+        {
+          "subject": "PER·주식수",
+          "severity": "high",
+          "detail": "8배는 과거 정상화 이익·ROE·PBR 또는 동종기업으로 검증하지 않은 편집 값입니다. 분모는 6월말 유통주식과 7월 발행의 합계에 희석 2%를 더한 근사입니다. FnGuide의 11월 2일 발행주식수 730,492,365주와도 정의·시점이 달라 최신 가중평균 희석주식수 대조가 필요합니다."
+        }
+      ],
+      "next_check": [
+        "HBM·DRAM·NAND별 매출·마진, 계약 ASP와 수율로 이익 추정을 다시 쌓습니다.",
+        "영업외손실의 반복성, 최신 가중평균 희석주식수, 증권사 목표가 원문 산식과 정상화 ROE/PBR을 확인합니다."
+      ],
+      "consensus": {
+        "provider": "FnGuide",
+        "as_of": "2026-11-02",
+        "retrieved_on": "2026-11-03",
+        "currency": "KRW",
+        "date_note": "공개 페이지의 시세 기준일은 11월 2일, 조회일은 11월 3일입니다. 컨센서스 구성 보고서는 작성일이 서로 다르고 일부는 3분기 실적 발표 전 자료입니다.",
+        "quote": {
+          "value": 1472000,
+          "date": "2026-11-02",
+          "source": "hynix-snapshot"
+        },
+        "forward": {
+          "per": 2.88,
+          "decimals": 2,
+          "period": "NTM",
+          "as_of": "2026-11-02",
+          "source": "hynix-snapshot"
+        },
+        "target": {
+          "mean": 3097000,
+          "count": 20,
+          "count_scope": "목표가·투자의견 표의 추정기관수. EPS 항목별 기여 기관수는 미확인.",
+          "low": null,
+          "high": null,
+          "horizon_note": "목표가 평균은 기관별 평가법·추정 이익 연도·목표 기간이 같다고 검증되지 않았습니다. 일률적으로 12개월 후 적정가로 보거나 재할인하지 않습니다.",
+          "source": "hynix-consensus"
+        },
+        "annual": [
+          {
+            "year": 2026,
+            "period": "FY",
+            "eps": 356352.22,
+            "revenue": 362.101614,
+            "operating": 281.86159499999997,
+            "owner": 256.207125,
+            "source": "hynix-consensus"
+          },
+          {
+            "year": 2027,
+            "period": "FY",
+            "eps": 533474.91,
+            "revenue": 569.7152,
+            "operating": 454.54523800000004,
+            "owner": 377.05958000000004,
+            "source": "hynix-consensus"
+          }
+        ],
+        "eps_note": "12개월 선행 EPS는 같은 공급자의 기준일 주가 ÷ 소수 둘째 자리 선행 PER로 복원한 근사치입니다. 직접 보고된 EPS가 아닙니다. 연간 EPS는 지배주주순이익/수정평균발행주식수 기준이며 기본·희석 여부가 별도로 표시되지 않았습니다.",
+        "gaps": [
+          "연간 EPS·12개월 선행 EPS 각각의 기여 기관수·최저·최고 추정치는 확인하지 못했습니다. 목표가 기관수를 EPS 표본수로 대신 쓰지 않습니다.",
+          "보고 EPS가 기본·희석 중 어느 것인지 별도 표기가 없고, 수정평균주식수·우선주 배분은 기존 모델의 분모와 일치한다고 검증하지 못했습니다.",
+          "개별 목표가의 평가법·평가 이익 연도·목표 도달 기간이 섞여 있습니다. 목표가 평균 ÷ 12개월 선행 EPS는 실제 증권사 채택 PER이 아닙니다."
+        ]
+      },
+      "broker_checks": [
+        {
+          "broker": "SK증권",
+          "date": "2026-10-29",
+          "target": 4000000,
+          "eps_year": null,
+          "eps": null,
+          "method": "평가법·배수·기간 미확인",
+          "applied_multiple": null,
+          "horizon_months": null,
+          "basis": "FnGuide 증권사별 목표가 표에서 날짜·기관·목표가만 확인했습니다. 개별 보고서 원문 산식은 확인하지 못해 배수 검증의 근거로 채택하지 않습니다.",
+          "verification": "원제공자 목표가 행 확인 · 증권사 원문 미확인",
+          "source": "hynix-consensus"
+        }
+      ]
+    },
+    {
+      "id": "samsung",
+      "ticker": "005930",
+      "verdict": "needs_underwriting",
+      "summary": "기존 EPS가 컨센서스 근사치보다 크게 낮습니다. 목표가와의 차이를 낮은 PER 탓으로만 설명할 수 없습니다. 사업부 이익과 메모리 사이클의 지속 기간을 검증해야 합니다.",
+      "findings": [
+        {
+          "subject": "매출·이익률",
+          "severity": "high",
+          "detail": "분기 매출 ×4 대비 매출 -10%, 영업이익률 35%는 DS·DX·디스플레이의 매출·사업부 마진을 쌓아 검증한 중립 추정이 아닙니다. 메모리 호황 이후 이익 지속 기간을 별도로 검증해야 합니다."
+        },
+        {
+          "subject": "PER 10배",
+          "severity": "high",
+          "detail": "10배의 선택을 과거 사이클·ROE·PBR·순현금·사업부 가치로 입증하지 않았습니다. 컨센서스 목표가를 EPS로 나눈 환산배수보다 높더라도 그것만으로 과대평가 배수라고 단정할 수 없습니다."
+        },
+        {
+          "subject": "EPS 분모·영업외손익",
+          "severity": "medium",
+          "detail": "3분기 보고 보통주 EPS/지배주주순이익 비율에 희석 1%와 영업외손익 0을 적용했습니다. 다음 기간의 우선주 배분·자사주 효과·비경상 손익을 따로 확인해야 합니다."
+        }
+      ],
+      "next_check": [
+        "DS·DX·디스플레이 이익과 메모리 ASP 지속 기간을 나눠 기존 35% 마진과 컨센서스를 설명합니다.",
+        "영업외손익·우선주 배분·주식수 및 증권사의 실제 SOTP/PBR/PER 산식을 확인합니다."
+      ],
+      "consensus": {
+        "provider": "FnGuide",
+        "as_of": "2026-11-02",
+        "retrieved_on": "2026-11-03",
+        "currency": "KRW",
+        "date_note": "공개 페이지의 시세 기준일은 11월 2일, 조회일은 11월 3일입니다. 컨센서스 구성 보고서는 작성일이 서로 다르고 일부는 3분기 실적 발표 전 자료입니다.",
+        "quote": {
+          "value": 229000,
+          "date": "2026-11-02",
+          "source": "samsung-snapshot"
+        },
+        "forward": {
+          "per": 3.25,
+          "decimals": 2,
+          "period": "NTM",
+          "as_of": "2026-11-02",
+          "source": "samsung-snapshot"
+        },
+        "target": {
+          "mean": 479474,
+          "count": 19,
+          "count_scope": "목표가·투자의견 표의 추정기관수. EPS 항목별 기여 기관수는 미확인.",
+          "low": null,
+          "high": null,
+          "horizon_note": "목표가 평균은 기관별 평가법·추정 이익 연도·목표 기간이 같다고 검증되지 않았습니다. 일률적으로 12개월 후 적정가로 보거나 재할인하지 않습니다.",
+          "source": "samsung-consensus"
+        },
+        "annual": [
+          {
+            "year": 2026,
+            "period": "FY",
+            "eps": 45816.59,
+            "revenue": 721.963165,
+            "operating": 383.000395,
+            "owner": 305.611805,
+            "source": "samsung-consensus"
+          },
+          {
+            "year": 2027,
+            "period": "FY",
+            "eps": 73035.15,
+            "revenue": 1003.816365,
+            "operating": 604.31151,
+            "owner": 485.585126,
+            "source": "samsung-consensus"
+          }
+        ],
+        "eps_note": "12개월 선행 EPS는 같은 공급자의 기준일 주가 ÷ 소수 둘째 자리 선행 PER로 복원한 근사치입니다. 직접 보고된 EPS가 아닙니다. 연간 EPS는 지배주주순이익/수정평균발행주식수 기준이며 기본·희석 여부가 별도로 표시되지 않았습니다.",
+        "gaps": [
+          "연간 EPS·12개월 선행 EPS 각각의 기여 기관수·최저·최고 추정치는 확인하지 못했습니다. 목표가 기관수를 EPS 표본수로 대신 쓰지 않습니다.",
+          "보고 EPS가 기본·희석 중 어느 것인지 별도 표기가 없고, 수정평균주식수·우선주 배분은 기존 모델의 분모와 일치한다고 검증하지 못했습니다.",
+          "개별 목표가의 평가법·평가 이익 연도·목표 도달 기간이 섞여 있습니다. 목표가 평균 ÷ 12개월 선행 EPS는 실제 증권사 채택 PER이 아닙니다."
+        ]
+      },
+      "broker_checks": [
+        {
+          "broker": "KB증권",
+          "date": "2026-10-30",
+          "target": 600000,
+          "eps_year": null,
+          "eps": null,
+          "method": "목표가 평가법 미확인",
+          "applied_multiple": null,
+          "horizon_months": null,
+          "basis": "공식 웹문은 FY2027 영업이익 640조원·순이익 508조원 전망을 제시합니다. EPS와 목표가 산식·채택 PER/PBR·목표 도달 기간은 공개 본문에서 확인하지 못했습니다.",
+          "verification": "증권사 공식 웹문 확인 · 원본 PDF·목표가 산식 미확인",
+          "source": "kb-samsung"
+        }
+      ]
+    }
+  ]
+}
