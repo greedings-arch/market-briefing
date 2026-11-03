@@ -1,0 +1,384 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-11-03",
+  "horizon": 1,
+  "unit": "KRW trillion",
+  "methodology": "향후 12개월 연결 손익 시나리오입니다. 최근 분기 매출 ×4를 규모 기준으로 삼고, 매출 변화·영업마진·영업외손익·세율·지배주주 귀속·주식수 가정으로 연간 EPS를 계산합니다. EPS × P/E는 12개월 후 조건부 가격, 이를 요구수익률로 할인한 값은 현재 환산 적정가입니다. 컨센서스·확률가중 기대값이나 독립적으로 검증된 정상 이익이 아닙니다. 배당·거래비용·세금은 가격 수익률에 포함하지 않습니다.",
+  "sources": [
+    {
+      "id": "sem-q3",
+      "title": "연결재무제표기준 영업(잠정)실적(공정공시)",
+      "url": "https://dart.fss.or.kr/dsaf001/main.do?rcpNo=20261028800169",
+      "date": "2026-10-28",
+      "kind": "primary",
+      "note": "2026년 3분기 연결 잠정 실적. 외부 검토 전이며 금액은 백만원에서 조원으로 변환했습니다."
+    },
+    {
+      "id": "sem-eps",
+      "title": "2026 반기보고서, 23. 주당이익(연결)",
+      "url": "https://dart.fss.or.kr/report/viewer.do?rcpNo=20260814003805&dcmNo=11538604&eleId=52&offset=1406409&length=75578&dtd=dart4.xsd",
+      "date": "2026-08-14",
+      "kind": "primary",
+      "note": "연결 주당이익 주석. 상반기 보통주 EPS 7,476원과 지배주주순이익 0.564869956조원을 연결합니다."
+    },
+    {
+      "id": "sem-price",
+      "title": "삼성전기 009150 시세",
+      "url": "https://company.mbnmoney.co.kr/stock/item?code=009150",
+      "date": "2026-11-03",
+      "kind": "market",
+      "note": "11월 3일 15:30 정규장 표시. 이투데이 장종료 시세와 대조했습니다."
+    },
+    {
+      "id": "samsung-q3",
+      "title": "3Q 2026 Earnings Call presentation",
+      "url": "https://images.samsung.com/is/content/samsung/assets/global/ir/docs/2026_3Q_conference_eng.pdf",
+      "date": "2026-10-29",
+      "kind": "primary",
+      "note": "3분기 연결 잠정 실적. 조원 단위 반올림 수치와 보통주 EPS를 사용합니다. 부문 내부거래 매출은 합산하지 않습니다."
+    },
+    {
+      "id": "samsung-price",
+      "title": "삼성전자 · 정규장 가격 이력",
+      "url": "https://kr.investing.com/equities/samsung-electronics-co-ltd-historical-data",
+      "date": "2026-11-03",
+      "kind": "market",
+      "note": "11월 3일 15:29:59 KST 종가 219,500원. 한국경제 장마감·FnGuide 공개 표와 대조했습니다."
+    },
+    {
+      "id": "hynix-q3",
+      "title": "Form 6-K: Preliminary Results of Operations",
+      "url": "https://www.sec.gov/Archives/edgar/data/2120882/000119312526434994/d162547d6k.htm",
+      "date": "2026-10-28",
+      "kind": "primary",
+      "note": "3분기 연결 잠정 실적 공시. 백만원에서 조원으로 변환했습니다. 투자 평가손익의 상세 항목은 이 표에서 확인되지 않습니다."
+    },
+    {
+      "id": "hynix-shares",
+      "title": "Form 6-K: 2026 Semi-Annual Business Report and Reviewed Interim Financial Statements",
+      "url": "https://www.sec.gov/Archives/edgar/data/2120882/000119312526354777/d147827d6k.htm",
+      "date": "2026-08-18",
+      "kind": "primary",
+      "note": "반기 재무제표 주석 19·32. 6월말 발행주식-자기주식 711,075,500주에 7월 신규 발행 17,790,000주를 더한 계산 기준입니다. 3분기 가중평균 희석주식수가 아닙니다."
+    },
+    {
+      "id": "hynix-price",
+      "title": "SK hynix Inc (KRX:000660) price history",
+      "url": "https://stockanalysis.com/quote/krx/000660/",
+      "date": "2026-11-03",
+      "kind": "market",
+      "note": "11월 3일 15:30 KST KRX 1,398,000원. 이데일리와 대조. 타 공급자 1,388,000원 및 통합 KRX/NXT 1,414,000원은 불일치로 제외했습니다."
+    }
+  ],
+  "companies": [
+    {
+      "id": "sem",
+      "name": "삼성전기",
+      "ticker": "009150",
+      "quote": {
+        "value": 1105000,
+        "date": "2026-11-03",
+        "time": "15:30 KST",
+        "session": "KRX 정규장 종가",
+        "source": "sem-price",
+        "note": "시세는 수동 확인한 기준가격입니다."
+      },
+      "reported": {
+        "period": "2026년 3분기 · 3개월",
+        "end": "2026-09-30",
+        "published": "2026-10-28",
+        "revenue": 3.763278,
+        "operating_profit": 0.690957,
+        "pretax": 0.609716,
+        "net_income": 0.485034,
+        "owner_income": 0.46866,
+        "source": "sem-q3",
+        "note": "회사 공시 잠정 연결 실적. 미래 추정치와 구분합니다. 최근 분기 매출 ×4는 모델의 규모 기준이며 TTM이나 연간 가이던스가 아닙니다."
+      },
+      "eps_basis": {
+        "method": "reported_bridge",
+        "eps": 7476,
+        "owner_income": 0.564869956,
+        "shares_million": null,
+        "period": "2026년 상반기 누적",
+        "date": "2026-06-30",
+        "source": "sem-eps",
+        "note": "향후 EPS = 추정 지배주주순이익 × (상반기 보고 보통주 EPS ÷ 상반기 지배주주순이익) ÷ (1+주식수 변화). 보통주·우선주 배분 비율과 주식수가 유지된다는 근사입니다. 총 이익을 보통주 수로 바로 나누지 않습니다. 3분기 정확한 배분은 미확인입니다."
+      },
+      "defaults": {
+        "hurdle": 0.1,
+        "safety": 0.2
+      },
+      "scenarios": [
+        {
+          "id": "bear",
+          "label": "보수",
+          "reason": "고부가 부품 주문 둔화와 가동률 하락. 최근 분기 규모보다 매출과 마진이 함께 낮아집니다.",
+          "inputs": {
+            "growth": -0.15,
+            "margin": 0.12,
+            "nonoperating": -0.32,
+            "tax": 0.25,
+            "owner_ratio": 0.97,
+            "dilution": 0,
+            "multiple": 20
+          }
+        },
+        {
+          "id": "base",
+          "label": "기준",
+          "reason": "서버 MLCC·FC-BGA의 매출 성장이 이어지되 연결 마진은 최근 분기 수준에 머무릅니다.",
+          "inputs": {
+            "growth": 0.1,
+            "margin": 0.185,
+            "nonoperating": -0.2,
+            "tax": 0.25,
+            "owner_ratio": 0.97,
+            "dilution": 0,
+            "multiple": 25
+          }
+        },
+        {
+          "id": "bull",
+          "label": "낙관",
+          "reason": "고부가 제품 구성과 가동률 개선이 매출·마진·평가배수에 함께 반영됩니다.",
+          "inputs": {
+            "growth": 0.25,
+            "margin": 0.23,
+            "nonoperating": 0,
+            "tax": 0.25,
+            "owner_ratio": 0.97,
+            "dilution": 0,
+            "multiple": 30
+          }
+        }
+      ],
+      "assumptions": {
+        "growth": "최근 분기 매출 ×4 대비 -15% / +10% / +25%인 편집 스트레스 범위입니다. FY2027 컨센서스가 아닙니다.",
+        "margin": "최근 분기 영업이익률 약 18.36%를 기준으로 12% / 18.5% / 23%를 비교합니다. 부문별 이익이 공개되지 않아 부문 마진을 만들지 않습니다.",
+        "nonoperating": "최근 분기 세전이익-영업이익은 -0.081241조원입니다. 연간 -0.32 / -0.20 / 0조원은 편집 가정이며 일회성 항목 제거가 확인된 조정 실적이 아닙니다.",
+        "tax": "세 시나리오 25%는 보수적으로 둔 유효세율 가정입니다. 최근 분기 실측 약 20.45%와 다릅니다. 적자에는 세금 환급을 가정하지 않습니다.",
+        "owner_ratio": "최근 분기 지배주주 귀속 비율 약 96.62%를 반올림한 97% 가정입니다.",
+        "dilution": "현재 기본값은 0%. H1 보통주 EPS의 배분·주식수 관계를 유지합니다. 소각·발행이나 우선주 배분 변경이 있으면 수정해야 합니다.",
+        "multiple": "20 / 25 / 30배는 성장 지속성과 경기 민감도를 비교하기 위한 편집 배수입니다. 검증된 적정 배수·현재 컨센서스·동종기업 평균을 뜻하지 않습니다."
+      },
+      "drivers": [
+        "AI 서버 MLCC·FC-BGA 출하와 ASP → 매출 변화율",
+        "고부가 구성·가동률 → 연결 영업이익률",
+        "고객 CapEx 집행 지연 → 보수 매출·마진을 함께 검토"
+      ],
+      "limitations": [
+        "상반기 EPS 배분 관계를 향후 이익에 적용한 근사입니다. 3분기 상세 주식수·우선주 배분은 확인 전입니다.",
+        "사업부 매출 정보는 있으나 일관된 사업부 이익률이 없어 연결 손익으로 계산합니다.",
+        "유리기판 등 장기 신규사업 가치를 별도로 더하지 않습니다."
+      ],
+      "next_check": "다음 공시에서 AI 서버 매출 구성, FC-BGA 가동률과 MLCC ASP를 확인합니다. 매출이 늘어도 영업이익률이 18.5%에 못 미치면 기준 시나리오를 낮춥니다."
+    },
+    {
+      "id": "hynix",
+      "name": "SK하이닉스",
+      "ticker": "000660",
+      "quote": {
+        "value": 1398000,
+        "date": "2026-11-03",
+        "time": "15:30 KST",
+        "session": "KRX 정규장 종가",
+        "source": "hynix-price",
+        "note": "일부 공급자의 종가와 불일치합니다. KRX 식별·시각이 있는 두 자료가 일치한 값을 채택했습니다."
+      },
+      "reported": {
+        "period": "2026년 3분기 · 3개월",
+        "end": "2026-09-30",
+        "published": "2026-10-28",
+        "revenue": 104.615483,
+        "operating_profit": 83.333818,
+        "pretax": 50.7085,
+        "net_income": 39.775593,
+        "owner_income": 39.534392,
+        "source": "hynix-q3",
+        "note": "회사 공시 잠정 연결 실적. 미래 추정치와 구분합니다. 최근 분기 매출 ×4는 모델의 규모 기준이며 TTM이나 연간 가이던스가 아닙니다."
+      },
+      "eps_basis": {
+        "method": "shares",
+        "eps": null,
+        "owner_income": null,
+        "shares_million": 728.8655,
+        "period": "2026년 6월말 + 7월 29일 신규 발행",
+        "date": "2026-07-29",
+        "source": "hynix-shares",
+        "note": "6월말 711.0755백만 주 + 7월 신규 17.79백만 주 = 728.8655백만 주를 향후 분모의 출발점으로 사용합니다. 이후 자기주식 변동·희석 증권이 확정 반영된 보고 희석주식수가 아닙니다. 추가 2% 희석은 별도 편집 가정입니다."
+      },
+      "defaults": {
+        "hurdle": 0.1,
+        "safety": 0.2
+      },
+      "scenarios": [
+        {
+          "id": "bear",
+          "label": "보수",
+          "reason": "범용 메모리 ASP와 서버 주문이 함께 약화되고 HBM의 높은 수익성도 낮아집니다.",
+          "inputs": {
+            "growth": -0.3,
+            "margin": 0.3,
+            "nonoperating": -5,
+            "tax": 0.25,
+            "owner_ratio": 0.994,
+            "dilution": 0.02,
+            "multiple": 6
+          }
+        },
+        {
+          "id": "base",
+          "label": "기준",
+          "reason": "AI 수요는 이어지지만 최근 분기 약 80% 마진은 지속하지 못한다고 가정합니다.",
+          "inputs": {
+            "growth": -0.1,
+            "margin": 0.5,
+            "nonoperating": 0,
+            "tax": 0.25,
+            "owner_ratio": 0.994,
+            "dilution": 0.02,
+            "multiple": 8
+          }
+        },
+        {
+          "id": "bull",
+          "label": "낙관",
+          "reason": "HBM4와 서버 메모리의 공급 제약이 길어져 높은 마진이 유지됩니다.",
+          "inputs": {
+            "growth": 0.1,
+            "margin": 0.7,
+            "nonoperating": 0,
+            "tax": 0.25,
+            "owner_ratio": 0.994,
+            "dilution": 0.02,
+            "multiple": 10
+          }
+        }
+      ],
+      "assumptions": {
+        "growth": "최근 분기 매출 ×4 대비 -30% / -10% / +10%. 출하와 ASP를 합친 연결 변화 가정이며 DRAM 현물 변동률을 그대로 대입하지 않습니다.",
+        "margin": "최근 분기 약 79.66%보다 낮은 30% / 50% / 70%를 적용합니다. 역사적 정상 마진을 확정한 값이 아니라 호황 둔화의 편집 시나리오입니다.",
+        "nonoperating": "최근 분기 세전-영업이익 -32.625318조원을 반복 연환산하지 않습니다. 향후 -5 / 0 / 0조원 가정이므로 평가손실이 반복되면 가치가 크게 낮아집니다. 확인된 일회성 조정으로 부르지 않습니다.",
+        "tax": "세 시나리오 25% 가정. 최근 분기 세전·순이익에서 계산한 약 21.56%와 다릅니다. 세액공제 지속 여부는 미확인입니다.",
+        "owner_ratio": "최근 분기 귀속비율 약 99.39%를 반올림한 99.4%를 유지합니다.",
+        "dilution": "7월 발행 후 기계적 분모 대비 2% 추가 희석을 가정합니다. 실제 확정 희석율이 아니며 향후 발행·옵션·자기주식 확인 후 수정합니다.",
+        "multiple": "6 / 8 / 10배의 편집 범위입니다. 경기 민감도와 이익의 지속기간을 비교합니다. 현재 저P/E를 그대로 적정배수로 삼거나 피크 이익에 성장주 배수를 붙이지 않습니다."
+      },
+      "drivers": [
+        "범용 DRAM·NAND ASP와 비트 출하 → 매출 변화율",
+        "HBM 구성·수율과 NAND 재고 비용 → 연결 마진",
+        "GPU 임대료·텔레그램 투자 회수 우려 → 재주문 약화 시 보수 가정 검토"
+      ],
+      "limitations": [
+        "Q3 정확한 가중평균 희석주식수는 미확인입니다. 주식수와 추가 희석은 근사 가정입니다.",
+        "HBM·DRAM·NAND별 손익이 공개되지 않아 연결 마진을 사용합니다. 제품별 실제 ASP·수율 모형으로 오해하지 않아야 합니다.",
+        "영업외손익을 0으로 두는 기준 가정의 영향이 큽니다. 최근 손실이 반복되는지 확인해야 합니다."
+      ],
+      "next_check": "다음 상세 재무제표에서 평가·환손익과 희석주식수를 확인합니다. HBM 장기계약 가격 조건과 NAND 계약 ASP가 악화되면 매출·마진을 보수 값으로 낮춰 검토합니다."
+    },
+    {
+      "id": "samsung",
+      "name": "삼성전자",
+      "ticker": "005930",
+      "quote": {
+        "value": 219500,
+        "date": "2026-11-03",
+        "time": "15:29:59 KST",
+        "session": "KRX 정규장 종가",
+        "source": "samsung-price",
+        "note": "장중 220,000원·기준 불명 222,500원은 제외했습니다."
+      },
+      "reported": {
+        "period": "2026년 3분기 · 3개월",
+        "end": "2026-09-30",
+        "published": "2026-10-29",
+        "revenue": 195.3,
+        "operating_profit": 107.4,
+        "pretax": 98.5,
+        "net_income": 75.1,
+        "owner_income": 75.2,
+        "source": "samsung-q3",
+        "note": "회사 공시 잠정 연결 실적. 미래 추정치와 구분합니다. 최근 분기 매출 ×4는 모델의 규모 기준이며 TTM이나 연간 가이던스가 아닙니다."
+      },
+      "eps_basis": {
+        "method": "reported_bridge",
+        "eps": 11462,
+        "owner_income": 75.2,
+        "shares_million": null,
+        "period": "2026년 3분기 보통주",
+        "date": "2026-09-30",
+        "source": "samsung-q3",
+        "note": "향후 EPS = 추정 지배주주순이익 × (Q3 보통주 보고 EPS 11,462원 ÷ 반올림 지배주주순이익 75.2조원) ÷ (1+주식수 변화). 같은 보통주·우선주 이익 배분과 주식수 관계를 가정한 근사입니다. 이 비율을 실제 가중평균 주식수라고 표시하지 않습니다."
+      },
+      "defaults": {
+        "hurdle": 0.1,
+        "safety": 0.2
+      },
+      "scenarios": [
+        {
+          "id": "bear",
+          "label": "보수",
+          "reason": "범용 메모리 가격이 정상화되고 세트 원가·파운드리 부담이 이어집니다.",
+          "inputs": {
+            "growth": -0.3,
+            "margin": 0.2,
+            "nonoperating": -10,
+            "tax": 0.25,
+            "owner_ratio": 1,
+            "dilution": 0.01,
+            "multiple": 8
+          }
+        },
+        {
+          "id": "base",
+          "label": "기준",
+          "reason": "AI 투자 지속을 인정하되 최근 분기 연결 마진 55%는 35%로 낮아진다고 봅니다.",
+          "inputs": {
+            "growth": -0.1,
+            "margin": 0.35,
+            "nonoperating": 0,
+            "tax": 0.25,
+            "owner_ratio": 1,
+            "dilution": 0.01,
+            "multiple": 10
+          }
+        },
+        {
+          "id": "bull",
+          "label": "낙관",
+          "reason": "HBM 경쟁력과 공급 제약이 높은 메모리 수익성을 지탱하고 세트 부담도 완화됩니다.",
+          "inputs": {
+            "growth": 0.1,
+            "margin": 0.5,
+            "nonoperating": 0,
+            "tax": 0.25,
+            "owner_ratio": 1,
+            "dilution": 0.01,
+            "multiple": 12
+          }
+        }
+      ],
+      "assumptions": {
+        "growth": "최근 분기 연결 매출 ×4 대비 -30% / -10% / +10%. DS·DX 내부거래를 포함한 부문 매출은 더하지 않습니다.",
+        "margin": "최근 연결 영업이익률 55.0%에서 20% / 35% / 50%로 낮춥니다. DS의 높은 마진과 DX 적자를 합친 연결 스트레스 가정입니다.",
+        "nonoperating": "최근 분기 세전-영업이익 -8.9조원과 달리 향후 -10 / 0 / 0조원을 가정합니다. 환율·평가손익 반복 시 기준 가정을 수정해야 합니다.",
+        "tax": "세 시나리오 25% 유효세율 가정. 최근 분기 23.4÷98.5=약 23.76%와 구분합니다.",
+        "owner_ratio": "향후 순이익의 100%가 지배주주에 귀속된다는 근사입니다. Q3 반올림 수치 75.2/75.1의 100% 초과 비율을 반복하지 않습니다.",
+        "dilution": "Q3 보고 EPS 연결에 추가 1% 희석을 가정합니다. 실제 미래 희석율이 아니며 자사주 소각 효과를 별도 가산하지 않습니다.",
+        "multiple": "8 / 10 / 12배는 메모리 사이클·세트 사업을 함께 평가하는 편집 범위입니다. 과거 평균이나 목표주가 컨센서스가 아닙니다."
+      },
+      "drivers": [
+        "메모리 ASP·HBM 경쟁력 → 연결 매출과 영업이익률",
+        "DX 부품 원가·파운드리 수익성 → DS 수혜를 상쇄할 수 있는 항목",
+        "GPU 고객의 투자 회수·발주 집행 → 상방 가정을 확인할 간접 근거"
+      ],
+      "limitations": [
+        "Q3 지배주주순이익은 조원 단위 반올림입니다. 정확한 클래스별 이익 배분·희석 주식수는 후속 공시로 교체해야 합니다.",
+        "고정 EPS 연결은 보통주·우선주 이익 배분이 유지된다는 근사입니다. 신규 발행·소각은 직접 수정해야 합니다.",
+        "순현금을 P/E 평가액에 추가하지 않습니다. 현금수익·배수와 중복 가산하지 않기 위한 선택입니다."
+      ],
+      "next_check": "다음 상세 공시에서 보통주·우선주 배분, 희석주식수와 영업외손익을 확인합니다. DS 이익 개선이 DX 비용·파운드리 손실을 상쇄하는지 함께 대조합니다."
+    }
+  ]
+}

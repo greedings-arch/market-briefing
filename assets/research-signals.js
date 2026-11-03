@@ -1,8 +1,8 @@
 (function(root,factory){
   'use strict';
-  const api=factory(typeof module==='object'&&module.exports?require('node:crypto').webcrypto:root.crypto);
+  const api=factory(typeof module==='object'&&module.exports?require('node:crypto').webcrypto:root.crypto,typeof module==='object'&&module.exports?require('./equity-model'):root.EquityModel);
   if(typeof module==='object'&&module.exports)module.exports=api;else root.ResearchSignals=api;
-})(typeof globalThis!=='undefined'?globalThis:this,function(cryptoAPI){
+})(typeof globalThis!=='undefined'?globalThis:this,function(cryptoAPI,M){
   'use strict';
   const rows=x=>Array.isArray(x)?x:[],finite=x=>typeof x==='number'&&Number.isFinite(x);
   const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -98,7 +98,7 @@
     if(gaps)return {headline:'자료 보완·갱신이 필요한 영역은 판단을 보류합니다.',body:`${signals.length}개 산업 신호 중 ${gaps}개가 미확인 또는 갱신 필요 상태입니다. 확인된 자료의 지지·반대 논거만 반영하며 이전 결론을 자동으로 유지하지 않습니다.`};
     const [dram,nand,gpu]=signals;
     return {headline:dram.state==='support'&&nand.state==='caution'?'DRAM 전망은 지지하지만, NAND 위험을 더해 판단합니다.':gpu.state==='caution'?'임대료 하락을 반영해 투자 회수 가정을 다시 점검합니다.':'자료의 방향과 기업 이익을 대조하며 가설을 검증합니다.',
-      body:`DRAM은 ${dram.label}, NAND는 ${nand.label}, GPU는 ${gpu.label} 상태입니다. 텔레그램은 게시물별 검토와 기업별 영향으로 반영하며 공식 확인이 필요합니다. 정상화 이익·컨센서스가 없어 현재 가격의 매력도는 보류합니다.`};
+      body:`DRAM은 ${dram.label}, NAND는 ${nand.label}, GPU는 ${gpu.label} 상태입니다. 텔레그램은 게시물별 검토와 기업별 영향으로 반영하며 공식 확인이 필요합니다. ${M?.get(library['valuation-models'],'sem')?'국내 3사는 공개 EPS 시나리오로 가격을 비교합니다. 산업 자료의 반대 신호는 이익 가정을 다시 검토할 조건입니다.':'정상화 이익·컨센서스가 없어 현재 가격의 매력도는 보류합니다.'}`};
   }
   const profiles={
     sem:{name:'삼성전기',readout:'AI 서버 투자 가설은 유지하되, MLCC·기판의 직접 수혜 확인이 우선입니다.',line:'고부가 MLCC·FC-BGA의 출하, ASP, 가동률과 영업이익률',boundary:'GPU 임대료·메모리 가격은 고객 투자 환경입니다. 삼성전기의 수주·이익을 직접 증명하지 않습니다.',next:'다음 실적에서 AI 서버용 MLCC·기판 수요가 실제 매출 구성과 마진 개선으로 이어지는지 확인합니다.'},
@@ -144,7 +144,7 @@
     if(['hynix','samsung'].includes(id))readout=`${p.name}: ${dram?.label||'DRAM 미확인'} · ${nand?.label||'NAND 미확인'}을 분리해 이익 가정을 검토합니다.`;
     if(caution)readout+=' 하방 신호가 있어 이익 상향보다 반대 근거 확인을 우선합니다.';
     if(missingData)readout=`${p.name}: 자료 보완 전에는 가설 유지·강화를 판단할 수 없습니다. 확인된 신호와 미확인 영역을 아래에 구분했습니다.`;
-    return {...p,readout,signals,changes,state:!signals.length||missingData?'gap':caution?'caution':'mixed',label:!signals.length?'직접 근거 부족':missingData?'자료 보완 필요':caution?'하방 조건 추가 점검':'조건부 가설 유지',price:'가격 매력도 판단 보류 · 정상화 EPS·컨센서스 미확보'};
+    return {...p,readout,signals,changes,state:!signals.length||missingData?'gap':caution?'caution':'mixed',label:!signals.length?'직접 근거 부족':missingData?'자료 보완 필요':caution?'하방 조건 추가 점검':'조건부 가설 유지',price:(()=>{const m=M?.get(library['valuation-models'],id);return m?'공개 EPS 기본 가정: '+M.evaluate(m,{now}).label+' · 산업 자료의 '+(missingData?'미확인 영역 보완 필요':caution?'하방 조건 검토 필요':'검증 조건 유지'):'가격 매력도 판단 보류 · 정상화 EPS·컨센서스 미확보';})()};
   }
   function refsHTML(refs){return rows(refs).map(r=>{let u;try{u=new URL(r.url);}catch{return '';}
     return /^https?:$/.test(u.protocol)?`<a href="${esc(u.href)}" target="_blank" rel="noopener noreferrer">${esc(r.label)} ↗ <span>${esc(r.date)}</span></a>`:'';}).join('');}
@@ -154,11 +154,11 @@
   }
   function overview(library){
     const signals=analyze(library),gaps=signals.filter(x=>['gap','stale'].includes(x.state)).length;
-    return `<section class="research-assessment" data-research-assessment><div class="signal-section-head"><div><p class="eyebrow">자료 → 이익 가정 → 투자 판단</p><h2>기존 자료를 반영하면 판단이 이렇게 달라집니다</h2></div><a href="#evidence">근거·검토 이력 →</a></div><p class="signal-intro">${gaps?`${gaps}개 신호는 자료 보완이 필요합니다. `:''}사업 가설은 지지·반대 근거를 함께 보며 갱신합니다. 가격 매력도는 정상화 이익·컨센서스를 확보하기 전까지 보류합니다. 가격은 비교 가능한 관측으로 계산하고, 텔레그램은 현재 내용과 일치하는 편집 검토만 적용합니다. 이 해석은 사업 가설의 검토 우선순위에 반영됩니다. EPS·목표주가는 자동 계산하지 않습니다. 메모리 자동 판정 범위는 일반 DRAM 계약가 전망·분기 실측과 NAND 주간 현물이며, 회사별 실제 계약 ASP·점유율은 별도 검토 대상입니다.</p><div class="signal-grid">${signals.map(s=>card(s,{compact:true})).join('')}</div></section>`;
+    return `<section class="research-assessment" data-research-assessment><div class="signal-section-head"><div><p class="eyebrow">자료 → 이익 가정 → 투자 판단</p><h2>기존 자료를 반영하면 판단이 이렇게 달라집니다</h2></div><a href="#evidence">근거·검토 이력 →</a></div><p class="signal-intro">${gaps?`${gaps}개 신호는 자료 보완이 필요합니다. `:''}사업 가설은 지지·반대 근거를 함께 보며 갱신합니다. 국내 3사의 가격은 별도 EPS 시나리오에서 공개 가정과 함께 검토합니다. 가격은 비교 가능한 관측으로 계산하고, 텔레그램은 현재 내용과 일치하는 편집 검토만 적용합니다. 이 해석은 사업 가설의 검토 우선순위에 반영됩니다. 관측 변동률을 EPS에 자동으로 곱하지 않습니다. 매출·마진·배수를 사용자가 확인해 계산합니다. 메모리 자동 판정 범위는 일반 DRAM 계약가 전망·분기 실측과 NAND 주간 현물이며, 회사별 실제 계약 ASP·점유율은 별도 검토 대상입니다.</p><div class="signal-grid">${signals.map(s=>card(s,{compact:true})).join('')}</div></section>`;
   }
   function companyHTML(id,library,{compact=false}={}){
     const p=company(id,library);if(!p)return '';
-    return `<section class="research-assessment company-assessment" data-company-assessment="${esc(id)}"><p class="eyebrow">기존 자료를 반영한 기업 판단 · 편집 해석</p><h2>${esc(p.readout)}</h2><span class="signal-label">${esc(p.label)}</span><p>${esc(p.boundary)}</p><dl><dt>검토할 이익 가정</dt><dd>${esc(p.line)}</dd><dt>다음 확인 시점·내용</dt><dd>${esc(p.next)} 발표일은 공식 일정에서 확인합니다.</dd><dt>현재 주가에 대한 결론</dt><dd>${esc(p.price)}. 가격 검토의 연간 EPS 입력값은 자동으로 상향하지 않습니다.</dd></dl><ul class="signal-decisions">${p.changes.map(x=>`<li><b>${esc(x.title)} · ${esc(x.action)}</b>${compact?`<p>${esc(x.impact)}</p>`:''}</li>`).join('')}</ul>${compact?'':`<div class="signal-grid">${p.signals.map(s=>card(s,{companyID:id,compact:true})).join('')}</div>`}</section>`;
+    return `<section class="research-assessment company-assessment" data-company-assessment="${esc(id)}"><p class="eyebrow">기존 자료를 반영한 기업 판단 · 편집 해석</p><h2>${esc(p.readout)}</h2><span class="signal-label">${esc(p.label)}</span><p>${esc(p.boundary)}</p><dl><dt>검토할 이익 가정</dt><dd>${esc(p.line)}</dd><dt>다음 확인 시점·내용</dt><dd>${esc(p.next)} 발표일은 공식 일정에서 확인합니다.</dd><dt>현재 주가에 대한 결론</dt><dd>${esc(p.price)}. 공개 기본 가정의 가격 판단이며, 가격 검토 화면에서 바꾼 사용자 가정은 그 화면에서 확인합니다.</dd></dl><ul class="signal-decisions">${p.changes.map(x=>`<li><b>${esc(x.title)} · ${esc(x.action)}</b>${compact?`<p>${esc(x.impact)}</p>`:''}</li>`).join('')}</ul>${compact?'':`<div class="signal-grid">${p.signals.map(s=>card(s,{companyID:id,compact:true})).join('')}</div>`}</section>`;
   }
   function tabHTML(tab,data,companyID){
     const signals=tab==='memory'?memorySignals(data):tab==='gpu'?[gpuSignal(data)]:tab==='telegram'?telegramSignals(data):[];
