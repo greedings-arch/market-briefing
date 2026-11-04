@@ -39,7 +39,7 @@
     const strings = xs => require(Array.isArray(xs) && xs.every(x=>typeof x==='string'), '공개 문장 배열 필요');
     const textFields = (obj,names) => require(names.split(' ').every(k=>typeof obj[k]==='string'), '공개 문장 필드 필요');
     const date = x => typeof x === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(x) && !Number.isNaN(Date.parse(x)) && new Date(x).toISOString().slice(0,10) === x;
-    keys(data, 'schema_version as_of title summary summary_detail sources companies pillars cashflows review_log limitations research_reviews');
+    keys(data, 'schema_version as_of title summary summary_detail sources companies pillars cashflows review_log limitations research_reviews finance_reviews');
     textFields(data,'title summary summary_detail');strings(data.limitations);
     require(data.schema_version === 1 && date(data.as_of), '투자 데스크 형식/기준일 오류');
     require(Array.isArray(data.sources) && Array.isArray(data.companies) && data.companies.length > 0, '소스/기업 배열 필요');
@@ -87,6 +87,19 @@
       require(/^https:\/\/t\.me\/[A-Za-z][A-Za-z0-9_]{3,31}\/[1-9]\d*$/.test(r.source_url)&&!reviewURLs.has(r.source_url),'공개 텔레그램 검토 URL 또는 중복 오류');reviewURLs.add(r.source_url);
       require(/^[a-f0-9]{64}$/.test(r.source_hash)&&date(r.reviewed_on)&&r.reviewed_on<=data.as_of,'검토 내용 해시·날짜 오류');
       require(['support','caution','context'].includes(r.state),'검토 방향 오류');require(['reading','model','next'].every(k=>r[k].trim()),'검토 해석과 확인 조건 누락');strings(r.companies);require(r.companies.length>0&&r.companies.every(id=>ids.has(id)),'검토 기업 참조 오류');
+    }
+    require(data.finance_reviews===undefined||Array.isArray(data.finance_reviews),'금융 종합 검토 목록 오류');
+    const financeIds=new Set(),financeDates=new Set();
+    for(const r of data.finance_reviews||[]){
+      keys(r,'id company_id reviewed_on next_review_on baseline state reading support counter model price_condition next_check confirm invalidate evidence');
+      textFields(r,'id company_id reviewed_on next_review_on baseline state reading support counter model price_condition next_check confirm invalidate');
+      require(/^[a-z0-9-]+$/.test(r.id)&&!financeIds.has(r.id),'금융 종합 ID 오류');financeIds.add(r.id);
+      require(ids.has(r.company_id)&&date(r.reviewed_on)&&r.reviewed_on<=data.as_of&&date(r.next_review_on)&&r.next_review_on>r.reviewed_on,'금융 종합 기업·검토일 오류');
+      const key=r.company_id+':'+r.reviewed_on;require(!financeDates.has(key),'같은 기업·날짜의 금융 종합 중복');financeDates.add(key);
+      require(['strengthened','weakened','mixed','unchanged','unproven'].includes(r.state),'금융 종합 방향 오류');
+      require(['baseline','reading','support','counter','model','price_condition','next_check','confirm','invalidate'].every(k=>r[k].trim()),'금융 종합 논거·반증 조건 누락');
+      require(Array.isArray(r.evidence)&&r.evidence.length>0,'금융 종합 근거 누락');const evidenceIds=new Set();
+      for(const e of r.evidence){keys(e,'record_id source_hash');textFields(e,'record_id source_hash');require(/^[a-z0-9-]+$/.test(e.record_id)&&!evidenceIds.has(e.record_id)&&/^[a-f0-9]{64}$/.test(e.source_hash),'금융 종합 근거 연결 오류');evidenceIds.add(e.record_id);}
     }
     return data;
   }

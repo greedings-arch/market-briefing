@@ -13,7 +13,7 @@
   function select(key,label,values,value='전체') {return `<label>${esc(label)} <select data-filter="${key}" aria-label="${esc(label)}">${values.map(v=>`<option value="${esc(v)}" ${v===value?'selected':''}>${esc(v)}</option>`).join('')}</select></label>`;}
   function route() {const raw=location.hash.slice(1),[name,q='']=raw.split('?'),investor=window.InvestorDesk;return {tab:config?.tabs.some(t=>t.id===name)||investor?.views.includes(name)?name:investor?(config?.workspace?.home||'desk'):'summary',params:new URLSearchParams(q)};}
   function clearItemRoute(tab){const {params}=route();if(params.has('id')){params.delete('id');params.delete('section');history.replaceState(null,'','#'+tab+(params.size?'?'+params.toString():''));}}
-  async function json(name) {if(!cache.has(name)){const request=fetch('data/'+name+'.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('자료 응답 오류');return r.json();}).then(data=>name==='telegram'&&window.ResearchSignals?window.ResearchSignals.prepareTelegram(data):data).catch(e=>{if(cache.get(name)===request)cache.delete(name);throw e;});cache.set(name,request);}return cache.get(name);}
+  async function json(name) {if(!cache.has(name)){const request=fetch('data/'+name+'.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('자료 응답 오류');return r.json();}).then(data=>name==='telegram'&&window.ResearchSignals?window.ResearchSignals.prepareTelegram(data):name==='finance'&&window.ResearchSignals?window.ResearchSignals.prepareFinance(data):data).catch(e=>{if(cache.get(name)===request)cache.delete(name);throw e;});cache.set(name,request);}return cache.get(name);}
   function title(tab,data,description='') {const t=config.tabs.find(x=>x.id===tab),meta=data.meta||status.tabs[tab];return `<header class="page-title"><div><p class="eyebrow">AI & CLOUD / ${esc(tab.replace(/-/g,' '))}</p><h1>${esc(t.label)}</h1>${description?`<p class="subtitle">${esc(description)}</p>`:''}</div><div class="stamp"><span>기준일 ${esc(meta?.as_of||'수집 전')}</span><span>${fmt(meta?.count||0,0)}건</span><span>생성 ${esc(meta?.generated_at||'아직 없음')}</span></div></header>`;}
   function globalWarning() {
     const messages=[];
@@ -476,7 +476,7 @@
     investor?.deactivate();navigation();$('#content').className=isInvestor?'investor-view':'';$('#content').innerHTML='<div class="loading">자료를 불러오고 있습니다.</div>';
     try{
       if(isInvestor){
-        const names=['investor-desk','broker-research','gpu','memory','telegram','valuation-models','valuation-audit','valuation-defaults',...(tab==='desk'||tab==='company'||tab==='valuation'?['reports']:[]),...(tab==='company'||tab==='valuation'?['news']:[])];
+        const names=['investor-desk','broker-research','gpu','memory','telegram','finance','valuation-models','valuation-audit','valuation-defaults',...(tab==='desk'||tab==='company'||tab==='valuation'?['reports']:[]),...(tab==='company'||tab==='valuation'?['news']:[])];
         const results=await Promise.allSettled(names.map(json));if(token!==generation)return;
         if(results[0].status!=='fulfilled')throw results[0].reason;
         const related={config,status};names.slice(1).forEach((name,i)=>{related[name]=results[i+1].status==='fulfilled'?results[i+1].value:null;});

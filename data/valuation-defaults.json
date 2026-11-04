@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "as_of": "2026-11-03",
+  "as_of": "2026-11-04",
   "currency": "KRW",
   "valuation_basis": "current_NTM_reference",
   "policy": "컨센서스 NTM EPS 100%와 역사 자료의 보수적 참조 배수. 현재 평가액이며 미래 목표가로 다시 할인하지 않습니다. 안전마진 20%는 사용자 변경 가능한 여유율로, 통계적 신뢰구간이 아닙니다.",
@@ -132,6 +132,30 @@
       "date": "2025-11-24",
       "kind": "broker",
       "note": "2010~13·2017~19 성장기 평균 PER 30배를 FY2026 EPS에 적용한다고 설명. 같은 기준 12MF 장기 평균이 아니며 여기서는 낙관 가정의 상단 참고 사례로만 사용."
+    },
+    {
+      "id": "sem-hankyung-20261104",
+      "title": "삼성전기 · 한국경제 장마감 가격",
+      "url": "https://markets.hankyung.com/stock/009150",
+      "date": "2026-11-04",
+      "kind": "market",
+      "note": "2026-11-04 장마감 표시를 공개 페이지에서 확인했습니다. 거래소 원파일 대조는 미실시했으며 시각은 별도 표시되지 않습니다. 컨센서스 EPS 원천의 기준가격과 구분합니다."
+    },
+    {
+      "id": "hynix-hankyung-20261104",
+      "title": "SK hynix · 한국경제 장마감 가격",
+      "url": "https://markets.hankyung.com/stock/000660",
+      "date": "2026-11-04",
+      "kind": "market",
+      "note": "2026-11-04 장마감 표시를 공개 페이지에서 확인했습니다. 거래소 원파일 대조는 미실시했으며 시각은 별도 표시되지 않습니다. 컨센서스 EPS 원천의 기준가격과 구분합니다."
+    },
+    {
+      "id": "samsung-hankyung-20261104",
+      "title": "삼성전자 · 한국경제 장마감 가격",
+      "url": "https://markets.hankyung.com/stock/005930",
+      "date": "2026-11-04",
+      "kind": "market",
+      "note": "2026-11-04 장마감 표시를 공개 페이지에서 확인했습니다. 거래소 원파일 대조는 미실시했으며 시각은 별도 표시되지 않습니다. 컨센서스 EPS 원천의 기준가격과 구분합니다."
     }
   ],
   "companies": [
@@ -140,11 +164,11 @@
       "name": "삼성전기",
       "ticker": "009150",
       "quote": {
-        "value": 1105000,
-        "date": "2026-11-03",
-        "source": "sem-price",
-        "time": "15:30 KST",
-        "session": "KRX 정규장 종가"
+        "value": 1115000,
+        "date": "2026-11-04",
+        "source": "sem-hankyung-20261104",
+        "time": "장마감 · 세부 시각 미표시",
+        "session": "한국경제 장마감 표시"
       },
       "consensus": {
         "as_of": "2026-11-02",
@@ -260,11 +284,11 @@
       "name": "SK하이닉스",
       "ticker": "000660",
       "quote": {
-        "value": 1398000,
-        "date": "2026-11-03",
-        "source": "hynix-price",
-        "time": "15:30 KST",
-        "session": "KRX 정규장 종가"
+        "value": 1396000,
+        "date": "2026-11-04",
+        "source": "hynix-hankyung-20261104",
+        "time": "장마감 · 세부 시각 미표시",
+        "session": "한국경제 장마감 표시"
       },
       "consensus": {
         "as_of": "2026-11-02",
@@ -331,11 +355,11 @@
       "name": "삼성전자",
       "ticker": "005930",
       "quote": {
-        "value": 219500,
-        "date": "2026-11-03",
-        "source": "samsung-price",
-        "time": "15:29:59 KST",
-        "session": "KRX 정규장 종가"
+        "value": 218000,
+        "date": "2026-11-04",
+        "source": "samsung-hankyung-20261104",
+        "time": "장마감 · 세부 시각 미표시",
+        "session": "한국경제 장마감 표시"
       },
       "consensus": {
         "as_of": "2026-11-02",

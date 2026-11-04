@@ -133,6 +133,44 @@
     }
     return {...s,sourceState:s.state,state:id==='sem'&&s.tab==='memory'&&!pending?'context':s.state,impact,action,channel,reading:impact};
   }
+  const financeFingerprints=new WeakMap();
+  function financeFingerprintText(item){
+    function canonical(x){if(Array.isArray(x))return x.map(canonical);if(x&&typeof x==='object')return Object.fromEntries(Object.keys(x).sort().map(k=>[k,canonical(x[k])]));return typeof x==='string'?x.normalize('NFC'):x;}
+    return JSON.stringify(canonical(item));
+  }
+  async function prepareFinance(data){
+    if(!data)return data;
+    await Promise.all(rows(data.items).map(async item=>{
+      try{const text=financeFingerprintText(item),bytes=await cryptoAPI.subtle.digest('SHA-256',new TextEncoder().encode(text));financeFingerprints.set(item,{text,hash:Array.from(new Uint8Array(bytes),b=>b.toString(16).padStart(2,'0')).join('')});}catch{financeFingerprints.delete(item);}
+    }));return data;
+  }
+  const financeLabels={strengthened:'강화 · 사업 근거',weakened:'약화 · 가설 재검토',mixed:'혼재 · 긍정·반대 공존',unchanged:'유지 · 추가 입증 대기',unproven:'추가 입증 필요',gap:'자료 확인 필요',stale:'검토 기한 경과',uncovered:'직접 근거 부족'};
+  function financeAssessment(id,snapshot,library={},now=new Date()){
+    const day=today(now),review=rows(snapshot?.finance_reviews).filter(r=>r.company_id===id).sort((a,b)=>b.reviewed_on.localeCompare(a.reviewed_on))[0];
+    const output=(state,reading,evidence=[])=>({state,label:financeLabels[state],reading,review,evidence});
+    if(!review)return output('uncovered','이번 금융 사례에는 이 기업의 가설을 바꿀 직접 근거가 없습니다.');
+    if(review.reviewed_on>day||review.next_review_on<day)return output('stale','종합 검토 기한이 지났거나 검토일이 미래입니다. 이전 강화·약화 판단은 현재 결론에서 제외합니다.');
+    const evidence=review.evidence.map(ref=>rows(library.finance?.items).find(item=>item.id===ref.record_id));
+    const valid=evidence.every((item,i)=>{
+      const f=item&&financeFingerprints.get(item);
+      return item?.verified===true&&item.source_date<=review.reviewed_on&&(!item.case_study||item.case_study.reviewed_on<=review.reviewed_on)&&(!item.insight||item.insight.reviewed_on<=review.reviewed_on)&&f?.text===financeFingerprintText(item)&&f.hash===review.evidence[i].source_hash;
+    });
+    if(!valid)return output('gap','금융 자료가 누락되거나 검토 후 바뀌었습니다. 근거를 다시 대조하기 전에는 종합 판단을 적용하지 않습니다.');
+    return output(review.state,review.reading,evidence);
+  }
+  function financePrice(company,snapshot,library={},now=new Date()){
+    const v=F?.evaluate(library['valuation-defaults'],company.id,{},now),quote=v?.company?.quote||company.quote;
+    const age=(Date.parse(today(now))-Date.parse(quote.date))/86400000;
+    const quoteFresh=finite(age)&&age>=0&&age<=4;
+    if(company.market==='KR'){
+      if(!v?.result||['stale','invalid','missing'].includes(v.state))return {quote,state:v?.state||'missing',label:v?.label||'기본 평가 자료 확인 필요',detail:'가격·컨센서스 갱신 후 판단합니다.',result:null};
+      const r=v.result;
+      return {quote,state:v.state,label:v.label,result:r,detail:`평가 참조 ₩${fmt(r.value,0)} · 가격 여유 ${fmt(r.margin*100,1)}% · 선택 PER ${fmt(r.per,1)}배. 컨센서스 EPS와 편집 배수의 조건부 계산입니다.`};
+    }
+    if(!quoteFresh)return {quote,state:'stale',label:'가격 갱신 후 판단',detail:'확인한 종가가 점검 기한 4일을 벗어났습니다.',result:null};
+    const requiredEPS=quote.value*1.1/company.multiple;
+    return {quote,state:'unpriced',label:'매력 판단 보류 · 이익 검증',result:null,requiredEPS,detail:`12개월 후 ${fmt(company.multiple,1)}배·요구수익률 10% 가정이면 연간 EPS $${fmt(requiredEPS,2)} 필요. 컨센서스·적정 배수는 미확보입니다.`};
+  }
   function company(id,library={},now=new Date()){
     const p=profiles[id];if(!p)return null;
     const signals=analyze(library,now).filter(s=>s.companies.includes(id)).map(s=>exposure(id,s));
@@ -165,5 +203,5 @@
     if(!signals.length)return '';
     return `<details class="research-assessment tab-assessment"><summary>이 자료가 투자 판단에 주는 변화 <span>${signals.map(s=>esc(s.label)).join(' · ')}</span></summary><div class="signal-grid">${signals.map(s=>card(s,{companyID,compact:true})).join('')}</div><nav class="signal-company-links"><a href="#desk">전체 투자 판단 →</a>${[...new Set(signals.flatMap(s=>s.companies))].map(id=>`<a href="${link('company',{id})}">${esc(profiles[id]?.name||id)} 판단 →</a>`).join('')}</nav></details>`;
   }
-  return {analyze,summary,memorySignals,gpuSignal,telegramSignals,prepareTelegram,fingerprintText,company,overview,companyHTML,tabHTML};
+  return {analyze,summary,memorySignals,gpuSignal,telegramSignals,prepareTelegram,fingerprintText,prepareFinance,financeFingerprintText,financeAssessment,financePrice,company,overview,companyHTML,tabHTML};
 });
