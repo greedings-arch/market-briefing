@@ -31,7 +31,7 @@
   }
   function desk() {
     const coverage = data.companies.filter(c=>c.metrics.length).length;
-    return heading('THE TWO QUESTIONS','AI 투자는 이어지는가.<br><span>지금 가격은 매력적인가.</span>') +
+    return heading('THE TWO QUESTIONS','AI 투자는 이어지는가.<br><span>지금 가격은 매력적인가.</span>') + (window.BrokerResearch?.highlights(library['broker-research'])||'') +
       `<section class="desk-lead"><div><div class="section-tag"><span class="live-dot"></span> 이번 검토의 판단 <span>· ${escape(data.as_of)}</span></div><h2>${escape(R?.summary(library).headline||data.summary)}</h2><p>${escape(R?.summary(library).body||data.summary_detail)}</p><details class="prior-thesis"><summary>직전 실적 검토의 기준선</summary><p>${escape(data.summary)}</p><p>${escape(data.summary_detail)}</p></details><p class="desk-research-readout">메모리 계약가 전망·NAND 현물·GPU 임대가격·텔레그램을 아래에서 대조합니다. 지지와 반대 근거가 기업별 판단에 함께 반영됩니다.</p><a class="text-link" href="#company?id=sem">삼성전기부터 검토하기 <span>↗</span></a></div><aside class="lead-aside"><span class="eyebrow">COVERAGE / READINESS</span><div><strong>${data.companies.length}<small>개사</small></strong><span>워치리스트</span></div><div><strong>${coverage}<small>개사</small></strong><span>실적 수치 확인</span></div><p>국내 3사 EPS·가격 시나리오<br><b>보고 수치와 편집 가정을 구분</b></p></aside></section>
       ${V?.overview(library)||''}${R?.overview(library)||''}
       <section class="section"><div class="section-head"><div><p class="eyebrow">02 / WATCHLIST</p><h2>같은 사이클, 다른 이익 구조</h2></div><div class="filters" aria-label="워치리스트 필터">${[['all','전체'],['KR','국내 3개사'],['US','미국 7개사'],['mixed','상충·점검']].map(([id,label])=>`<button type="button" data-investor-filter="${id}" aria-pressed="${activeFilter===id}">${label}</button>`).join('')}</div></div><div class="table-scroll" tabindex="0" aria-label="기업 비교표 가로 스크롤"><table class="watch-table"><thead><tr><th>기업 / 사이클의 연결점</th><th class="numeric">확인한 가격</th><th>사업 가설</th><th>가격 검증</th><th>다음에 확인할 것</th></tr></thead><tbody id="watch-rows">${tableRows()}</tbody></table></div></section>
@@ -39,7 +39,7 @@
   }
   function company(c) {
     const model=V?.get(library,c.id),quote=model?.quote||c.quote;
-    return heading('COMPANY UNDERWRITING',escape(c.name),escape(c.role)+' · '+escape(c.ticker)) + companyPicker(c.id,'company')+(V?.compact(c.id,library)||'')+(R?.companyHTML(c.id,library)||'')+
+    return heading('COMPANY UNDERWRITING',escape(c.name),escape(c.role)+' · '+escape(c.ticker)) + companyPicker(c.id,'company')+(window.BrokerResearch?.highlights(library['broker-research'],c.id)||'')+(V?.compact(c.id,library)||'')+(R?.companyHTML(c.id,library)||'')+
       `<section class="company-hero"><div><p class="eyebrow">직전 실적 검토의 기준선 · 기준일은 아래 원문·지표에 표시</p>${badge(c.status)}<h2>${escape(c.thesis)}</h2><p>${escape(c.counter)}</p></div><aside><span class="eyebrow">OBSERVED PRICE</span><strong>${money(quote.value,c)}</strong><small>${escape(quote.date)} · ${escape(quote.time)}<br>${escape(quote.session)}</small>${quoteRef(c)}<a class="button dark" href="${href('valuation',c.id)}">이 가격의 기대를 역산 →</a></aside></section>
       <div class="transmission" aria-label="사업 영향 경로">${c.transmission.map((s,i)=>`<div><span>0${i+1}</span>${escape(s)}</div>`).join('')}</div>
       <div class="metric-grid">${c.metrics.map(m=>`<article><span>${escape(m.label)}</span><strong>${num(m.value,4)}<small>${escape(m.unit)}</small></strong><p>${escape(m.period)}</p>${refs([m.source])}</article>`).join('')||'<div class="empty">최신 실적 수치 대조가 완료되지 않았습니다. 수치는 채워 넣지 않았습니다.</div>'}</div>
