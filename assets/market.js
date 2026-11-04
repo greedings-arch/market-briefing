@@ -476,7 +476,7 @@
     investor?.deactivate();navigation();$('#content').className=isInvestor?'investor-view':'';$('#content').innerHTML='<div class="loading">자료를 불러오고 있습니다.</div>';
     try{
       if(isInvestor){
-        const names=['investor-desk','broker-research','gpu','memory','telegram','finance','valuation-models','valuation-audit','valuation-defaults',...(tab==='desk'||tab==='company'||tab==='valuation'?['reports']:[]),...(tab==='company'||tab==='valuation'?['news']:[])];
+        const names=['investor-desk','broker-research','gpu','memory','telegram','finance','valuation-models','valuation-audit','valuation-defaults','valuation-broker',...(tab==='desk'||tab==='company'||tab==='valuation'?['reports']:[]),...(tab==='company'||tab==='valuation'?['news']:[])];
         const results=await Promise.allSettled(names.map(json));if(token!==generation)return;
         if(results[0].status!=='fulfilled')throw results[0].reason;
         const related={config,status};names.slice(1).forEach((name,i)=>{related[name]=results[i+1].status==='fulfilled'?results[i+1].value:null;});

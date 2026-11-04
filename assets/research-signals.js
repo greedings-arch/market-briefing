@@ -4,6 +4,7 @@
   if(typeof module==='object'&&module.exports)module.exports=api;else root.ResearchSignals=api;
 })(typeof globalThis!=='undefined'?globalThis:this,function(cryptoAPI,M,F){
   'use strict';
+  const B=typeof module==='object'&&module.exports?require('./broker-valuation'):globalThis.BrokerValuation;
   const rows=x=>Array.isArray(x)?x:[],finite=x=>typeof x==='number'&&Number.isFinite(x);
   const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const fmt=(x,n=2)=>finite(x)?x.toLocaleString('ko-KR',{maximumFractionDigits:n}):'—';
@@ -131,6 +132,7 @@
       channel='2차 자료 · 편집 검토';
       impact+=id==='sem'?' 삼성전기에는 MLCC·기판 확정 발주로 이어지는지 확인할 조건입니다.':['hynix','samsung'].includes(id)?' 메모리 업체에는 서버 발주·HBM/DRAM 구매 약정으로 연결되는지 확인할 조건입니다.':'';
     }
+    if(s.tab==='reports'){action=s.action;channel='이익·평가 조건 검토';}
     return {...s,sourceState:s.state,state:id==='sem'&&s.tab==='memory'&&!pending?'context':s.state,impact,action,channel,reading:impact};
   }
   const financeFingerprints=new WeakMap();
@@ -159,13 +161,13 @@
     return output(review.state,review.reading,evidence);
   }
   function financePrice(company,snapshot,library={},now=new Date()){
-    const v=F?.evaluate(library['valuation-defaults'],company.id,{},now),quote=v?.company?.quote||company.quote;
+    const v=B.fromLibrary(library,company.id,{},now),quote=v?.company?.quote||company.quote;
     const age=(Date.parse(today(now))-Date.parse(quote.date))/86400000;
     const quoteFresh=finite(age)&&age>=0&&age<=4;
     if(company.market==='KR'){
       if(!v?.result||['stale','invalid','missing'].includes(v.state))return {quote,state:v?.state||'missing',label:v?.label||'기본 평가 자료 확인 필요',detail:'가격·컨센서스 갱신 후 판단합니다.',result:null};
       const r=v.result;
-      return {quote,state:v.state,label:v.label,result:r,detail:`평가 참조 ₩${fmt(r.value,0)} · 가격 여유 ${fmt(r.margin*100,1)}% · 선택 PER ${fmt(r.per,1)}배. 컨센서스 EPS와 편집 배수의 조건부 계산입니다.`};
+      return {quote,state:v.decisionState||v.state,priceState:v.state,label:v.decisionLabel||v.label,result:r,detail:`평가 참조 ₩${fmt(r.value,0)} · 가격 여유 ${fmt(r.margin*100,1)}% · 선택 PER ${fmt(r.per,1)}배. 컨센서스 EPS와 편집 배수의 조건부 계산입니다. ${v.reviewStatus==='ready'?v.next:'목표가 근거 연결을 재검토해야 합니다.'}`};
     }
     if(!quoteFresh)return {quote,state:'stale',label:'가격 갱신 후 판단',detail:'확인한 종가가 점검 기한 4일을 벗어났습니다.',result:null};
     const requiredEPS=quote.value*1.1/company.multiple;
@@ -173,22 +175,23 @@
   }
   function company(id,library={},now=new Date()){
     const p=profiles[id];if(!p)return null;
-    const signals=analyze(library,now).filter(s=>s.companies.includes(id)).map(s=>exposure(id,s));
+    const broker=('valuation-defaults' in library||'valuation-broker' in library)?B.signal(library,id,now):null;
+    const signals=[...analyze(library,now),...(broker?[broker]:[])].filter(s=>s.companies.includes(id)).map(s=>exposure(id,s));
     const caution=signals.some(s=>s.state==='caution'),missingData=signals.some(s=>['gap','stale'].includes(s.state));
-    const changes=signals.map(s=>({id:s.id,title:s.title,state:s.state,channel:s.channel,action:s.action,impact:s.impact}));
+    const changes=signals.map(s=>({id:s.id,title:s.title,state:s.state,channel:s.channel,action:s.action,impact:s.impact,needsReview:!!s.needsReview}));
     const dram=signals.find(s=>s.id==='memory-contract'),nand=signals.find(s=>s.id==='memory-nand');
     let readout=p.readout;
     if(id==='sem')readout='삼성전기: 고객의 메모리 원가와 GPU 투자 회수 여건을 MLCC·기판 발주와 대조합니다.';
     if(['hynix','samsung'].includes(id))readout=`${p.name}: ${dram?.label||'DRAM 미확인'} · ${nand?.label||'NAND 미확인'}을 분리해 이익 가정을 검토합니다.`;
     if(caution)readout+=' 하방 신호가 있어 이익 상향보다 반대 근거 확인을 우선합니다.';
     if(missingData)readout=`${p.name}: 자료 보완 전에는 가설 유지·강화를 판단할 수 없습니다. 확인된 신호와 미확인 영역을 아래에 구분했습니다.`;
-    return {...p,readout,signals,changes,state:!signals.length||missingData?'gap':caution?'caution':'mixed',label:!signals.length?'직접 근거 부족':missingData?'자료 보완 필요':caution?'하방 조건 추가 점검':'조건부 가설 유지',price:(()=>{const v=F?.evaluate(library['valuation-defaults'],id,{},now);return v?.result?'컨센서스·역사 배수 기본값: '+v.label+' · 산업 자료의 '+(missingData?'미확인 영역 보완 필요':caution?'하방 조건 검토 필요':'검증 조건 유지'):'가격 매력도 판단 보류 · 기본 평가 자료 미확보';})()};
+    return {...p,readout,signals,changes,state:!signals.length||missingData?'gap':caution?'caution':'mixed',label:!signals.length?'직접 근거 부족':missingData?'자료 보완 필요':caution?'하방 조건 추가 점검':'조건부 가설 유지',price:(()=>{const v=B.fromLibrary(library,id,{},now);return v?.result?'컨센서스·역사 배수 기본값: '+(v.decisionLabel||v.label)+' · 산업 자료의 '+(missingData?'미확인 영역 보완 필요':caution?'하방 조건 검토 필요':'검증 조건 유지'):'가격 매력도 판단 보류 · 기본 평가 자료 미확보';})()};
   }
   function refsHTML(refs){return rows(refs).map(r=>{let u;try{u=new URL(r.url);}catch{return '';}
     return /^https?:$/.test(u.protocol)?`<a href="${esc(u.href)}" target="_blank" rel="noopener noreferrer">${esc(r.label)} ↗ <span>${esc(r.date)}</span></a>`:'';}).join('');}
   function card(s,{companyID,compact=false}={}){
     const to=link(s.tab,{...s.route,...(companyID?{company:companyID}:{})});
-    return `<article class="signal-card ${esc(s.state)}" data-signal="${esc(s.id)}"><div class="signal-head"><h3>${esc(s.title)}</h3><span class="signal-label">${esc(s.label)}</span></div>${s.asOf?`<p class="signal-date">근거 기준 ${esc(s.asOf)}${s.reviewedOn?' · 내용 검토 '+esc(s.reviewedOn):''} · 저장 자료의 해석</p>`:''}<ul class="signal-facts">${s.facts.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${s.action?`<p class="signal-date">${esc(s.channel)} · 이번 검토: ${esc(s.action)}</p>`:''}<p class="signal-reading"><b>판단 반영</b> ${esc(s.reading)}</p><details ${compact?'':'open'}><summary>이익 가정과 판단을 바꿀 조건</summary><dl><dt>이익에 연결할 항목</dt><dd>${esc(s.model)}</dd><dt>다음 확인 · 초안 점검 기준</dt><dd>${esc(s.next)}</dd></dl><div class="signal-sources">${refsHTML(s.refs)}</div></details><a class="signal-return" href="${esc(to)}">${s.tab==='gpu'?'GPU 가격':s.tab==='memory'?'메모리 가격':'텔레그램'} 자료 확인 →</a></article>`;
+    return `<article class="signal-card ${esc(s.state)}" data-signal="${esc(s.id)}"><div class="signal-head"><h3>${esc(s.title)}</h3><span class="signal-label">${esc(s.label)}</span></div>${s.asOf?`<p class="signal-date">근거 기준 ${esc(s.asOf)}${s.reviewedOn?' · 내용 검토 '+esc(s.reviewedOn):''} · 저장 자료의 해석</p>`:''}<ul class="signal-facts">${s.facts.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>${s.action?`<p class="signal-date">${esc(s.channel)} · 이번 검토: ${esc(s.action)}</p>`:''}<p class="signal-reading"><b>판단 반영</b> ${esc(s.reading)}</p><details ${compact?'':'open'}><summary>이익 가정과 판단을 바꿀 조건</summary><dl><dt>이익에 연결할 항목</dt><dd>${esc(s.model)}</dd><dt>다음 확인 · 초안 점검 기준</dt><dd>${esc(s.next)}</dd></dl><div class="signal-sources">${refsHTML(s.refs)}</div></details><a class="signal-return" href="${esc(to)}">${s.tab==='gpu'?'GPU 가격':s.tab==='memory'?'메모리 가격':s.tab==='reports'?'증권사 원문':'텔레그램'} 자료 확인 →</a></article>`;
   }
   function overview(library){
     const signals=analyze(library),gaps=signals.filter(x=>['gap','stale'].includes(x.state)).length;

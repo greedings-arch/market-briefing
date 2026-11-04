@@ -1,0 +1,916 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-11-04",
+  "policy": "검토한 목표가 변경 근거를 시나리오와 행동 판단에 연결합니다. 기본 컨센서스 EPS에는 과거 보고서 수정률을 중복 가산하지 않습니다. 하방 EPS는 같은 FY2026 컨센서스와 검토 보고서 중 낮은 값입니다. 연간 EPS 수준을 NTM 스트레스에 차용하는 편집 가정이며 새 컨센서스가 아닙니다.",
+  "window": {
+    "from": "2026-10-22",
+    "through": "2026-11-04"
+  },
+  "companies": [
+    {
+      "id": "sem",
+      "eps_reason": "기본 NTM EPS는 11월 2일 컨센서스를 유지합니다. 10월 29일 보고서의 연간 EPS 상향은 집계에 이미 포함됐을 수 있어 다시 더하지 않습니다. 구성 기관별 포함 여부는 미확인입니다.",
+      "per_reason": "현재 NTM 역사 참조 PER 28배를 유지합니다. 신한 34.3배는 FY2028 EPS, 하나는 FY2028 사업부 SOTP, IBK는 EV/EBITDA 평가입니다. 이를 현재 NTM PER로 옮기지 않습니다.",
+      "next_check": "MLCC·FC-BGA의 계약 ASP·가동률·수율과 동일 연도 EPS 수정치를 확인합니다. 이익 상향과 별개로 비교기업 배수 하락이 지속되면 선택 PER도 재검토합니다.",
+      "reviewed_reports": [
+        "naver-98247c9cdd5e20c940ad",
+        "naver-906b847eacf18524ccde",
+        "naver-9cc383a2361205e1acd6",
+        "naver-f8bcfd7e1e4d986c0e77",
+        "naver-26a0563cf12eb29c340c",
+        "naver-7228566c87c764bb1cf5",
+        "naver-b005ffa2397083ee8f12",
+        "naver-61adcc1da88fab5faf90",
+        "naver-afd7d99da837311f55e8"
+      ],
+      "reviews": [
+        {
+          "change_id": "target-naver-7228566c87c764bb1cf5",
+          "pdf_url": "https://stock.pstatic.net/stock-research/company/40/20261030_company_433363000.pdf",
+          "treatment": "stress",
+          "direction": "support",
+          "flags": [],
+          "reason": "FY2026 EPS는 하방 스트레스 후보, FY2027 EPS는 동일 연도 컨센서스 대조에 사용합니다. EV/EBITDA 배수는 PER로 변환하지 않습니다.",
+          "metrics": [
+            {
+              "metric": "EPS",
+              "period": "FY2026E",
+              "value": 22307,
+              "previous_value": 21684,
+              "previous_period": "FY2026E",
+              "unit": "KRW/share",
+              "page": 1
+            },
+            {
+              "metric": "EPS",
+              "period": "FY2027E",
+              "value": 41924,
+              "previous_value": 41490,
+              "previous_period": "FY2027E",
+              "unit": "KRW/share",
+              "page": 1
+            }
+          ],
+          "source_basis": {
+            "report_id": "naver-7228566c87c764bb1cf5",
+            "company_id": "sem",
+            "broker": "IBK투자증권",
+            "report_date": "2026-10-29",
+            "change_date": "2026-10-29",
+            "change_timing": "current_report",
+            "current_target": 1900000,
+            "previous_target": 1750000,
+            "valuation_method": "SOTP·EV/EBITDA. 패키지 40배, 컴포넌트 26배, 광학 7배를 두 보고서에서 동일하게 적용했습니다. 표상 주당가치는 1,747,583원 → 1,863,583원이며 목표가는 175만원 → 190만원으로 반올림했습니다.",
+            "drivers": [
+              {
+                "kind": "earnings",
+                "detail": "2026E EPS 21,684원 → 22,307원, 2027E EPS 41,490원 → 41,924원. 이익 전망 상향을 목표가에 반영한다고 명시했습니다. 목표가 상향과 배수 유지 설명은 현재 원문 4쪽에 있습니다.",
+                "page": 1
+              },
+              {
+                "kind": "multiple",
+                "detail": "부문별 적용 배수는 유지했습니다. 부문 구성에 따라 가중 평균 배수는 28.8배 → 28.9배로 달라집니다.",
+                "page": 4
+              }
+            ]
+          },
+          "posted_date": "2026-10-29"
+        },
+        {
+          "change_id": "target-naver-26a0563cf12eb29c340c",
+          "pdf_url": "https://stock.pstatic.net/stock-research/company/21/20261029_company_359531000.pdf",
+          "treatment": "reference",
+          "direction": "mixed",
+          "flags": [
+            "multiple_compression"
+          ],
+          "reason": "이익 상향과 배수 하향이 함께 있습니다. FY2028 EPS·PER는 기간이 달라 NTM 기본값이나 FY2027 낙관값에 직접 쓰지 않고 배수 압축 확인 조건으로 반영합니다.",
+          "metrics": [
+            {
+              "metric": "EPS",
+              "period": "FY2028E",
+              "value": 78002,
+              "previous_value": null,
+              "previous_period": null,
+              "unit": "KRW/share",
+              "page": 2
+            },
+            {
+              "metric": "PER",
+              "period": "FY2028E",
+              "value": 34.3,
+              "previous_value": null,
+              "previous_period": null,
+              "unit": "times",
+              "page": 1
+            }
+          ],
+          "source_basis": {
+            "report_id": "naver-26a0563cf12eb29c340c",
+            "company_id": "sem",
+            "broker": "신한투자증권",
+            "report_date": "2026-10-29",
+            "change_date": "2026-10-29",
+            "change_timing": "current_report",
+            "current_target": 2700000,
+            "previous_target": 2200000,
+            "valuation_method": "2028F EPS 78,002원 × P/E 34.3배 = 2,675,469원(계산), 반올림 목표가 270만원. 무라타 2023~2025년 고점 P/E 평균을 기준으로 삼았습니다.",
+            "drivers": [
+              {
+                "kind": "earnings",
+                "detail": "2027년 영업이익 추정치를 3조5,033억원 → 5조251억원으로 43.4% 높였습니다. EPS 추정치 45% 상향이라는 설명도 있으나 그 문장의 적용 연도는 명시하지 않았습니다.",
+                "page": 2
+              },
+              {
+                "kind": "multiple",
+                "detail": "변동성 확대를 반영해 적용 P/E를 종전보다 15% 낮춘 34.3배로 제시했습니다. 종전 배수의 절대값을 역산해 확정값으로 표시하지 않았습니다.",
+                "page": 1
+              }
+            ]
+          },
+          "posted_date": "2026-10-29"
+        },
+        {
+          "change_id": "target-naver-afd7d99da837311f55e8",
+          "pdf_url": "https://stock.pstatic.net/stock-research/company/57/20261029_company_109904000.pdf",
+          "treatment": "stress",
+          "direction": "mixed",
+          "flags": [
+            "multiple_compression"
+          ],
+          "reason": "FY2026 EPS는 하방 스트레스 후보, FY2027 EPS는 동일 연도 컨센서스 대조에 사용합니다. 목표가 하락은 배수·SOTP 전환 때문이며 EPS를 하향하지 않습니다.",
+          "metrics": [
+            {
+              "metric": "EPS",
+              "period": "FY2026E",
+              "value": 21714,
+              "previous_value": 20689,
+              "previous_period": "FY2026E",
+              "unit": "KRW/share",
+              "page": 1
+            },
+            {
+              "metric": "EPS",
+              "period": "FY2027E",
+              "value": 47909,
+              "previous_value": 47679,
+              "previous_period": "FY2027E",
+              "unit": "KRW/share",
+              "page": 1
+            }
+          ],
+          "source_basis": {
+            "report_id": "naver-afd7d99da837311f55e8",
+            "company_id": "sem",
+            "broker": "하나증권",
+            "report_date": "2026-10-29",
+            "change_date": "2026-10-29",
+            "change_timing": "current_report",
+            "current_target": 2000000,
+            "previous_target": 3000000,
+            "valuation_method": "2028F 부문별 순이익에 P/E를 곱한 SOTP. 컴포넌트 20.67배, 광학 7.07배, 패키지 32.67배를 적용해 주당가치 1,997,155원, 반올림 목표가 200만원을 제시했습니다.",
+            "drivers": [
+              {
+                "kind": "earnings",
+                "detail": "2026E EPS 20,689원 → 21,714원, 2027E EPS 47,679원 → 47,909원으로 올렸습니다. 목표가 하락을 EPS 하향으로 설명하지 않습니다.",
+                "page": 1
+              },
+              {
+                "kind": "multiple",
+                "detail": "동종업체 배수가 낮아져 목표가를 하향했다고 설명합니다. 컴포넌트·패키지는 2028년 무라타·이비덴 P/E에 30% 프리미엄을 적용합니다.",
+                "page": 2
+              },
+              {
+                "kind": "other",
+                "detail": "평가방식을 SOTP로 바꿨습니다. 이전 방식의 대응 배수를 확인하지 못해 배수와 방식 변경의 원화 기여도를 임의 분해하지 않았습니다.",
+                "page": 1
+              }
+            ]
+          },
+          "posted_date": "2026-10-29"
+        }
+      ],
+      "catalog": {
+        "count": 149,
+        "latest": "2026-10-29"
+      },
+      "model_basis": {
+        "consensus_as_of": "2026-11-02",
+        "reference_price": 1193000,
+        "forward_per": 26.86,
+        "fy2026": 22250.45,
+        "fy2027": 46425.57,
+        "history_per": 28,
+        "history_period": "2025-12-30~2026-11-02 · 월별 12개 점",
+        "downside_eps": 22250.45,
+        "downside_per": 20.78,
+        "upside_eps": 46425.57,
+        "upside_per": 30
+      }
+    },
+    {
+      "id": "hynix",
+      "eps_reason": "기본 NTM EPS는 컨센서스를 유지합니다. IBK의 FY2027 EPS 538,187원이나 신한의 선행 BPS를 NTM EPS에 더하지 않습니다. 보고서는 컨센서스 기준일보다 이르며 실제 포함 여부는 미확인입니다.",
+      "per_reason": "현재 평가의 역사 하단 PER 4.5배는 유지합니다. 낙관 시나리오의 8.6배는 IBK가 변동성과 주가·목표가 괴리를 반영해 낮춘 6배로 제한합니다. 이는 FY2027 평가 배수를 차용한 편집 선택이며 현재 NTM 적정 PER의 검증값은 아닙니다.",
+      "next_check": "HBM·DRAM 계약 ASP와 분기 이익이 FY2027 증익 경로를 지지하는지 확인합니다. IBK의 PER 6배 유지·변경 이유와 신한의 선행 BPS/PBR을 별도 대조합니다.",
+      "reviewed_reports": [
+        "naver-aaa6ad6cc4ff553cd591",
+        "naver-a05ed809cf9c00ca469d",
+        "naver-44482a8c61a46693f8d4",
+        "naver-96de092032be4034e2a4",
+        "naver-331921c5bb8eb9fa93fe",
+        "naver-861286d561ca67d43b62",
+        "naver-a1f98700aee245616484",
+        "naver-909deaf282e031bc1516",
+        "naver-d28d9f6ff41725dc87d2",
+        "naver-ae16bd2da0f5f2073d03",
+        "naver-eab7af931538729f84f1",
+        "naver-f1ed48fb82b1a81683d8",
+        "naver-037206d833626248322e",
+        "naver-24b05ee33853cb302550"
+      ],
+      "reviews": [
+        {
+          "change_id": "target-naver-d28d9f6ff41725dc87d2",
+          "pdf_url": "https://stock.pstatic.net/stock-research/company/40/20261029_company_340660000.pdf",
+          "treatment": "stress_and_cap",
+          "direction": "mixed",
+          "flags": [
+            "multiple_compression"
+          ],
+          "reason": "FY2026 EPS를 하방 후보로 대조하되 기존 컨센서스보다 높아 하방을 완화하지 않습니다. 낙관 FY2027 수준의 PER만 6배로 제한합니다. 12MF→FY2027 기간 변경을 순수 EPS 수정으로 분해하지 않습니다.",
+          "metrics": [
+            {
+              "metric": "EPS",
+              "period": "FY2026E",
+              "value": 361690,
+              "previous_value": 369678,
+              "previous_period": "FY2026E",
+              "unit": "KRW/share",
+              "page": 1
+            },
+            {
+              "metric": "EPS",
+              "period": "FY2027E",
+              "value": 538187,
+              "previous_value": 479295,
+              "previous_period": "FY2027E",
+              "unit": "KRW/share",
+              "page": 1
+            },
+            {
+              "metric": "PER",
+              "period": "FY2027E",
+              "value": 6,
+              "previous_value": 9,
+              "previous_period": "NTM",
+              "unit": "times",
+              "page": 7
+            }
+          ],
+          "source_basis": {
+            "report_id": "naver-d28d9f6ff41725dc87d2",
+            "company_id": "hynix",
+            "broker": "IBK투자증권",
+            "report_date": "2026-10-29",
+            "change_date": "2026-10-29",
+            "change_timing": "current_report",
+            "current_target": 3200000,
+            "previous_target": 4000000,
+            "valuation_method": "2027E EPS 538,187원 × PER 6배를 적용해 반올림 목표가 320만원을 제시했습니다. 이전 보고서는 12개월 선행 EPS 446,092원 × PER 9배로 400만원을 제시했습니다.",
+            "drivers": [
+              {
+                "kind": "multiple",
+                "detail": "현재 PER 6배, 이전 9배입니다. 현재 주가와 목표가의 괴리율 및 변동성을 하향 이유로 명시했습니다.",
+                "page": 7
+              },
+              {
+                "kind": "earnings",
+                "detail": "같은 연도의 EPS 추정은 2026년 369,678원 → 361,690원, 2027년 479,295원 → 538,187원입니다.",
+                "page": 1
+              },
+              {
+                "kind": "other",
+                "detail": "현재 산식의 2027E EPS와 이전 산식의 12개월 선행 EPS는 기간이 다릅니다. 이 두 값의 차이를 동일 기준의 EPS 상향으로 해석하지 않습니다.",
+                "page": 7
+              }
+            ]
+          },
+          "posted_date": "2026-10-29"
+        },
+        {
+          "change_id": "target-naver-a1f98700aee245616484",
+          "pdf_url": "https://stock.pstatic.net/stock-research/company/21/20261029_company_572400000.pdf",
+          "treatment": "crosscheck",
+          "direction": "support",
+          "flags": [],
+          "reason": "BPS×PBR 평가를 별도 교차 근거로 반영합니다. BPS는 EPS가 아니며 두 12MF 창의 한 달 이동이 있어 순수 같은 기간 추정 수정률로 쓰지 않습니다.",
+          "metrics": [
+            {
+              "metric": "BPS",
+              "period": "NTM",
+              "value": 871503,
+              "previous_value": 825088,
+              "previous_period": "NTM",
+              "unit": "KRW/share",
+              "page": 1
+            },
+            {
+              "metric": "PBR",
+              "period": "NTM",
+              "value": 3.5,
+              "previous_value": 3.3,
+              "previous_period": "NTM",
+              "unit": "times",
+              "page": 1
+            }
+          ],
+          "source_basis": {
+            "report_id": "naver-a1f98700aee245616484",
+            "company_id": "hynix",
+            "broker": "신한투자증권",
+            "report_date": "2026-10-29",
+            "change_date": "2026-10-29",
+            "change_timing": "current_report",
+            "current_target": 3000000,
+            "previous_target": 2700000,
+            "valuation_method": "현재 12개월 선행 BPS 871,503원 × PBR 3.5배 = 3,050,261원(계산), 제시 목표가 300만원. 이전 12개월 선행 BPS 825,088원 × PBR 3.3배 = 2,722,790원(계산), 목표가 270만원. 반올림 전 산식 차이는 BPS 증가분×이전 배수 약 15.3만원과 배수 증가분×현재 BPS 약 17.4만원으로 나뉩니다(계산).",
+            "drivers": [
+              {
+                "kind": "book_value",
+                "detail": "두 시점의 12개월 선행 BPS가 825,088원 → 871,503원으로 5.6% 증가했습니다(계산). EPS나 2027년 말 BPS 수치가 아니며, 선행 기간 이동과 추정 수정의 기여는 분리하지 못했습니다.",
+                "page": 1
+              },
+              {
+                "kind": "multiple",
+                "detail": "목표 PBR이 3.3배 → 3.5배로 높아졌습니다. 현재 주가의 12MF PBR 1.7배를 들어 동종업체 대비 저평가 구간이라고 설명합니다.",
+                "page": 1
+              }
+            ]
+          },
+          "posted_date": "2026-10-29"
+        },
+        {
+          "change_id": "target-naver-24b05ee33853cb302550",
+          "pdf_url": "https://stock.pstatic.net/stock-research/company/18/20261029_company_286073000.pdf",
+          "treatment": "crosscheck",
+          "direction": "support",
+          "flags": [],
+          "reason": "FY2027 자본·이익 전망의 지지 근거로 반영합니다. 분기 영업이익과 PBR만으로 EPS·PER를 만들어 내지 않습니다.",
+          "metrics": [
+            {
+              "metric": "PBR",
+              "period": "FY2027E",
+              "value": 3.5,
+              "previous_value": null,
+              "previous_period": null,
+              "unit": "times",
+              "page": 1
+            }
+          ],
+          "source_basis": {
+            "report_id": "naver-24b05ee33853cb302550",
+            "company_id": "hynix",
+            "broker": "유안타증권",
+            "report_date": "2026-10-28",
+            "change_date": "2026-10-28",
+            "change_timing": "current_report",
+            "current_target": 3700000,
+            "previous_target": 3300000,
+            "valuation_method": "현재 원문은 2027E BPS × PBR 3.5배를 사용합니다. 10쪽 이력표의 2026-06-01 목표가 330만원과 현재 370만원을 대조했습니다.",
+            "drivers": [
+              {
+                "kind": "earnings",
+                "detail": "4Q26 영업이익 전망을 118.2조원으로 높였습니다. EPS가 아닌 분기 영업이익 전망입니다.",
+                "page": 1
+              },
+              {
+                "kind": "book_value",
+                "detail": "2027E BPS에 3.5배를 적용해 목표가를 제시했습니다. 이전 BPS와 배수의 세부 기여는 확인하지 못했습니다.",
+                "page": 1
+              }
+            ]
+          },
+          "posted_date": "2026-10-29"
+        }
+      ],
+      "catalog": {
+        "count": 160,
+        "latest": "2026-11-04"
+      },
+      "model_basis": {
+        "consensus_as_of": "2026-11-02",
+        "reference_price": 1472000,
+        "forward_per": 2.88,
+        "fy2026": 356352.22,
+        "fy2027": 533474.91,
+        "history_per": 4.5,
+        "history_period": "2016~2024 · 삼성증권 차트",
+        "downside_eps": 356352.22,
+        "downside_per": 4.5,
+        "upside_eps": 533474.91,
+        "upside_per": 8.6
+      }
+    },
+    {
+      "id": "samsung",
+      "eps_reason": "기본 NTM EPS는 컨센서스를 유지합니다. IBK는 FY2026·FY2027 EPS를 높였으므로 목표가 하향을 EPS 하향으로 처리하지 않습니다. 10월 보고서의 이익 상향을 11월 집계에 중복 가산하지 않습니다.",
+      "per_reason": "현재 NTM 역사 하단 PER 8배를 유지합니다. IBK의 실제 목표가 35만원으로 PER을 역산해 채택하지 않습니다. 별도 이론가의 PBR 4.3배와 유안타의 FY2027 PBR 3.5배도 PER이 아닙니다.",
+      "next_check": "공식 주주환원 집행·정책과 다음 동일 증권사 평가를 확인합니다. IBK의 상대 선호도 논거와 유안타의 자본·이익 전망을 대조하고, 파운드리 손실·DS 수익성을 함께 확인합니다.",
+      "reviewed_reports": [
+        "naver-39f2ce11fbe757619461",
+        "naver-60d85023dbc69455a825",
+        "naver-c38c2dcbf446136baba4",
+        "naver-ac38d375561065a9baf0",
+        "naver-284aa8ab6b83ab31b4e2",
+        "naver-a5174c58610c4e1053ba",
+        "naver-61e0fbed643e34cc7fa8",
+        "naver-d337cec8977adff3d4c4",
+        "naver-11be384d90e93735cc55",
+        "naver-60fbc09af427a4b63450",
+        "naver-6e1cf6202128747efe36"
+      ],
+      "reviews": [
+        {
+          "change_id": "target-naver-11be384d90e93735cc55",
+          "pdf_url": "https://stock.pstatic.net/stock-research/company/40/20261030_company_555323000.pdf",
+          "treatment": "stress",
+          "direction": "mixed",
+          "flags": [
+            "capital_return_concern"
+          ],
+          "reason": "FY2026 EPS를 하방 후보로 사용합니다. EPS 상향과 주주환원 관련 목표가 하향을 분리해 계산상 여유와 행동 판단을 구분합니다. 환원 우려는 해당 기관의 의견이며 공식 정책 악화로 단정하지 않습니다.",
+          "metrics": [
+            {
+              "metric": "EPS",
+              "period": "FY2026E",
+              "value": 45784,
+              "previous_value": 45019,
+              "previous_period": "FY2026E",
+              "unit": "KRW/share",
+              "page": 1
+            },
+            {
+              "metric": "EPS",
+              "period": "FY2027E",
+              "value": 85168,
+              "previous_value": 70006,
+              "previous_period": "FY2027E",
+              "unit": "KRW/share",
+              "page": 1
+            }
+          ],
+          "source_basis": {
+            "report_id": "naver-11be384d90e93735cc55",
+            "company_id": "samsung",
+            "broker": "IBK투자증권",
+            "report_date": "2026-10-30",
+            "change_date": "2026-10-30",
+            "change_timing": "current_report",
+            "current_target": 350000,
+            "previous_target": 460000,
+            "valuation_method": "실제 목표가 350,000원과 별도 이론 적정가 465,690원을 구분합니다. 이론가는 2026E BPS 108,244원·ROE 53.4%와 적정 PBR 4.3배를 사용했습니다. 실제 목표가 35만원의 별도 PER 산식은 확인되지 않았습니다.",
+            "drivers": [
+              {
+                "kind": "earnings",
+                "detail": "2026E EPS 45,019원 → 45,784원, 2027E EPS 70,006원 → 85,168원으로 상향했습니다.",
+                "page": 1
+              },
+              {
+                "kind": "other",
+                "detail": "주주환원이 시장 기대에 못 미치고 경쟁사 대비 선호도가 낮아 상승 여력이 제한된다고 설명합니다.",
+                "page": 8
+              },
+              {
+                "kind": "not_disclosed",
+                "detail": "이론 적정가 465,690원에서 실제 목표가 350,000원으로 조정하는 별도 수식·목표 PER은 명시하지 않았습니다.",
+                "page": 8
+              }
+            ]
+          },
+          "posted_date": "2026-10-30"
+        },
+        {
+          "change_id": "target-naver-ac38d375561065a9baf0",
+          "pdf_url": "https://stock.pstatic.net/stock-research/company/18/20261030_company_582076000.pdf",
+          "treatment": "crosscheck",
+          "direction": "support",
+          "flags": [],
+          "reason": "FY2027 BPS×PBR 방식의 상향 근거로 반영합니다. 분기 영업이익은 EPS로 바꾸지 않고 PBR 3.5배를 PER 입력에도 쓰지 않습니다.",
+          "metrics": [
+            {
+              "metric": "PBR",
+              "period": "FY2027E",
+              "value": 3.5,
+              "previous_value": null,
+              "previous_period": null,
+              "unit": "times",
+              "page": 1
+            }
+          ],
+          "source_basis": {
+            "report_id": "naver-ac38d375561065a9baf0",
+            "company_id": "samsung",
+            "broker": "유안타증권",
+            "report_date": "2026-10-29",
+            "change_date": "2026-10-29",
+            "change_timing": "current_report",
+            "current_target": 690000,
+            "previous_target": 630000,
+            "valuation_method": "현재 목표가는 2027E BPS × PBR 3.5배로 산정했습니다. 이전 9월 23일 보고서의 63만원과 현재 69만원을 비교했습니다.",
+            "drivers": [
+              {
+                "kind": "earnings",
+                "detail": "4Q26 영업이익을 137.3조원으로 전망하고 목표가를 상향했습니다. 이 수치는 EPS가 아닌 분기 영업이익 전망입니다.",
+                "page": 1
+              },
+              {
+                "kind": "multiple",
+                "detail": "현재 적용 PBR은 3.5배입니다. 이전 적용 배수와 이익 변경의 각각 기여를 이번 확인 범위에서 확정하지 않았습니다.",
+                "page": 1
+              }
+            ]
+          },
+          "posted_date": "2026-10-30"
+        },
+        {
+          "change_id": "target-naver-61e0fbed643e34cc7fa8",
+          "pdf_url": "https://stock.pstatic.net/stock-research/company/15/20261030_company_442840000.pdf",
+          "treatment": "excluded",
+          "direction": "gap",
+          "flags": [],
+          "reason": "10월 23일 과거 변경이며 10월 30일은 유지입니다. 변경 이유·산식이 미확인이라 수치와 현재 방향 판정에서 제외하고 확인 공백으로 남깁니다.",
+          "metrics": [],
+          "source_basis": {
+            "report_id": "naver-61e0fbed643e34cc7fa8",
+            "company_id": "samsung",
+            "broker": "대신증권",
+            "report_date": "2026-10-30",
+            "change_date": "2026-10-23",
+            "change_timing": "historical_change",
+            "current_target": 500000,
+            "previous_target": 560000,
+            "valuation_method": "6개월 목표가입니다. 현재 PDF 7쪽의 목표가 이력으로 56만원 → 50만원을 확인했습니다. 별도 10월 23일 원문을 확인한 것은 아니며 현재 PDF 1~4쪽에는 하향 이유와 50만원 산식이 확인되지 않았습니다.",
+            "drivers": [
+              {
+                "kind": "not_disclosed",
+                "detail": "목표가 이력은 6/2 560,000원, 10/23 500,000원, 10/30 500,000원입니다. 10/30 보고서의 유지 문구와 일치합니다. 이력표에는 10/23 하향 이유가 적혀 있지 않습니다.",
+                "page": 7
+              }
+            ]
+          },
+          "posted_date": "2026-10-30"
+        }
+      ],
+      "catalog": {
+        "count": 201,
+        "latest": "2026-11-04"
+      },
+      "model_basis": {
+        "consensus_as_of": "2026-11-02",
+        "reference_price": 229000,
+        "forward_per": 3.25,
+        "fy2026": 45816.59,
+        "fy2027": 73035.15,
+        "history_per": 8,
+        "history_period": "2026-07-13 기준 직전 10년 · 기사 인용",
+        "downside_eps": 45816.59,
+        "downside_per": 8,
+        "upside_eps": 73035.15,
+        "upside_per": 11.84
+      }
+    }
+  ],
+  "source_state": {
+    "as_of": "2026-11-04",
+    "generated_at": "2026-11-03T23:47:12.644982+00:00",
+    "review_versions": [
+      {
+        "report_id": "naver-98247c9cdd5e20c940ad",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "원문 표지와 목표가 이력에서 2,100,000원 유지를 확인했습니다. 유지된 목표가가 이익 추정치까지 동일하다는 뜻은 아닙니다.",
+        "pages": [
+          1,
+          5
+        ]
+      },
+      {
+        "report_id": "naver-906b847eacf18524ccde",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "원문 표지와 목표가 이력에서 2,100,000원 유지를 확인했습니다. 유지된 목표가가 이익 추정치까지 동일하다는 뜻은 아닙니다.",
+        "pages": [
+          1,
+          8
+        ]
+      },
+      {
+        "report_id": "naver-9cc383a2361205e1acd6",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "원문 표지와 목표가 이력에서 2,800,000원 유지를 확인했습니다. 유지된 목표가가 이익 추정치까지 동일하다는 뜻은 아닙니다.",
+        "pages": [
+          1,
+          3,
+          7
+        ]
+      },
+      {
+        "report_id": "naver-f8bcfd7e1e4d986c0e77",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "원문 표지와 목표가 이력에서 2,000,000원 유지를 확인했습니다. 유지된 목표가가 이익 추정치까지 동일하다는 뜻은 아닙니다.",
+        "pages": [
+          1,
+          11
+        ]
+      },
+      {
+        "report_id": "naver-26a0563cf12eb29c340c",
+        "status": "changed",
+        "reviewed_on": "2026-11-04",
+        "note": "배수는 낮췄지만 이익 전망 상향이 더 컸습니다",
+        "pages": [
+          1,
+          2,
+          6
+        ]
+      },
+      {
+        "report_id": "naver-7228566c87c764bb1cf5",
+        "status": "changed",
+        "reviewed_on": "2026-11-04",
+        "note": "이익 전망을 올리고 부문별 배수는 유지",
+        "pages": [
+          1,
+          4,
+          7
+        ]
+      },
+      {
+        "report_id": "naver-b005ffa2397083ee8f12",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "원문 표지와 목표가 이력에서 2,800,000원 유지를 확인했습니다. 유지된 목표가가 이익 추정치까지 동일하다는 뜻은 아닙니다.",
+        "pages": [
+          1,
+          6
+        ]
+      },
+      {
+        "report_id": "naver-61adcc1da88fab5faf90",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "원문 표지와 목표가 이력에서 2,800,000원 유지를 확인했습니다. 유지된 목표가가 이익 추정치까지 동일하다는 뜻은 아닙니다.",
+        "pages": [
+          1,
+          11
+        ]
+      },
+      {
+        "report_id": "naver-afd7d99da837311f55e8",
+        "status": "changed",
+        "reviewed_on": "2026-11-04",
+        "note": "EPS는 높였지만 동종업체 배수 하락으로 목표가를 내렸습니다",
+        "pages": [
+          1,
+          2,
+          8
+        ]
+      },
+      {
+        "report_id": "naver-aaa6ad6cc4ff553cd591",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "현재 목표가 3,600,000원; 직전 하나증권 10/13 보고서 목표가 3,600,000원",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-a05ed809cf9c00ca469d",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "목표주가 4,000,000원 유지 표기",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-44482a8c61a46693f8d4",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "현재 목표가 4,000,000원; 직전 SK증권 10/12 보고서 4,000,000원",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-96de092032be4034e2a4",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "6개월 목표가 3,000,000원 유지 표기",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-331921c5bb8eb9fa93fe",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "목표가 2,640,000원 유지 표기",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-861286d561ca67d43b62",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "현재 한화 목표가 3,150,000원; 직전 동기관 보고서도 3,150,000원",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-a1f98700aee245616484",
+        "status": "changed",
+        "reviewed_on": "2026-11-04",
+        "note": "9/30 목표가 2,700,000원 유지→10/29 3,000,000원 상향; target PBR 3.5배",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-909deaf282e031bc1516",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "현재 목표가 3,100,000원; 직전 미래에셋 10/06 보고서도 3,100,000원 유지",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-d28d9f6ff41725dc87d2",
+        "status": "changed",
+        "reviewed_on": "2026-11-04",
+        "note": "이전 4,000,000원→현재 3,200,000원 하향; 2027E EPS×PER 6배",
+        "pages": [
+          1,
+          7
+        ]
+      },
+      {
+        "report_id": "naver-ae16bd2da0f5f2073d03",
+        "status": "unresolved",
+        "reviewed_on": "2026-11-04",
+        "note": "기업 스팟노트; 첫 페이지에 목표주가·투자의견 없음",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-eab7af931538729f84f1",
+        "status": "unresolved",
+        "reviewed_on": "2026-11-04",
+        "note": "네이버 게시일 10/29이나 PDF 자체 발행일 10/12. 표지에서 target 3,200,000원 및 목표가 상향 언급; 실제 보고서일이 검토 기간 이전이므로 기간 변경분 합계에서 제외",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-f1ed48fb82b1a81683d8",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "STRONG BUY 유지, 목표가 3,700,000원 유지 표기",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-39f2ce11fbe757619461",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "매수 유지, 목표가 500,000원 유지 표기",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-60d85023dbc69455a825",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "목표가 480,000원 유지; 10/12 동기관 보고서와 동일",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-c38c2dcbf446136baba4",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "목표가 530,000원 유지 표기",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-ac38d375561065a9baf0",
+        "status": "changed",
+        "reviewed_on": "2026-11-04",
+        "note": "목표가 630,000원→690,000원 상향; 2027E BPS×PBR 3.5배",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-284aa8ab6b83ab31b4e2",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "목표가 400,000원 유지 표기",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-a5174c58610c4e1053ba",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "목표가 580,000원; 직전 한화 보고서도 580,000원, 현재 본문은 2027E EPS 94,073원×P/E 6.2배 유지",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-61e0fbed643e34cc7fa8",
+        "status": "comparison",
+        "reviewed_on": "2026-11-04",
+        "note": "현재 10/30 원문은 목표가 50만원 유지입니다. 같은 PDF 7쪽 이력표에서 6/2 56만원 → 10/23 50만원의 과거 변경을 확인했습니다. 10/23 별도 원문과 하향 이유는 미확인입니다.",
+        "pages": [
+          1,
+          2,
+          3,
+          4,
+          7
+        ]
+      },
+      {
+        "report_id": "naver-d337cec8977adff3d4c4",
+        "status": "unchanged",
+        "reviewed_on": "2026-11-04",
+        "note": "목표가 450,000원 유지 표기",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-11be384d90e93735cc55",
+        "status": "changed",
+        "reviewed_on": "2026-11-04",
+        "note": "이전 460,000원→현재 350,000원 하향; p.8 실제 목표가 350,000원, 별도 이론 적정가 465,690원; 실제 목표가 PER 산식 미공개",
+        "pages": [
+          1,
+          8
+        ]
+      },
+      {
+        "report_id": "naver-60fbc09af427a4b63450",
+        "status": "unresolved",
+        "reviewed_on": "2026-11-04",
+        "note": "종목 스팟노트; 첫 페이지에 목표주가·투자의견 없음",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-037206d833626248322e",
+        "status": "unresolved",
+        "reviewed_on": "2026-11-04",
+        "note": "신규 커버리지; 목표가 2,300,000원, 직전 목표가 없음",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-6e1cf6202128747efe36",
+        "status": "unresolved",
+        "reviewed_on": "2026-11-04",
+        "note": "신규 커버리지; 목표가 370,000원, 직전 목표가 없음",
+        "pages": [
+          1
+        ]
+      },
+      {
+        "report_id": "naver-24b05ee33853cb302550",
+        "status": "changed",
+        "reviewed_on": "2026-11-04",
+        "note": "현재 PDF 1쪽 목표가 330만원 → 370만원, 10쪽 목표가 이력의 직전 적용일 2026-06-01을 대조했습니다. 현재 PDF 표기일은 10/28, 네이버 게시일은 10/29입니다.",
+        "pages": [
+          1,
+          10
+        ]
+      }
+    ]
+  }
+}
