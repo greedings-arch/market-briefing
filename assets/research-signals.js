@@ -48,7 +48,7 @@
   const affected=['sem','hynix','samsung','nvda','msft','amzn','googl','meta'];
   const gpuModels=['b300-sxm','b200-sxm','h200-sxm','h100-sxm'];
   function gpuSignal(data,now=new Date()){
-    const result=missing('gpu-fixed','GPU 임대가격과 투자 회수','gpu',affected);
+    const result=missing('gpu-fixed','공식 4종 GPU 임대가격과 투자 회수','gpu',affected);
     const direct=data?.research?.direct;
     if(direct?.kind!=='direct_fixed_panel')return result;
     const models=gpuModels.map(id=>{
@@ -59,10 +59,10 @@
     const gaps=models.filter(m=>['gap','stale'].includes(m.state)),falling=models.filter(m=>m.state==='caution');
     const valid=models.filter(m=>['caution','mixed'].includes(m.state));
     const seriesIDs=new Set(valid.flatMap(m=>rows(m.model.series))),series=rows(data?.data?.series).filter(x=>seriesIDs.has(x.id));
-    return {...result,state:gaps.length?'gap':falling.length?'caution':'mixed',label:gaps.length?'일부 SKU 근거 미확인':falling.length?'임대료 하락 · 회수 점검':'가격 급락 근거 없음',models,asOf:direct.end,change:models[0]?.model?.change,route:{section:'gpu-direct'},
-      facts:models.map(x=>x.state==='gap'||x.state==='stale'?`${x.label}: 비교 표본 부족 또는 갱신 필요. 해당 SKU 판단을 보류합니다.`:`${x.label} 공식 고정 표본 ${x.model.providers}개 공급자: ${x.model.base} → ${x.model.end} ${signed(x.model.change)} (기준 100 → ${fmt(x.model.index)}).`).concat('SKU별로 같은 공급자·상품 시리즈의 시작일/종료일을 비교합니다. GPU 수·지역·과금 조건을 섞지 않으며 SKU 간 평균도 만들지 않습니다. GB300은 표본 부족으로 판단 제외입니다.'),
+    return {...result,state:gaps.length?'gap':falling.length?'caution':'mixed',label:gaps.length?'일부 SKU 근거 미확인':falling.length?'임대료 하락 · 회수 점검':'공식 4종 고정표본 내 급락 미확인',models,asOf:direct.end,change:models[0]?.model?.change,route:{section:'gpu-direct'},
+      facts:models.map(x=>x.state==='gap'||x.state==='stale'?`${x.label}: 비교 표본 부족 또는 갱신 필요. 해당 SKU 판단을 보류합니다.`:`${x.label} 공식 고정 표본 ${x.model.providers}개 공급자: ${x.model.base} → ${x.model.end} ${signed(x.model.change)} (기준 100 → ${fmt(x.model.index)}).`).concat('SKU별로 같은 공급자·상품 시리즈의 시작일/종료일을 비교합니다. GPU 수·지역·과금 조건을 섞지 않으며 SKU 간 평균도 만들지 않습니다. GB200·GB300은 이 고정표본 판단에 포함하지 않습니다.'),
       refs:series.map(s=>({label:s.provider+' '+s.model+' 공식 요금',date:direct.end,url:s.source})),
-      reading:falling.length?`${falling.map(m=>m.model.label).join(', ')}의 동일 조건 공개 임대료가 낮아졌습니다. 해당 SKU의 고객 가동률·실현 단가·재주문을 먼저 점검합니다. 가격만으로 AI 투자 사이클의 종료를 단정하지 않습니다.`:valid.length?'확인된 고정 표본에서 임대가격 급락은 확인되지 않습니다. 공시 가격 유지가 가동률이나 신규 주문의 강세를 증명하지는 않습니다.':'현재 비교 가능한 고정 표본이 없습니다. 이전 가격을 채워 넣어 수요 가설을 유지하지 않습니다.',
+      reading:falling.length?`${falling.map(m=>m.model.label).join(', ')}의 동일 조건 공개 임대료가 낮아졌습니다. 해당 SKU의 고객 가동률·실현 단가·재주문을 먼저 점검합니다. 가격만으로 AI 투자 사이클의 종료를 단정하지 않습니다.`:valid.length?'B300·B200·H200·H100의 공식 고정 표본에서 임대가격 급락은 확인되지 않습니다. Vast GB200 등 마켓별 가격 변화는 GPU 가격 탭의 날짜별 해석과 별도로 대조해야 합니다. 공시 가격 유지가 가동률이나 신규 주문의 강세를 증명하지는 않습니다.':'현재 비교 가능한 고정 표본이 없습니다. 이전 가격을 채워 넣어 수요 가설을 유지하지 않습니다.',
       model:'공개 임대료는 클라우드 고객의 회수 여건입니다. GPU 판매 ASP·HBM 가격·부품 수주로 환산하지 않습니다.',
       next:falling.length?'하락 SKU의 동일 상품 가용 수량·가동률·재주문을 다음 관측과 실적에서 대조합니다. 세 지표가 함께 악화되면 고객 투자 회수와 공급망 주문 가정을 낮출 근거가 됩니다.':'다음 동일 SKU·지역·GPU 수·과금 조건의 가격과 실제 임대 가능 물량을 확인합니다. 관측이 빠지면 해당 SKU 판단을 보류합니다.'};
   }
