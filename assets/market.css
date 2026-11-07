@@ -190,3 +190,5 @@
 .telegram-batch-heading{max-width:1160px;margin:0 auto 12px;padding:12px 16px;background:#e5ebe9;border-left:4px solid var(--green);display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px}
 .telegram-batch-heading h3{margin:0;font-size:15px}
 .telegram-batch-heading span{font-size:11px;color:var(--muted)}
+
+.telegram-filters{gap:12px;align-items:flex-end}.telegram-search{flex:1;min-width:220px}.filters input[data-search="telegram"]{display:block;width:100%;max-width:none;min-height:38px}.telegram-filters button{min-height:38px}@media(max-width:600px){.telegram-search{flex-basis:100%}}
