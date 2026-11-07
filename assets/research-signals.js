@@ -81,6 +81,7 @@
     }));return data;
   }
   function telegramSignals(data,now=new Date()){
+    if(data?.mode==='original_posts')return [];
     const notes=rows(data?.items).filter(x=>x.source_type==='telegram_summary');
     if(!notes.length)return [missing('telegram-review','텔레그램 검토','telegram',affected)];
     return notes.map((note,i)=>{
@@ -207,7 +208,7 @@
   }
   function overview(library){
     const signals=analyze(library),gaps=signals.filter(x=>['gap','stale'].includes(x.state)).length;
-    return `<section class="research-assessment" data-research-assessment><div class="signal-section-head"><div><p class="eyebrow">자료 → 이익 가정 → 투자 판단</p><h2>기존 자료를 반영하면 판단이 이렇게 달라집니다</h2></div><a href="#evidence">근거·검토 이력 →</a></div><p class="signal-intro">${gaps?`${gaps}개 신호는 자료 보완이 필요합니다. `:''}사업 가설은 지지·반대 근거를 함께 보며 갱신합니다. 국내 3사의 가격은 별도 EPS 시나리오에서 공개 가정과 함께 검토합니다. 가격은 비교 가능한 관측으로 계산하고, 텔레그램은 현재 내용과 일치하는 편집 검토만 적용합니다. 이 해석은 사업 가설의 검토 우선순위에 반영됩니다. 관측 변동률을 EPS에 자동으로 곱하지 않습니다. 매출·마진·배수를 사용자가 확인해 계산합니다. 메모리 자동 판정 범위는 일반 DRAM 계약가 전망·분기 실측과 NAND 주간 현물이며, 회사별 실제 계약 ASP·점유율은 별도 검토 대상입니다.</p><div class="signal-grid">${signals.map(s=>card(s,{compact:true})).join('')}</div></section>`;
+    return `<section class="research-assessment" data-research-assessment><div class="signal-section-head"><div><p class="eyebrow">자료 → 이익 가정 → 투자 판단</p><h2>기존 자료를 반영하면 판단이 이렇게 달라집니다</h2></div><a href="#evidence">근거·검토 이력 →</a></div><p class="signal-intro">${gaps?`${gaps}개 신호는 자료 보완이 필요합니다. `:''}사업 가설은 지지·반대 근거를 함께 보며 갱신합니다. 국내 3사의 가격은 별도 EPS 시나리오에서 공개 가정과 함께 검토합니다. 가격은 비교 가능한 관측으로 계산합니다. 이 해석은 사업 가설의 검토 우선순위에 반영됩니다. 관측 변동률을 EPS에 자동으로 곱하지 않습니다. 매출·마진·배수를 사용자가 확인해 계산합니다. 메모리 자동 판정 범위는 일반 DRAM 계약가 전망·분기 실측과 NAND 주간 현물이며, 회사별 실제 계약 ASP·점유율은 별도 검토 대상입니다.</p><div class="signal-grid">${signals.map(s=>card(s,{compact:true})).join('')}</div></section>`;
   }
   function companyHTML(id,library,{compact=false}={}){
     const p=company(id,library);if(!p)return '';

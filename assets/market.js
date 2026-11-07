@@ -19,7 +19,7 @@
     const messages=[];
     if(status.automation_enabled&&(!status.latest_daily||status.latest_daily<status.expected_daily))messages.push(`최신 일간 회차 ${status.latest_daily||'없음'} · 예정 기준 ${status.expected_daily}. 갱신이 늦었습니다.`);
     if(status.last_run&&status.last_run.status!=='success')messages.push(`마지막 실행에 문제가 있습니다 (${status.last_run.status==='failed'?'실패':status.last_run.status==='partial'?'일부 미완료':'보류'}).`);
-    if(!status.automation_enabled)messages.push(`자동 갱신 중지 · 마지막 일간 회차 ${status.latest_daily||'없음'}. 자료마다 표시된 기준일을 확인해 주세요.`);
+    if(!status.automation_enabled)messages.push(`전체 일간 갱신 중지 · 마지막 일간 회차 ${status.latest_daily||'없음'}. 자료마다 표시된 기준일을 확인해 주세요.`);
     $('#global-warning').hidden=!messages.length;$('#global-warning').innerHTML=messages.map(esc).join(' ')+' <a href="#sources">실행 기록 보기 →</a>';
   }
   function navigation() {
@@ -38,6 +38,7 @@
     return `<aside class="context-strip"><div><small>투자 판단을 위한 근거</small><p>${esc(item[0])}</p></div><nav>${item[1].map(id=>anchor('company',id,companies.find(c=>c.id===id).name+' →')).join('')}${anchor('desk',null,'투자 판단 →')}</nav></aside>`;
   }
   function researchContext(tab,data,params,html){
+    if(tab==='telegram')return html;
     const signal=window.ResearchSignals?.tabHTML(tab,data,params.get('company'))||'';
     if(tab==='gpu'&&html.includes('data-gpu-briefing'))return html.replace('<nav class="gpu-jump"',contextStrip(tab,params)+signal+'<nav class="gpu-jump"');
     return contextStrip(tab,params)+(signal?html.replace(/(<header class="page-title[^]*?<\/header>)/,match=>match+signal):html);
@@ -52,11 +53,29 @@
   }
   function renderTelegram(data,params) {
     const f=filters.telegram||={},target=list(data.items).find(x=>x.id===params.get('id'));
-    if(target){f.type='전체';f.search='';}
-    const type=x=>x.source_type==='telegram_summary'?'텔레그램 정리글':x.source_type==='subscriber_article'?'구독 매체 해설':'증권사 원문 해설';
-    const items=list(data.items).filter(x=>(!f.type||f.type==='전체'||type(x)===f.type)&&(!f.search||[x.title,x.broker,x.channel,x.thesis].join(' ').toLowerCase().includes(f.search.toLowerCase()))).sort((a,b)=>b.source_date.localeCompare(a.source_date));
-    return title('telegram',data,'기존에 발행한 텔레그램 정리글·증권사·구독 매체 해설을 다시 읽고 투자 가설과 대조합니다.')+`<p class="library-preservation">공개 해설 ${list(data.items).length}건 중 텔레그램 ${list(data.items).filter(x=>x.source_type==='telegram_summary').length}건입니다. 아래 본문은 당시 삼성SDS 사업 관점의 해설을 보존한 내용입니다. 현재 투자 판단은 별도 표시합니다.</p><div class="filters">${select('type','자료 종류',['전체','텔레그램 정리글','증권사 원문 해설','구독 매체 해설'],f.type)}<label>검색 <input data-search="telegram" aria-label="텔레그램 리서치 검색" value="${esc(f.search||'')}" placeholder="주제·증권사·채널"></label></div>`+(items.length?items.map(r=>`<article class="story telegram-note" data-item="${esc(r.id)}" tabindex="-1"><div class="meta">${badge(type(r))}<span>${esc(r.broker)}${r.channel?' · '+esc(r.channel):''}</span><span>${r.original_date?'원문일':'정리글 게시일'} ${esc(r.source_date)}</span>${r.original_access==='not_read'?badge('원문 미열람'):''}</div><h2>${esc(r.headline||r.title)}</h2><p class="note">${esc(r.title)}</p><p>${esc(r.thesis)}</p>${r.dateNote?`<p class="note">${esc(r.dateNote)}</p>`:''}<div class="signal-sources">${url(r.source_url,r.source_type==='telegram_summary'?'텔레그램 정리글 ↗':'공개 출처 ↗')}</div><p class="research-limit"><b>확인 범위</b> ${esc(r.limitations)}</p><details ${target?.id===r.id?'open':''}><summary>당시 해설 전체 · 근거와 반대 조건</summary>${list(r.sections).map(s=>`<section><p class="eyebrow">${esc(s.role||'당시 해설')}</p><h3>${esc(s.heading)}</h3>${String(s.body||'').split('\n\n').map(p=>`<p>${esc(p)}</p>`).join('')}</section>`).join('')}<h3>당시 정리한 근거</h3>${list(r.facts).map(x=>`<div class="research-fact"><small>${esc(x.kind)} · ${esc(x.page)}</small><p>${esc(x.text)}</p><p class="note">${esc(x.scope)}</p></div>`).join('')}<h3>당시 판단을 바꿀 조건</h3><p>${esc(r.reconsider)}</p>${list(r.connections).map(x=>`<p>${url(x.url,x.title)} · ${esc(x.relation)}</p><p>${esc(x.body)}</p>`).join('')}${list(r.actions).length?'<h3>당시 사업 점검 항목</h3>'+r.actions.map(x=>`<p><b>${esc(x.owner)}</b> ${esc(x.task)}</p><p class="note">${esc(x.check)}</p>`).join(''):''}</details><nav class="research-note-links"><a href="${esc(href('telegram',r.id))}">이 해설 주소 →</a><a href="#desk">현재 투자 판단 →</a><a href="#gpu">GPU 가격 →</a><a href="#reports">기업 실적 리포트 →</a></nav></article>`).join(''):empty('선택한 조건의 해설이 없습니다'));
+    if(target){f.channel='전체';f.search='';f.page=1;}
+    const channels=['전체',...new Set(list(data.items).map(x=>x.channel))];
+    const items=list(data.items).filter(x=>(!f.channel||f.channel==='전체'||x.channel===f.channel)&&(!f.search||[x.title,x.channel].join(' ').toLowerCase().includes(f.search.toLowerCase()))).sort((a,b)=>b.published_at.localeCompare(a.published_at));
+    const page=Math.max(1,Number(f.page)||1),size=25,visible=target?[target]:items.slice((page-1)*size,page*size);
+    return title('telegram',data,'규칙으로 잡음을 거른 공개 텔레그램 원문입니다. 추가 요약과 해석을 붙이지 않습니다.')+`<div class="filters">${select('channel','채널',channels,f.channel)}<label>검색 <input data-search="telegram" aria-label="텔레그램 원문 검색" value="${esc(f.search||'')}" placeholder="원문 제목·채널"></label></div><p class="note">${items.length}건 · ${data.window_days||14}일 범위</p>`+(visible.length?visible.map(r=>`<article class="story telegram-note telegram-original" data-item="${esc(r.id)}" tabindex="-1"><div class="meta"><span>${esc(r.channel)}</span><time datetime="${esc(r.published_at)}">${esc(new Date(r.published_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}))}</time></div><h2>${url(r.source_url,r.title)}</h2><details class="telegram-post" data-post="${esc(new URL(r.source_url).pathname.slice(1))}" ${target?'open':''}><summary>원문 보기</summary><div class="telegram-widget"></div><p>${url(r.source_url,'텔레그램에서 원문 열기 ↗')}</p></details><a class="source" href="${esc(href('telegram',r.id))}">이 게시물 주소 →</a></article>`).join(''):empty('규칙을 통과한 게시물이 없습니다','채널과 검색 조건을 확인해 주세요.'))+(!target&&items.length>size?`<nav class="telegram-pages"><button data-telegram-page="${page-1}" ${page<=1?'disabled':''}>이전</button><span>${page} / ${Math.ceil(items.length/size)}</span><button data-telegram-page="${page+1}" ${page*size>=items.length?'disabled':''}>다음</button></nav>`:'');
   }
+  function mountTelegramPost(details){
+    if(!details.open||details.dataset.loaded)return;
+    const post=details.dataset.post;
+    if(!/^[A-Za-z][A-Za-z0-9_]{3,31}\/[1-9]\d*$/.test(post||''))return;
+    details.dataset.loaded='true';
+    const iframe=document.createElement('iframe');iframe.src='https://t.me/'+post+'?embed=1';iframe.title='텔레그램 원문';iframe.loading='lazy';iframe.style.cssText='width:100%;height:480px;border:0';iframe.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups');
+    details.querySelector('.telegram-widget').appendChild(iframe);
+  }
+  document.addEventListener('toggle',event=>{if(event.target.matches?.('.telegram-post'))mountTelegramPost(event.target);},true);
+  window.addEventListener('message',event=>{
+    if(event.origin!=='https://t.me')return;
+    const iframe=[...document.querySelectorAll('.telegram-widget iframe')].find(f=>f.contentWindow===event.source);if(!iframe)return;
+    let message;try{message=typeof event.data==='string'?JSON.parse(event.data):event.data;}catch{return;}
+    if(message?.event==='resize'&&Number.isFinite(Number(message.height))&&Number(message.height)>=80&&Number(message.height)<=30000)iframe.style.height=Number(message.height)+'px';
+    if(message?.event==='ready')iframe.contentWindow.postMessage(JSON.stringify({event:'visible',frame:iframe.id}),'https://t.me');
+  });
+  document.addEventListener('click',event=>{const button=event.target.closest?.('[data-telegram-page]');if(button&&!button.disabled){filters.telegram||={};filters.telegram.page=Number(button.dataset.telegramPage);redraw();}});
   function renderSummary(data) {
     let main=title('summary',data,'오늘 바뀐 것부터, 영향이 큰 순서로 읽습니다.');
     if(data.cards.length)main+=`<div class="stats">${data.cards.map(x=>`<a class="stat-card" href="${esc(href(x.tab,x.id))}"><span>${esc(x.label)}</span><b>${fmt(x.value)}</b><small>${esc(x.unit)} · ${esc(x.date)}${Number.isFinite(x.change)?` · 직전 관측 대비 ${fmt(x.change)}%`:''}</small></a>`).join('')}</div>`;
@@ -517,7 +536,7 @@
   function redraw(){const {params}=route(),tab=active;return cache.get(tab)?.then(data=>{if(active!==tab)return;$('#content').innerHTML=researchContext(tab,data,params,tab==='telegram'?renderTelegram(data,params):renderers[tab]?renderers[tab](data,params):renderGeneric(tab,data));});}
   document.addEventListener('change',e=>{
     if(e.target.dataset.weeklyEdition!==undefined&&e.target.value){location.hash=href('weekly',e.target.value);return;}
-    if(e.target.dataset.filter){filters[active]||={};filters[active][e.target.dataset.filter]=e.target.value;clearItemRoute(active);redraw();}
+    if(e.target.dataset.filter){filters[active]||={};filters[active][e.target.dataset.filter]=e.target.value;filters[active].page=1;clearItemRoute(active);redraw();}
     if(e.target.dataset.memorySeries){filters.memory||={};filters.memory.selected=[...document.querySelectorAll('[data-memory-series]:checked')].map(x=>x.dataset.memorySeries);redraw();}
   });
   let searchTimer;document.addEventListener('input',e=>{if(e.target.dataset.search){
@@ -525,7 +544,7 @@
     searchTimer=setTimeout(()=>{
       if(active!==tab||generation!==searchGeneration)return;
       const keepFocus=document.activeElement===e.target,start=e.target.selectionStart,end=e.target.selectionEnd;
-      filters[tab]||={};filters[tab].search=value;clearItemRoute(tab);
+      filters[tab]||={};filters[tab].search=value;filters[tab].page=1;clearItemRoute(tab);
       redraw()?.then(()=>{if(keepFocus&&active===tab){const input=$('[data-search="'+tab+'"]');input?.focus();input?.setSelectionRange(start,end);}});
     },150);
   }});
