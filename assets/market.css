@@ -194,3 +194,12 @@
 .telegram-filters{gap:12px;align-items:flex-end}.telegram-search{flex:1;min-width:220px}.filters input[data-search="telegram"]{display:block;width:100%;max-width:none;min-height:38px}.telegram-filters button{min-height:38px}@media(max-width:600px){.telegram-search{flex-basis:100%}}
 
 .telegram-original-text .telegram-paragraph-break{display:block;height:6px;line-height:0;font-size:0;white-space:pre}
+
+/* Separate the white reading page from the surrounding screen. */
+@media screen{
+ body{background:#edf1f5}
+ .app-wrap{width:calc(100% - 40px);margin:24px auto;background:#fff;border:1px solid #d4dde7;border-radius:5px;box-shadow:0 6px 24px #102c470d}
+}
+@media screen and (max-width:600px){
+ .app-wrap{width:calc(100% - 16px);margin:10px auto;border-radius:3px;padding:0 16px;box-shadow:0 2px 10px #102c4708}
+}
