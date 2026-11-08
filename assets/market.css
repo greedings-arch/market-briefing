@@ -180,9 +180,9 @@
 .telegram-original{max-width:1160px;margin-left:auto;margin-right:auto;padding:28px 30px}
 .telegram-original h2{max-width:1100px;font-size:21px;line-height:1.6}
 .telegram-original .telegram-post{margin-top:18px}
-.telegram-original-text{white-space:pre-wrap;overflow-wrap:anywhere;font-size:16px;line-height:1.5;max-width:1100px;padding:20px 24px;margin-top:16px;background:#fff;border:1px solid #cbd5df;border-radius:4px;color:var(--ink);tab-size:4}
+.telegram-original-text{white-space:pre-wrap;overflow-wrap:anywhere;font-size:16px;line-height:1.7;max-width:1100px;padding:20px 24px;margin-top:16px;background:#fff;border:1px solid #cbd5df;border-radius:4px;color:var(--ink);tab-size:4}
 .telegram-pages{display:flex;align-items:center;justify-content:center;gap:20px;margin:26px 0}
-@media(max-width:600px){.telegram-original{padding:20px 16px}.telegram-original h2{font-size:18px}.telegram-original-text{font-size:15px;line-height:1.5;padding:16px 12px}}
+@media(max-width:600px){.telegram-original{padding:20px 16px}.telegram-original h2{font-size:18px}.telegram-original-text{font-size:15px;line-height:1.7;padding:16px 12px}}
 
 .telegram-day{max-width:1160px;margin:32px auto 16px;padding:10px 0;border-bottom:2px solid var(--navy);font-size:23px}
 .telegram-day small{font-size:11px;font-weight:400;color:var(--muted);margin-left:12px}
@@ -192,3 +192,5 @@
 .telegram-batch-heading span{font-size:11px;color:var(--muted)}
 
 .telegram-filters{gap:12px;align-items:flex-end}.telegram-search{flex:1;min-width:220px}.filters input[data-search="telegram"]{display:block;width:100%;max-width:none;min-height:38px}.telegram-filters button{min-height:38px}@media(max-width:600px){.telegram-search{flex-basis:100%}}
+
+.telegram-original-text .telegram-paragraph-break{display:block;height:6px;line-height:0;font-size:0;white-space:pre}
