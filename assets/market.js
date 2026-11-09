@@ -11,7 +11,7 @@
   const source=x=>`<p class="source">${esc(x.source_name||x.company||x.institution||'원문')} · ${esc(x.source_date||'원문 날짜 미확인')} · ${url(x.source_url)}</p>`;
   const empty=(title='아직 수집된 자료가 없습니다',body='원문을 확인한 자료가 반영되면 이곳에 표시됩니다.')=>`<div class="empty"><div class="empty-mark">—</div><strong>${esc(title)}</strong><p>${esc(body)}</p><a href="#sources">수집 범위와 운영 상태 확인 →</a></div>`;
   function select(key,label,values,value='전체') {return `<label>${esc(label)} <select data-filter="${key}" aria-label="${esc(label)}">${values.map(v=>`<option value="${esc(v)}" ${v===value?'selected':''}>${esc(v)}</option>`).join('')}</select></label>`;}
-  function route() {const raw=location.hash.slice(1),[name,q='']=raw.split('?'),investor=window.InvestorDesk;return {tab:config?.tabs.some(t=>t.id===name)||investor?.views.includes(name)?name:investor?(config?.workspace?.home||'desk'):'summary',params:new URLSearchParams(q)};}
+  function route() {const raw=location.hash.slice(1),[name,q='']=raw.split('?'),investor=window.InvestorDesk;return {tab:config?.tabs.some(t=>t.id===name)||investor?.views.includes(name)||(name==='dcf'&&window.DCFApp)?name:investor?(config?.workspace?.home||'desk'):'summary',params:new URLSearchParams(q)};}
   function clearItemRoute(tab){const {params}=route();if(params.has('id')){params.delete('id');params.delete('section');history.replaceState(null,'','#'+tab+(params.size?'?'+params.toString():''));}}
   async function json(name) {if(!cache.has(name)){const request=fetch('data/'+name+'.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('자료 응답 오류');return r.json();}).then(data=>name==='telegram'&&window.ResearchSignals?window.ResearchSignals.prepareTelegram(data):name==='finance'&&window.ResearchSignals?window.ResearchSignals.prepareFinance(data):data).catch(e=>{if(cache.get(name)===request)cache.delete(name);throw e;});cache.set(name,request);}return cache.get(name);}
   function title(tab,data,description='') {const t=config.tabs.find(x=>x.id===tab),meta=data.meta||status.tabs[tab];return `<header class="page-title"><div><p class="eyebrow">AI & CLOUD / ${esc(tab.replace(/-/g,' '))}</p><h1>${esc(t.label)}</h1>${description?`<p class="subtitle">${esc(description)}</p>`:''}</div><div class="stamp"><span>기준일 ${esc(meta?.as_of||'수집 전')}</span><span>${fmt(meta?.count||0,0)}건</span><span>생성 ${esc(meta?.generated_at||'아직 없음')}</span></div></header>`;}
@@ -25,7 +25,7 @@
   function navigation() {
     if(!window.InvestorDesk||!config.workspace){$('#tabs').innerHTML=config.tabs.map(t=>`<a href="#${esc(t.id)}" ${t.id===active?'class="active" aria-current="page"':''}>${esc(t.label)}</a>`).join('');return;}
     const ws=config.workspace,label=id=>ws.labels.find(x=>x.id===id)?.label||config.tabs.find(t=>t.id===id)?.label||id;
-    $('#tabs').innerHTML=ws.primary.map(id=>`<a data-nav="${esc(id)}" href="${['company','valuation'].includes(id)?href(id,selectedCompany):'#'+esc(id)}" ${id===active?'class="active" aria-current="page"':''}>${esc(label(id))}</a>`).join('');
+    $('#tabs').innerHTML=ws.primary.map(id=>`<a data-nav="${esc(id)}" href="${['company','valuation','dcf'].includes(id)?href(id,id==='dcf'&&!['samsung','hynix','sem'].includes(selectedCompany)?'samsung':selectedCompany):'#'+esc(id)}" ${id===active?'class="active" aria-current="page"':''}>${esc(label(id))}</a>`).join('');
     // The whole existing library stays visible on every screen, including phones.
     $('#subtabs').innerHTML=ws.resources.map(id=>`<a data-library-tab="${esc(id)}" href="#${esc(id)}" ${id===active?'class="active" aria-current="page"':''}>${esc(label(id))}</a>`).join('')+'<a href="#archive?section=legacy-tools">이전 브리핑</a>';
   }
@@ -525,10 +525,14 @@
   async function show() {
     const token=++generation,{tab,params}=route();active=tab;
     let openedReport=null;
-    const investor=window.InvestorDesk,isInvestor=investor?.views.includes(tab),companyID=isInvestor?params.get('id'):params.get('company');
+    const investor=window.InvestorDesk,isInvestor=investor?.views.includes(tab),companyID=isInvestor||tab==='dcf'?params.get('id'):params.get('company');
     if(config.workspace?.companies.some(c=>c.id===companyID))selectedCompany=companyID;
     investor?.deactivate();navigation();$('#content').className=isInvestor?'investor-view':'';$('#content').innerHTML='<div class="loading">자료를 불러오고 있습니다.</div>';
     try{
+      if(tab==='dcf'){
+        const dcf=await json('dcf-models');if(token!==generation)return;
+        window.DCFApp.mount(dcf,params.get('id')||(['samsung','hynix','sem'].includes(selectedCompany)?selectedCompany:'samsung'));viewTop();return;
+      }
       if(isInvestor){
         const names=['investor-desk','broker-research','gpu','memory','telegram','finance','valuation-models','valuation-audit','valuation-defaults','valuation-broker',...(tab==='desk'||tab==='company'||tab==='valuation'?['reports']:[]),...(tab==='company'||tab==='valuation'?['news']:[])];
         const results=await Promise.allSettled(names.map(json));if(token!==generation)return;
@@ -590,6 +594,6 @@
     if(['interviews','finance'].includes(active)&&route().params.get('id')&&link?.getAttribute('href')===location.hash){e.preventDefault();show();}
   });
   window.addEventListener('hashchange',show);
-  $('#refresh').addEventListener('click',async()=>{const token=++generation;window.InvestorDesk?.reset();cache.clear();try{const nextStatus=await json('status');if(token!==generation)return;status=nextStatus;globalWarning();await show();}catch{if(token!==generation)return;$('#global-warning').hidden=false;$('#global-warning').textContent='갱신 상태를 확인하지 못했습니다. 자료 다시 읽기로 재시도해 주세요.';$('#content').innerHTML=empty('자료를 불러오지 못했습니다','이전 값을 현재 자료로 표시하지 않습니다.');}});
+  $('#refresh').addEventListener('click',async()=>{const token=++generation;window.InvestorDesk?.reset();window.DCFApp?.reset();cache.clear();try{const nextStatus=await json('status');if(token!==generation)return;status=nextStatus;globalWarning();await show();}catch{if(token!==generation)return;$('#global-warning').hidden=false;$('#global-warning').textContent='갱신 상태를 확인하지 못했습니다. 자료 다시 읽기로 재시도해 주세요.';$('#content').innerHTML=empty('자료를 불러오지 못했습니다','이전 값을 현재 자료로 표시하지 않습니다.');}});
   (async()=>{try{[config,status]=await Promise.all([json('config'),json('status')]);$('#today').textContent=new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',dateStyle:'medium'}).format(new Date())+' KST';globalWarning();await show();}catch{$('#content').innerHTML=empty('브리핑을 불러오지 못했습니다','설정과 데이터가 함께 게시됐는지 확인해 주세요.');}})();
 })();
