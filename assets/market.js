@@ -19,7 +19,7 @@
     const messages=[];
     if(status.automation_enabled&&(!status.latest_daily||status.latest_daily<status.expected_daily))messages.push(`최신 일간 회차 ${status.latest_daily||'없음'} · 예정 기준 ${status.expected_daily}. 갱신이 늦었습니다.`);
     if(status.last_run&&status.last_run.status!=='success')messages.push(`마지막 실행에 문제가 있습니다 (${status.last_run.status==='failed'?'실패':status.last_run.status==='partial'?'일부 미완료':'보류'}).`);
-    if(!status.automation_enabled)messages.push(`전체 일간 갱신 중지 · 마지막 일간 회차 ${status.latest_daily||'없음'}. 자료마다 표시된 기준일을 확인해 주세요.`);
+    if(!status.automation_enabled)messages.push(`편집 브리핑 자동 갱신 중지 · 마지막 편집 회차 ${status.latest_daily||'없음'}. 자료마다 표시된 기준일을 확인해 주세요.`);
     $('#global-warning').hidden=!messages.length;$('#global-warning').innerHTML=messages.map(esc).join(' ')+' <a href="#sources">실행 기록 보기 →</a>';
   }
   function navigation() {
@@ -184,10 +184,11 @@
     svg+=`<text x="${left}" y="${h-9}">${esc(labels[0])}</text><text x="${w-right}" y="${h-9}" text-anchor="end">${esc(labels.at(-1))}</text></svg>`;
     return `<div class="chart-wrap">${svg}<div class="legend">${series.map((s,i)=>`<span><i style="background:${palette[i%palette.length]}"></i>${esc(s.label)}</span>`).join('')}<span>${esc(unit)}</span></div></div>`;
   }
-  function reportComment(x) {
-    return `<aside class="comment ${esc(x.kind)}"><b>${x.kind==='calculation'?'(계산)':'(해석)'}</b><p>${esc(x.text)}</p>${x.kind==='calculation'?`<p class="note">입력 ${x.inputs.map((v,i)=>`${x.input_labels?.[i]?esc(x.input_labels[i])+': ':''}${fmt(v,6)}`).join(' · ')} → 계산값 ${fmt(x.result,4)} ${esc(x.unit||(['percentage','growth'].includes(x.operation)?'%':''))}</p>`:''}${x.assumptions?`<p class="note">가정·한계: ${esc(x.assumptions)}</p>`:''}</aside>`;
+  function reportComment(x,presentation) {
+    return `<aside class="comment ${esc(x.kind)}"><b>${presentation==='commentary'?'*코멘트 →':x.kind==='calculation'?'(계산)':'(해석)'}</b><p>${esc(x.text)}</p>${x.kind==='calculation'&&presentation!=='commentary'?`<p class="note">입력 ${x.inputs.map((v,i)=>`${x.input_labels?.[i]?esc(x.input_labels[i])+': ':''}${fmt(v,6)}`).join(' · ')} → 계산값 ${fmt(x.result,4)} ${esc(x.unit||(['percentage','growth'].includes(x.operation)?'%':''))}</p>`:''}${x.assumptions?`<p class="note">가정·한계: ${esc(x.assumptions)}</p>`:''}</aside>`;
   }
-  function reportBars(b) {
+  function reportNumberTag(label) {return String(label).match(/\[(?:원문 사실|원문 추정|공개 자료|내 계산)\]/)?.[0]||'';}
+  function reportBars(b,presentation) {
     let running=0;
     const bridge=b.kind==='bridge',bars=b.points.map((p,i)=>{
       const total=!bridge||i===0||i===b.points.length-1;
@@ -196,25 +197,41 @@
     });
     const low=Math.min(0,...bars.flatMap(p=>[p.start,p.end])),high=Math.max(0,...bars.flatMap(p=>[p.start,p.end])),span=high-low||1;
     const position=v=>(v-low)/span*100,zero=position(0);
-    return `<div class="report-bars" role="img" aria-label="${esc(b.title)}. ${bars.map(p=>esc(p.label)+': '+fmt(p.value)+' '+esc(b.unit)).join('; ')}"><p class="report-chart-unit">${esc(b.unit)}${bridge?' · 시작값에서 항목별 증감을 거쳐 끝값으로 연결':''}</p>${bars.map(p=>`<div class="report-bar-row"><span class="report-bar-label">${esc(p.label)}</span><div class="report-bar-track"><i class="report-bar-zero" style="left:${zero}%"></i><span class="report-bar ${p.total?'total':p.value<0?'negative':'positive'}" style="left:${Math.min(position(p.start),position(p.end))}%;width:${Math.abs(p.end-p.start)/span*100}%"></span></div><b>${bridge&&!p.total&&p.value>0?'+':''}${fmt(p.value,3)}</b></div>`).join('')}</div>`;
+    return `<div class="report-bars" role="img" aria-label="${esc(b.title)}. ${bars.map(p=>esc(p.label)+': '+fmt(p.value)+' '+esc(b.unit)).join('; ')}"><p class="report-chart-unit">${esc(b.unit)}${bridge?' · 시작값에서 항목별 증감을 거쳐 끝값으로 연결':''}</p>${bars.map(p=>`<div class="report-bar-row"><span class="report-bar-label">${esc(p.label)}</span><div class="report-bar-track"><i class="report-bar-zero" style="left:${zero}%"></i><span class="report-bar ${p.total?'total':p.value<0?'negative':'positive'}" style="left:${Math.min(position(p.start),position(p.end))}%;width:${Math.abs(p.end-p.start)/span*100}%"></span></div><b>${bridge&&!p.total&&p.value>0?'+':''}${fmt(p.value,3)}${presentation==='commentary'&&reportNumberTag(p.label)?`<small class="report-value-tag">${esc(reportNumberTag(p.label))}</small>`:''}</b></div>`).join('')}</div>`;
   }
-  function reportCitation(b) {
+  function reportDate(date) {
+    const parts=String(date).match(/^(\d{4})-(\d{2})(?:-(\d{2}))?$/);
+    return parts?`${parts[1]}년 ${Number(parts[2])}월${parts[3]?' '+Number(parts[3])+'일':''}`:String(date);
+  }
+  function reportSourceDate(date,sourceURL,originalSourceURL) {
+    const normalized=value=>String(value||'').split(/[?#]/)[0].replace(/\/$/,'');
+    const tag=normalized(sourceURL)===normalized(originalSourceURL)?'[원문 사실]':'[공개 자료]';
+    return reportDate(date)+' '+tag;
+  }
+  function reportCitation(b,presentation,originalSourceURL) {
     if(!b.source_url)return '';
     let name='출처';try{name=new URL(b.source_url).hostname.replace(/^www\./,'');}catch{}
-    return `<p class="source report-citation">${url(b.source_url,name+' ↗')}<span> · ${esc(b.source_date)}${b.locator?' · '+esc(b.locator):''}</span></p>`;
+    return `<p class="source report-citation">${url(b.source_url,name+' ↗')}<span> · ${esc(presentation==='commentary'?reportSourceDate(b.source_date,b.source_url,originalSourceURL):b.source_date)}${b.locator?' · '+esc(b.locator):''}</span></p>`;
   }
-  function reportBlock(b) {
-    const citation=reportCitation(b);
+  function reportBlock(b,presentation,originalSourceURL) {
+    const citation=reportCitation(b,presentation,originalSourceURL);
     let html='';
     if(b.type==='paragraph')html=`<p>${esc(b.text)}</p>`;
     if(b.type==='subheading')html=`<h3>${esc(b.text)}</h3>`;
     if(b.type==='bullets')html=`<ul class="report-bullets">${b.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
     if(b.type==='dialogue')html=`<div class="report-dialogue ${esc(b.role)}"><p class="dialogue-speaker"><b>${esc(b.speaker)}</b><span>${b.role==='question'?'질문 요지':'답변 요지'}</span></p>${b.paragraphs.map(p=>`<p>${esc(p)}</p>`).join('')}</div>`;
-    if(b.type==='comment')html=reportComment(b);
+    if(b.type==='comment')html=reportComment(b,presentation);
     if(b.type==='table')html=`<figure class="report-figure"><figcaption>${esc(b.title)}</figcaption>${table(b.columns,b.rows)}</figure>`;
-    if(b.type==='chart')html=`<figure class="report-figure report-chart"><figcaption>${esc(b.title)}</figcaption>${b.kind?reportBars(b):chart([{label:b.title,points:b.points}],{unit:b.unit})}${b.caption?`<p class="report-figure-caption">${esc(b.caption)}</p>`:''}<details class="report-chart-data"><summary>숫자 표 보기</summary>${table(['기간·구분',b.unit],b.points.map(p=>[p.label,p.value]))}</details></figure>`;
+    if(b.type==='chart')html=`<figure class="report-figure report-chart"><figcaption>${esc(b.title)}</figcaption>${b.kind?reportBars(b,presentation):chart([{label:b.title,points:b.points}],{unit:b.unit})}${b.caption?`<p class="report-figure-caption">${esc(b.caption)}</p>`:''}<details class="report-chart-data"><summary>숫자 표 보기</summary>${table(['기간·구분',b.unit],b.points.map(p=>[p.label,presentation==='commentary'?fmt(p.value,3)+(reportNumberTag(p.label)?' '+reportNumberTag(p.label):''):p.value]))}</details></figure>`;
     if(b.type==='diagram')html=`<figure class="report-figure report-diagram ${b.layout==='parallel'?'report-parallel':'report-sequence'}"><figcaption>${esc(b.title)}</figcaption><${b.layout==='parallel'?'ul':'ol'}>${b.steps.map((step,i)=>`<li>${b.layout==='parallel'?'':`<span class="report-step-number">${String(i+1).padStart(2,'0')}</span>`}<div><strong>${esc(step.title)}</strong><p>${esc(step.text)}</p></div></li>`).join('')}</${b.layout==='parallel'?'ul':'ol'}><p class="report-figure-caption">${esc(b.caption)}</p></figure>`;
     return `<div class="report-block">${html}${citation}</div>`;
+  }
+  function reportCommentary(r,context) {
+    const e=r.editorial,link=s=>href('reports',r.id,{...context,section:s.id});
+    const sourceNotice=()=>`<aside class="report-original-source" aria-label="원문 안내"><p class="report-original-label">이 글이 읽은 원문 · ${e.source_access==='paid'?'유료 자료':''}</p><p class="report-original-title">${url(r.source_url,e.source_title+' ↗')}</p><p>발행 ${esc(reportDate(r.source_date))} [원문 사실] · ${esc(r.source_name||'SemiAnalysis')}</p></aside>`;
+    const toc=`<nav class="toc report-essay-toc report-commentary-toc" aria-label="리포트 목차"><p class="eyebrow">목차</p><div>${r.sections.map(s=>`<a href="${esc(link(s))}">${esc(s.title)} : ${esc(s.subtitle)}</a>`).join('')}</div></nav>`;
+    const related=list(e.related_reports).map(x=>`<a href="${esc(href('reports',x.id,context))}">${esc(x.title)} <span aria-hidden="true">↗</span></a>`).join('');
+    return `<div class="report-reader-tools"><a href="${esc(href('reports',null,{...context,section:'deep'}))}">← 심층 리포트</a><button type="button" data-report-print>인쇄 / PDF 저장</button></div><article class="report-body report-essay report-commentary" tabindex="-1" data-item="${esc(r.id)}"><header class="report-opening"><p class="eyebrow">MARKET BRIEFING · 심층 해설</p><h1>${esc(r.title)}</h1><p class="report-deck">${esc(r.overview)}</p><div class="report-dateline"><span>첨부 원문과 공개 자료를 대조해 전면 개정</span></div></header>${sourceNotice()}<div class="report-intro">${e.introduction.map(p=>`<p>${esc(p)}</p>`).join('')}</div>${toc}${r.sections.map(s=>`<section id="section-${esc(s.id)}" class="report-section report-${esc(s.role)}"><div class="report-chapter"><h2>${esc(s.title)}</h2><p class="report-chapter-subtitle">${esc(s.subtitle)}</p></div>${s.blocks.map(b=>reportBlock(b,'commentary',r.source_url)).join('')}</section>`).join('')}<section class="report-methodology"><h2>근거 자료</h2><p>${reportCoverage(r)}</p><details class="report-source-ledger"><summary>자료별 링크와 발행일</summary><div class="report-references">${list(r.references).map(ref=>`<p>${url(ref.url,ref.label)} <span>· ${esc(reportSourceDate(ref.date,ref.url,r.source_url))}</span></p>`).join('')}</div></details></section>${related?`<section class="report-related report-essay-related"><h2>함께 읽을 분석</h2>${related}</section>`:''}${sourceNotice()}</article>`;
   }
   function reportEssay(r,context) {
     const e=r.editorial,link=s=>href('reports',r.id,{...context,section:s.id});
@@ -225,6 +242,7 @@
   function reportBody(r,params=new URLSearchParams()) {
     const company=config.workspace?.companies.find(c=>c.id===params.get("company")),context=company?{company:company.id}:{};
     const e=r.editorial;
+    if(e?.presentation==='commentary')return reportCommentary(r,context);
     if(e?.layout==='essay')return reportEssay(r,context);
     const intro=e?`<div class="report-takeaways"><p class="eyebrow">한눈에 보기</p><ul>${e.key_takeaways.map(p=>`<li>${esc(p)}</li>`).join('')}</ul></div><div class="report-intro">${e.introduction.map(p=>`<p>${esc(p)}</p>`).join('')}</div>${list(e.related_reports).length?`<div class="report-related"><b>함께 읽기</b>${e.related_reports.map(x=>anchor('reports',x.id,x.title)).join('')}</div>`:''}`:'';
     const references=list(r.references).map(ref=>`<li>${url(ref.url,ref.label)} · ${esc(ref.date)}</li>`).join('');
@@ -522,6 +540,11 @@
     if(target){target.classList.add('item-highlight');target.tabIndex=-1;target.focus({preventScroll:true});target.scrollIntoView({block:'start',behavior:'instant'});}
   }
   function viewTop(){ $('#content').focus?.({preventScroll:true});window.scrollTo?.(0,0); }
+  async function collectorRelated(tab,token){
+    if(!window.Collector)return;const html=await window.Collector.related(tab);if(token!==generation||!html)return;
+    const marked='<!--collector-related:start:'+tab+'-->'+html+'<!--collector-related:end-->';
+    const content=$('#content'),head=content.querySelector('.page-title,.desk-header,.investor-heading');if(head)head.insertAdjacentHTML('afterend',marked);else content.insertAdjacentHTML('afterbegin',marked);
+  }
   async function show() {
     const token=++generation,{tab,params}=route();active=tab;
     let openedReport=null;
@@ -538,13 +561,14 @@
         const results=await Promise.allSettled(names.map(json));if(token!==generation)return;
         if(results[0].status!=='fulfilled')throw results[0].reason;
         const related={config,status};names.slice(1).forEach((name,i)=>{related[name]=results[i+1].status==='fulfilled'?results[i+1].value:null;});
-        investor.mount(results[0].value,{view:tab,id:params.get('id')||selectedCompany},related);viewTop();return;
+        investor.mount(results[0].value,{view:tab,id:params.get('id')||selectedCompany},related);await collectorRelated(tab,token);if(token!==generation)return;viewTop();return;
       }
+      if(tab==='collector'&&window.Collector){const result=await window.Collector.page(params);if(token!==generation)return;$('#content').className='collector-host';$('#content').innerHTML=result.html;document.title=result.title+' · Market Briefing';viewTop();window.Collector.mount($('#content'),params);return;}
       const data=await json(tab);if(token!==generation)return;
       if(tab==='reports'&&window.BrokerResearch&&params.get('section')!=='deep'&&(!params.get('id')||params.get('id').startsWith('naver-'))){
         const index=await json('broker-research');if(token!==generation)return;
         const html=await window.BrokerResearch.page(index,params,json);if(token!==generation)return;
-        $('#content').innerHTML=html;document.title='증권사 리포트 · Market Briefing';viewTop();window.BrokerResearch.mount();return;
+        $('#content').innerHTML=html;document.title='증권사 리포트 · Market Briefing';await collectorRelated(tab,token);if(token!==generation)return;viewTop();window.BrokerResearch.mount();return;
       }
       else if(tab==='reports'&&params.get('id')){if(!data.items.some(r=>r.id===params.get('id')))throw Error('목록에 없는 리포트');const report=await json('reports/'+encodeURIComponent(params.get('id')));if(token!==generation)return;openedReport=report;$('#content').className=report.editorial?.layout==='essay'?'report-reading-view':'';$('#content').innerHTML=(report.editorial?.layout==='essay'?'':title('reports',data))+reportBody(report,params);}
       else if(tab==='weekly'){
@@ -555,10 +579,11 @@
           if(!params.get('id'))history.replaceState(null,'',href('weekly',selected));
         }
         $('#content').innerHTML=contextStrip(tab,params)+renderWeekly(data,params,week);
-        document.title=(week?week.id+' · ':'')+'주간 시사점 · Market Briefing';if(params.get('section'))highlight(params);else viewTop();return;
+        document.title=(week?week.id+' · ':'')+'주간 시사점 · Market Briefing';await collectorRelated(tab,token);if(token!==generation)return;if(params.get('section'))highlight(params);else viewTop();return;
       }
       else $('#content').innerHTML=tab==='telegram'?renderTelegram(data,params):renderers[tab]?renderers[tab](data,params):renderGeneric(tab,data);
       $('#content').innerHTML=researchContext(tab,data,params,$('#content').innerHTML);
+      if(!openedReport){await collectorRelated(tab,token);if(token!==generation)return;}
       document.title=(openedReport?.title||config.workspace?.labels.find(x=>x.id===tab)?.label||config.tabs.find(x=>x.id===tab).label)+' · Market Briefing';
       if(params.get('section')||(params.get('id')&&tab!=='reports'))highlight(params);else if(openedReport?.editorial?.layout==='essay'){$('.report-essay')?.focus?.({preventScroll:true});$('.report-reader-tools')?.scrollIntoView?.({block:'start',behavior:'instant'});}else viewTop();
     }catch(e){if(token===generation){if(isInvestor)investor.reset();$('#content').innerHTML=`<div class="empty error" role="alert"><h1>${isInvestor?'검증 자료를 불러오지 못했습니다':'자료를 불러오지 못했습니다'}</h1><p>자료 다시 읽기로 재시도해 주세요. 다른 자료 화면은 계속 이용하실 수 있습니다.</p></div><button data-retry type="button">다시 불러오기</button>`;}}
@@ -593,8 +618,8 @@
     const link=e.target.closest('a[href]');
     if(['interviews','finance'].includes(active)&&route().params.get('id')&&link?.getAttribute('href')===location.hash){e.preventDefault();show();}
   });
-  window.addEventListener('hashchange',show);
+  window.addEventListener('hashchange',()=>{if(active==='collector'&&/^#cl-/.test(location.hash))return;show();});
   window.addEventListener('popstate',show);
-  $('#refresh').addEventListener('click',async()=>{const token=++generation;window.InvestorDesk?.reset();window.DCFApp?.reset();cache.clear();try{const nextStatus=await json('status');if(token!==generation)return;status=nextStatus;globalWarning();await show();}catch{if(token!==generation)return;$('#global-warning').hidden=false;$('#global-warning').textContent='갱신 상태를 확인하지 못했습니다. 자료 다시 읽기로 재시도해 주세요.';$('#content').innerHTML=empty('자료를 불러오지 못했습니다','이전 값을 현재 자료로 표시하지 않습니다.');}});
+  $('#refresh').addEventListener('click',async()=>{const token=++generation;window.InvestorDesk?.reset();window.DCFApp?.reset();window.Collector?.reset();cache.clear();try{const nextStatus=await json('status');if(token!==generation)return;status=nextStatus;globalWarning();await show();}catch{if(token!==generation)return;$('#global-warning').hidden=false;$('#global-warning').textContent='갱신 상태를 확인하지 못했습니다. 자료 다시 읽기로 재시도해 주세요.';$('#content').innerHTML=empty('자료를 불러오지 못했습니다','이전 값을 현재 자료로 표시하지 않습니다.');}});
   (async()=>{try{[config,status]=await Promise.all([json('config'),json('status')]);$('#today').textContent=new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',dateStyle:'medium'}).format(new Date())+' KST';globalWarning();await show();}catch{$('#content').innerHTML=empty('브리핑을 불러오지 못했습니다','설정과 데이터가 함께 게시됐는지 확인해 주세요.');}})();
 })();
