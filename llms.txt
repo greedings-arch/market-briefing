@@ -1,0 +1,29 @@
+# Market Briefing
+
+한국어 AI·반도체 투자 연구. 공개 편집 자료이며 투자 권유가 아닙니다. 원문 날짜와 사실·전망·가정을 구분하세요.
+
+- [공개 JSON 전체 목록](https://greedings-arch.github.io/market-briefing/data/catalog.json)
+- [HTML/JSON 탐색](https://greedings-arch.github.io/market-briefing/data.html)
+
+- [투자 판단](https://greedings-arch.github.io/market-briefing/desk.html)
+- [기업 검증](https://greedings-arch.github.io/market-briefing/company.html)
+- [가격 검토](https://greedings-arch.github.io/market-briefing/valuation.html)
+- [DCF 시나리오](https://greedings-arch.github.io/market-briefing/dcf.html)
+- [근거·검토 이력](https://greedings-arch.github.io/market-briefing/evidence.html)
+- [일간 브리핑](https://greedings-arch.github.io/market-briefing/summary.html)
+- [시장 온도](https://greedings-arch.github.io/market-briefing/temperature.html)
+- [뉴스](https://greedings-arch.github.io/market-briefing/news.html)
+- [주간 시사점](https://greedings-arch.github.io/market-briefing/weekly.html)
+- [금융권 시각](https://greedings-arch.github.io/market-briefing/finance.html)
+- [증권사·심층 리포트](https://greedings-arch.github.io/market-briefing/reports.html)
+- [텔레그램 원문](https://greedings-arch.github.io/market-briefing/telegram.html)
+- [GPU 가격](https://greedings-arch.github.io/market-briefing/gpu.html)
+- [메모리 가격](https://greedings-arch.github.io/market-briefing/memory.html)
+- [지표](https://greedings-arch.github.io/market-briefing/indicators.html)
+- [행사](https://greedings-arch.github.io/market-briefing/events.html)
+- [AI 현주소](https://greedings-arch.github.io/market-briefing/ai-state.html)
+- [리더 인터뷰](https://greedings-arch.github.io/market-briefing/interviews.html)
+- [아카이브](https://greedings-arch.github.io/market-briefing/archive.html)
+- [소스·방법론](https://greedings-arch.github.io/market-briefing/sources.html)
+
+HTML 본문은 빌드 시 생성됩니다. JSON은 화면과 동일한 공개 데이터이며 페이지 제한 없이 전체 자료를 제공합니다. 구독 매체의 원문과 내부 DB는 공개하지 않습니다.

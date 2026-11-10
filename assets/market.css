@@ -203,3 +203,5 @@
 @media screen and (max-width:600px){
  .app-wrap{width:calc(100% - 16px);margin:10px auto;border-radius:3px;padding:0 16px;box-shadow:0 2px 10px #102c4708}
 }
+
+.telegram-original h2 a{overflow-wrap:anywhere}
