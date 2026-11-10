@@ -1,0 +1,166 @@
+{
+ "updated_kst": "2026-11-11 07:20",
+ "entries": [
+  {
+   "url": "https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx/",
+   "event_key": "",
+   "pub": "2026-11-09",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://inside.nhn.com/news/985",
+   "event_key": "nhn-ai-datacenter-expansion-20261110",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://www.wiz.io/blog/qubole-cross-account-access-abused-in-the-wild",
+   "event_key": "",
+   "pub": "2026-11-09",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://pr.tsmc.com/chinese/news/3349",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://www.constellationenergy.com/news/2026/11/constellation-reports-third-quarter-2026-results.html",
+   "event_key": "",
+   "pub": "2026-11-09",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://investor.vistracorp.com/2026-11-06-Vistra-Reports-Third-Quarter-2026-Results",
+   "event_key": "",
+   "pub": "2026-11-06",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://aws.amazon.com/about-aws/whats-new/2026/11/claude-fable-5-2-aws/",
+   "event_key": "claude-fable-5-2-aws-availability",
+   "pub": "2026-11-09",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://www.globenewswire.com/news-release/2026/11/09/3399018/0/en/rackspace-technology-reports-third-quarter-2026-results.html",
+   "event_key": "",
+   "pub": "2026-11-09",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://www.wiwynn.com/news/wiwynn-reports-third-quarter-2026-financial-results",
+   "event_key": "",
+   "pub": "2026-11-09",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/1849056/000162828026071319/oklo-20260930.htm",
+   "event_key": "",
+   "pub": "2026-11-06",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://latent.space/p/handshake/",
+   "event_key": "",
+   "pub": "2026-11-09",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://latent.space/p/one_million_ai_engineer_special_how_stanford_teaches_ai-native_engineering_mihail_eric_monaco/",
+   "event_key": "",
+   "pub": "2026-11-08",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://latent.space/p/controlling-biology-fabian-theis-helmholtz-munich/",
+   "event_key": "",
+   "pub": "2026-11-06",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://www.dwarkesh.com/p/clocktower",
+   "event_key": "",
+   "pub": "2026-11-05",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://semianalysis.com/weekly/episodes/ep-043/",
+   "event_key": "",
+   "pub": "2026-11-04",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://www.youtube.com/watch?v=2v8b062QzTI",
+   "event_key": "",
+   "pub": "2026-11-07",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://traffic.megaphone.fm/PDP1158596730.mp3",
+   "event_key": "",
+   "pub": "2026-11-05",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://colossus.com/episode/trillion-dollar-goalposts/",
+   "event_key": "",
+   "pub": "2026-11-06",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://share.transistor.fm/s/69a09d0c",
+   "event_key": "",
+   "pub": "2026-11-03",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://www.anthropic.com/research/how-researchers-use-claude",
+   "event_key": "",
+   "pub": "2026-11-05",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://arxiv.org/abs/2611.09892",
+   "event_key": "",
+   "pub": "2026-11-06",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://www.quantamagazine.org/new-research-tests-whether-ai-models-know-their-own-thoughts-20261104/",
+   "event_key": "",
+   "pub": "2026-11-04",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://psi.inc/research/aaronson-ambainis/",
+   "event_key": "",
+   "pub": "2026-11-06",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  }
+ ]
+}

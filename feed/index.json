@@ -1,0 +1,91 @@
+{
+ "format": "collector-index/1",
+ "updated_kst": "2026-11-11 07:20",
+ "daily": {
+  "latest": "2026-11-10",
+  "url": "feed/daily/2026-11-10.json",
+  "status": "partial",
+  "revision": 3,
+  "counts": {
+   "items": 10,
+   "finance": 0,
+   "podcasts": 9,
+   "packs": 3,
+   "lens": 4
+  },
+  "empty_lanes": [
+   "CM"
+  ],
+  "failed_lanes": []
+ },
+ "weekly": {
+  "latest": "2026-W46",
+  "url": "feed/weekly/2026-W46.json",
+  "status": "partial",
+  "revision": 4,
+  "empty_sections": [
+   "LAB",
+   "CX",
+   "F13"
+  ],
+  "failed_sections": []
+ },
+ "files": [
+  {
+   "url": "feed/QUESTIONS.md",
+   "bytes": 7240,
+   "made_kst": "2026-11-11 07:19"
+  },
+  {
+   "url": "feed/SPEC.md",
+   "bytes": 49113,
+   "made_kst": "2026-11-11 07:19"
+  },
+  {
+   "url": "feed/daily/2026-11-10.json",
+   "bytes": 89934,
+   "made_kst": "2026-11-10 16:46"
+  },
+  {
+   "url": "feed/daily/latest.json",
+   "bytes": 89934,
+   "made_kst": "2026-11-10 16:46"
+  },
+  {
+   "url": "feed/health.json",
+   "bytes": 183887,
+   "made_kst": "2026-11-11 01:17"
+  },
+  {
+   "url": "feed/src/iv-ceg-3q26-call.json",
+   "bytes": 30370,
+   "made_kst": "2026-11-11 07:19"
+  },
+  {
+   "url": "feed/src/iv-oklo-3q26-call.json",
+   "bytes": 40813,
+   "made_kst": "2026-11-11 07:19"
+  },
+  {
+   "url": "feed/src/iv-vst-3q26-call.json",
+   "bytes": 30017,
+   "made_kst": "2026-11-11 07:19"
+  },
+  {
+   "url": "feed/state/seen.json",
+   "bytes": 4694,
+   "made_kst": "2026-11-11 07:20"
+  },
+  {
+   "url": "feed/weekly/2026-W46.json",
+   "bytes": 264042,
+   "made_kst": "2026-11-10 16:45"
+  },
+  {
+   "url": "feed/weekly/latest.json",
+   "bytes": 264042,
+   "made_kst": "2026-11-10 16:45"
+  }
+ ],
+ "notes": "일간 2026-11-10 / 주간 2026-W46 묶음입니다. 미확보 자료는 partial 및 health에 기록했습니다."
+}
