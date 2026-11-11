@@ -116,8 +116,8 @@
         ws.labels.find((x) => x.id === id)?.label ||
         config.tabs.find((t) => t.id === id)?.label ||
         id;
-    const merged = ['company', 'valuation', 'evidence'].includes(active) ? 'desk' : active;
-    const menu = [...new Set(['desk', ...ws.resources, 'dcf'])];
+    const merged = ['company', 'valuation', 'evidence', 'dcf'].includes(active) ? 'desk' : active;
+    const menu = [...new Set(['desk', ...ws.resources])];
     $('#tabs').innerHTML =
       menu
         .map(
@@ -125,8 +125,8 @@
             `<a ${ws.resources.includes(id) ? 'data-library-tab' : 'data-nav'}="${esc(id)}" href="${id === 'dcf' ? href('dcf', ['samsung', 'hynix', 'sem'].includes(selectedCompany) ? selectedCompany : 'samsung') : '#' + esc(id)}" ${id === merged ? 'class="active" aria-current="page"' : ''}>${esc(label(id))}</a>`
         )
         .join('') + '<a href="#archive?section=legacy-tools">이전 브리핑</a>';
-    $('#subtabs').innerHTML = '';
-    $('#subtabs').hidden = true;
+    $('#subtabs').innerHTML = merged === 'desk' ? [['desk', '투자 검토'], ['dcf', 'DCF 시나리오']].map(([id, text]) => `<a href="${href(id, id === 'dcf' ? selectedCompany : null)}" ${id === active || (id === 'desk' && active !== 'dcf') ? 'aria-current="page"' : ''}>${text}</a>`).join('') : '';
+    $('#subtabs').hidden = merged !== 'desk';
   }
   function contextStrip(tab, params) {
     if (!window.InvestorDesk) return '';
@@ -294,10 +294,26 @@
     if (head) head.insertAdjacentHTML('afterend', marked);
     else content.insertAdjacentHTML('afterbegin', marked);
   }
+  async function collectedBriefing(tab, params, token) {
+    if (!window.Collector || params.get('id')) return;
+    try {
+      const result = await window.Collector.page(new URLSearchParams(tab === 'weekly' ? { view: 'weekly' } : { view: 'daily' }));
+      if (token !== generation) return;
+      const content = $('#content');
+      content.innerHTML = '<!--collector-briefing:start:' + tab + '--><section class="collector-host" data-briefing="' + tab + '">' + result.html + '</section><!--collector-briefing:end--><details class="section"><summary>기존 편집 브리핑·보관 회차</summary>' + content.innerHTML + '</details>';
+      const heading = content.querySelector('[data-briefing] h1');
+      if (heading) heading.textContent = tab === 'weekly' ? '주간 브리핑' : '일간 브리핑';
+      window.Collector.mount(content.querySelector('[data-briefing]'), params);
+    } catch (error) {
+      if (token === generation) $('#content').insertAdjacentHTML('afterbegin', '<p class="note" role="status">최신 수집 브리핑을 불러오지 못했습니다. 기존 편집 자료를 표시합니다.</p>');
+    }
+  }
   async function show() {
     const token = ++generation,
-      { tab, params } = route();
-    active = tab;
+      { tab: requestedTab, params } = route();
+    const tab = requestedTab === 'deep-reports' ? 'reports' : requestedTab;
+    if (requestedTab === 'deep-reports') params.set('section', 'deep');
+    active = tab === 'collector' && params.get('id')?.startsWith('daily-') ? 'summary' : tab === 'collector' && params.get('id')?.startsWith('weekly-') ? 'weekly' : tab === 'reports' && (params.get('section') === 'deep' || (params.get('id') && !params.get('id').startsWith('naver-'))) ? 'deep-reports' : tab;
     let openedReport = null;
     const investor = window.InvestorDesk,
       isInvestor = investor?.views.includes(tab),
@@ -353,7 +369,9 @@
         return;
       }
       if (tab === 'collector' && window.Collector) {
-        const result = await window.Collector.page(params);
+        const collectorParams = new URLSearchParams(params);
+        if (!collectorParams.has('id')) collectorParams.set('id', 'packs');
+        const result = await window.Collector.page(collectorParams);
         if (token !== generation) return;
         if (result.canonical) {
           history.replaceState(null, '', result.canonical + location.search + location.hash);
@@ -427,7 +445,7 @@
         openedReport = report;
         $('#content').className = report.editorial?.layout === 'essay' ? 'report-reading-view' : '';
         $('#content').innerHTML =
-          (report.editorial?.layout === 'essay' ? '' : title('reports', data)) +
+          (report.editorial?.layout === 'essay' ? '' : title('deep-reports', data)) +
           views.reports.detail(report, params);
       } else if (tab === 'weekly') {
         const selected =
@@ -436,10 +454,12 @@
         if (selected && data.items.some((w) => w.id === selected)) {
           week = await json('weekly/' + encodeURIComponent(selected));
           if (token !== generation) return;
-          if (!params.get('id')) history.replaceState(null, '', href('weekly', selected));
+          // Keep the latest briefing URL stable; archived editions retain their own URLs.
         }
         $('#content').innerHTML =
           contextStrip(tab, params) + views.library.weekly(data, params, week);
+        await collectedBriefing(tab, params, token);
+        if (token !== generation) return;
         document.title = (week ? week.id + ' · ' : '') + '주간 시사점 · Market Briefing';
         await collectorRelated(tab, token);
         if (token !== generation) return;
@@ -447,15 +467,20 @@
         else viewTop();
         return;
       } else $('#content').innerHTML = renderTab(tab, data, params);
+      if (tab === 'summary') {
+        await collectedBriefing(tab, params, token);
+        if (token !== generation) return;
+      }
       $('#content').innerHTML = researchContext(tab, data, params, $('#content').innerHTML);
       if (!openedReport) {
         await collectorRelated(tab, token);
         if (token !== generation) return;
       }
+      if (tab === 'summary' && window.Collector && $('#content').querySelector('[data-briefing]')) window.Collector?.mount($('#content').querySelector('[data-briefing]'), params);
       document.title =
         (openedReport?.title ||
           config.workspace?.labels.find((x) => x.id === tab)?.label ||
-          config.tabs.find((x) => x.id === tab).label) + ' · Market Briefing';
+          config.tabs.find((x) => x.id === active).label) + ' · Market Briefing';
       if (params.get('section') || (params.get('id') && tab !== 'reports')) highlight(params);
       else if (openedReport?.editorial?.layout === 'essay') {
         $('.report-essay')?.focus?.({ preventScroll: true });
@@ -471,9 +496,10 @@
   }
   function redraw() {
     const { params } = route(),
-      tab = active;
+      currentTab = active,
+      tab = currentTab === 'deep-reports' ? 'reports' : currentTab;
     return cache.get(tab)?.then((data) => {
-      if (active !== tab) return;
+      if (active !== currentTab) return;
       $('#content').innerHTML = researchContext(tab, data, params, renderTab(tab, data, params));
     });
   }
@@ -483,9 +509,10 @@
       return;
     }
     if (e.target.dataset.filter) {
-      filters[active] ||= {};
-      filters[active][e.target.dataset.filter] = e.target.value;
-      filters[active].page = 1;
+      const filterTab = active === 'deep-reports' ? 'reports' : active;
+      filters[filterTab] ||= {};
+      filters[filterTab][e.target.dataset.filter] = e.target.value;
+      filters[filterTab].page = 1;
       clearItemRoute(active);
       redraw();
     }

@@ -38,7 +38,7 @@
       let html =
         (reportTabs('deep') || '') +
         title(
-          'reports',
+          'deep-reports',
           {
             ...data,
             meta: {
