@@ -1,6 +1,6 @@
 {
  "format": "collector-index/1",
- "updated_kst": "2026-11-11 09:40",
+ "updated_kst": "2026-11-11 09:49",
  "daily": {
   "latest": "2026-11-10",
   "url": "feed/daily/2026-11-10.json",
@@ -34,12 +34,12 @@
   {
    "url": "feed/QUESTIONS.md",
    "bytes": 8619,
-   "made_kst": "2026-11-11 09:39"
+   "made_kst": "2026-11-11 09:49"
   },
   {
    "url": "feed/SPEC.md",
-   "bytes": 50281,
-   "made_kst": "2026-11-11 09:39"
+   "bytes": 52487,
+   "made_kst": "2026-11-11 09:49"
   },
   {
    "url": "feed/daily/2026-11-10.json",
@@ -59,17 +59,17 @@
   {
    "url": "feed/src/iv-ceg-3q26-call.json",
    "bytes": 30370,
-   "made_kst": "2026-11-11 09:39"
+   "made_kst": "2026-11-11 09:49"
   },
   {
    "url": "feed/src/iv-oklo-3q26-call.json",
    "bytes": 40813,
-   "made_kst": "2026-11-11 09:39"
+   "made_kst": "2026-11-11 09:49"
   },
   {
    "url": "feed/src/iv-vst-3q26-call.json",
    "bytes": 30017,
-   "made_kst": "2026-11-11 09:39"
+   "made_kst": "2026-11-11 09:49"
   },
   {
    "url": "feed/state/seen.json",
