@@ -1,0 +1,2473 @@
+{
+ "format": "collector-daily/1",
+ "date": "2026-11-11",
+ "revision": 1,
+ "made_kst": "2026-11-11 10:57",
+ "period": {
+  "from": "2026-11-10 09:00",
+  "to": "2026-11-11 10:05"
+ },
+ "status": "partial",
+ "lanes": {
+  "N1": {
+   "status": "partial",
+   "n": 3,
+   "tried_queries": [
+    "AI data center cloud hyperscaler contract November 10 2026 power deal",
+    "site:datacenterdynamics.com/en/news/ November 10 2026 data center contract power",
+    "Riot Platforms 910MW unnamed frontier AI lab agreement DCD November 10 2026",
+    "SoftBank Petros Grab Malaysia 5GW data center November 10 2026",
+    "Deutsche Telekom Munich AI data center 20MW November 10 2026",
+    "100MW data center power contract hyperscaler announcement November 10 2026",
+    "site:datacenterdynamics.com/en/news/ \"10 Nov 2026\" data center",
+    "site:utilitydive.com/news/ 10 November 2026 data center energy AI",
+    "Rackspace Together AI Blacksmith November 10 2026 contract",
+    "Rackspace Blacksmith 2 MW November 10 2026 GlobeNewswire",
+    "November 10 2026 onsite generation data center power procurement change AI hyperscaler"
+   ],
+   "tried_sources": [
+    "https://nvidianews.nvidia.com/releases.xml (열람 2026-11-11 10:06 KST, 최근 게시물 발행시각 확인)",
+    "https://cloudblog.withgoogle.com/rss/ (열람 2026-11-11 10:06 KST)",
+    "https://blogs.microsoft.com/feed/ (열람 2026-11-11 10:06 KST)",
+    "https://convergedigest.com/feed/ (열람 2026-11-11 10:06 KST)",
+    "https://aws.amazon.com/about-aws/whats-new/recent/feed/ (열람 2026-11-11 10:06 KST)",
+    "https://blogs.oracle.com/cloud-infrastructure/rss (열람 2026-11-11 10:06 KST)",
+    "https://www.datacenterdynamics.com/en/news/ (열람 2026-11-11 10:06 KST)",
+    "https://www.utilitydive.com/news/ai-boom-could-shift-diesel-generators-backup-everyday-use/873954/ (직접 열람 2026-11-11 10:19 KST)",
+    "https://www.globenewswire.com/news-release/2026/11/10/3399517/0/en/rackspace-and-together-ai-announce-strategic-agreement-to-support-enterprise-ai-inference.html (직접 열람 2026-11-11 10:19 KST; 차단)",
+    "https://www.globenewswire.com/news-release/2026/11/10/3399492/0/en/blacksmith-taps-rackspace-to-accelerate-software-deployments-to-production.html (직접 열람 2026-11-11 10:19 KST; 차단; 웹검색 원문 결과에서 전문·시각 확인)",
+    "https://ir.rackspace.com/news-releases/news-release-details/rackspace-and-together-ai-announce-strategic-agreement-support (직접 열람 차단; Rackspace newsroom 및 GlobeNewswire 동시 확인)",
+    "https://ir.rackspace.com/news-releases/news-release-details/blacksmith-taps-rackspace-accelerate-software-deployments (직접 열람 차단; Rackspace newsroom 및 GlobeNewswire 동시 확인)",
+    "https://blogs.oracle.com/cloud-infrastructure/",
+    "https://news.lenovo.com/pressroom/press-releases/lenovo-accelerates-ai-and-hpc-convergence-with-next-generation-infrastructure/"
+   ],
+   "failed_sources": [
+    {
+     "name": "Microsoft Blogs RSS",
+     "url": "https://blogs.microsoft.com/feed/",
+     "why": "Cloudflare/접근 제한 HTML; RSS 본문 수신 불가"
+    },
+    {
+     "name": "Oracle Cloud Infrastructure RSS",
+     "url": "https://blogs.oracle.com/cloud-infrastructure/rss",
+     "why": "기술 오류 HTML; RSS 본문 수신 불가"
+    },
+    {
+     "name": "Rackspace Investor Relations 및 GlobeNewswire 직접 원문",
+     "url": "https://www.globenewswire.com/news-release/2026/11/10/3399517/0/en/rackspace-and-together-ai-announce-strategic-agreement-to-support-enterprise-ai-inference.html",
+     "why": "curl 직접 열기는 Access Denied. 공개 검색 결과·Rackspace newsroom으로 기사 전문/발행시각과 조건 확인; 동일 도메인의 Blacksmith 보도자료도 직접 열기는 차단"
+    },
+    {
+     "name": "Financial Times Anthropic 가스발전 계약 최초 보도",
+     "url": "https://www.ft.com/content/41bf5c6a-9735-4f1a-a8e3-2bcccad58ba0",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+     "name": "Oracle Cloud Blog RSS",
+     "url": "https://blogs.oracle.com/cloud-infrastructure/rss",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+     "name": "Rackspace/GlobeNewswire press releases",
+     "url": "https://www.globenewswire.com/news-release/2026/11/10/3399517/0/en/rackspace-and-together-ai-announce-strategic-agreement-to-support-enterprise-ai-inference.html",
+     "why": "curl 직접 접근 Access Denied; 웹검색 결과와 Rackspace newsroom으로 보완 확인"
+    }
+   ],
+   "note": "100MW 이상 데이터센터 전력·용량 계약은 기간 내 확인하지 못했습니다. 11/09 발표로 확인된 Riot Platforms 910MW 계약은 기간 밖이라 제외했습니다. 데이터센터 온사이트·자체 발전을 주전원으로 삼는 신규 계약과 하이퍼스케일러·네오클라우드 전력조달 방식 변경도 기간 내 적격 발표를 확인하지 못했습니다. Rackspace-Together AI는 배치 금융·시설·전력·장비 확보 조건부이며 Rackspace-Blacksmith는 약 2MW 장기계약(초기 배치 2027년 초 예정)입니다. SoftBank-PETROS/Grab 및 Deutsche Telekom 20MW는 원 발표가 11/09여서 재보도 제외. DCD·Utility Dive 포함 지정 피드를 열람했으나 Microsoft 및 Oracle RSS는 직접 수신 실패. Lenovo 서버·AI 구축 서비스 발표를 추가 확인했다. FuelCell 전원 시험시설 연구 발표는 T1에 기록했으며 상용 주전원 공급 계약으로 보지 않았다."
+  },
+  "N3": {
+   "status": "partial",
+   "n": 2,
+   "tried_queries": [
+    "2026-11-10 2026-11-11 삼성SDS LG CNS SK AX 현대오토에버 포스코DX 신규 계약",
+    "2026-11-10 2026-11-11 롯데이노베이트 CJ올리브네트웍스 신세계I&C 대우정보시스템 ITCEN 계약",
+    "2026-11-10 2026-11-11 KT Cloud Naver Cloud NHN Cloud Kakao Enterprise cloud AI",
+    "2026-11-10 2026-11-11 SKT Megazone Bespin Systems AI cloud contract Korea",
+    "삼성SDS 뉴스룸 2026년 11월 10일 11월 11일",
+    "국내 IT 서비스 기업 전체 2026년 11월 10일 발표 계약 수주",
+    "site:etnews.com/20261110 AI 클라우드 기업 공급 계약",
+    "site:zdnet.co.kr 2026.11.10 기업 클라우드 AI 공급",
+    "2026년 11월 10일 11월 11일 공공기관 전산 AI 클라우드 100억원 입찰",
+    "2026년 11월 10일 금융권 클라우드 AI 100억원 이상 발주",
+    "DART 2026-11-10 단일판매 공급계약 IT 기업",
+    "개인정보위 Anthropic Claude 정식 조사 2026년 11월 10일",
+    "피앤피시큐어 저축은행 페이스락커 2026년 11월 11일",
+    "2026-11-10 삼성SDS 계약 수주 AI 클라우드",
+    "2026-11-10 LG CNS 신규 사업 계약 클라우드 AI",
+    "2026-11-10 SK AX 수주 발표",
+    "2026-11-10 현대오토에버 공급 계약",
+    "2026-11-10 포스코DX 사업 수주",
+    "2026-11-10 롯데이노베이트 신규 계약",
+    "2026-11-10 CJ올리브네트웍스 AI 클라우드 사업",
+    "2026-11-10 신세계I&C 공급 계약",
+    "2026-11-10 대우정보시스템 계약 공시",
+    "2026-11-10 ITCEN 금융 IT 사업 수주",
+    "2026-11-10 KT Cloud 계약 AI 데이터센터",
+    "2026-11-10 Naver Cloud 기업 계약 발표",
+    "2026-11-10 NHN Cloud 신규 계약 (기존 URL/사건 중복 검사)",
+    "2026-11-10 Kakao Enterprise 기업 AI 계약",
+    "2026-11-10 SKT AI 클라우드 계약",
+    "2026-11-10 Megazone Cloud 신규 수주",
+    "2026-11-10 Bespin Global 계약 발표"
+   ],
+   "tried_sources": [
+    "https://www.etnews.com/rss/ (ETNews AI·SW RSS, 일반 RSS 직접 열람 2026-11-11 10:06 KST; 최신 기사 시각 대조)",
+    "https://www.zdnet.co.kr/news/ (RSS 직접 열람 2026-11-11 10:06 KST)",
+    "https://www.ddaily.co.kr/ (RSS 주소는 HTML 반환; 페이지 검색으로 보완)",
+    "https://www.dt.co.kr/ (RSS 주소 직접 접근, 차단 페이지)",
+    "https://www.inews24.com/ (RSS 직접 접근 403)",
+    "https://www.newspim.com/ (RSS 주소는 일반 HTML 반환)",
+    "https://dart.fss.or.kr/api/list.xml (DART RSS 직접 열람; 10:05 KST 이전 공시만 확인)",
+    "https://www.samsungsds.com/kr/newsroom/index.html (기업 전체 검색·뉴스룸 확인)",
+    "https://inside.nhn.com/news/985 (기존 11/10 NHN Cloud 기사와 URL·사건 대조 후 중복 제외)",
+    "https://www.etnews.com/20261110000476 (원문 직접 열람 2026-11-11 10:19 KST)",
+    "https://www.etnews.com/20261111000016 (원문 직접 열람 2026-11-11 10:19 KST)"
+   ],
+   "failed_sources": [
+    {
+     "name": "Digital Daily RSS",
+     "url": "https://www.ddaily.co.kr/rss/",
+     "why": "RSS 대신 사이트 HTML 반환; 기사 개별 검색으로 대체"
+    },
+    {
+     "name": "Digital Times RSS",
+     "url": "https://www.dt.co.kr/rss/",
+     "why": "차단 안내 HTML 반환; 기사 개별 검색으로 대체"
+    },
+    {
+     "name": "iNews24 RSS",
+     "url": "https://www.inews24.com/rss/",
+     "why": "HTTP 403; 기사 개별 검색으로 대체"
+    },
+    {
+     "name": "NewsPim RSS",
+     "url": "https://www.newspim.com/rss/",
+     "why": "RSS 대신 사이트 HTML 반환; 기사 개별 검색으로 대체"
+    },
+    {
+     "name": "Digital Daily RSS",
+     "url": "https://www.ddaily.co.kr/rss/",
+     "why": "피드 주소가 사이트 HTML 반환"
+    },
+    {
+     "name": "Digital Times RSS",
+     "url": "https://www.dt.co.kr/rss/",
+     "why": "접근 차단 HTML"
+    },
+    {
+     "name": "NewsPim RSS",
+     "url": "https://www.newspim.com/rss/",
+     "why": "피드 주소가 사이트 HTML 반환"
+    },
+    {
+     "name": "NewsPim feed",
+     "url": "https://www.newspim.com/news/rss",
+     "why": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+     "name": "iNews24 RSS",
+     "url": "https://www.inews24.com/rss/",
+     "why": "HTTP 403"
+    },
+    {
+     "name": "iNews24 feed",
+     "url": "https://www.inews24.com/rss/news.xml",
+     "why": "HTTPError: HTTP Error 404: Not Found"
+    }
+   ],
+   "note": "지정 기업 17곳(삼성SDS·LG CNS·SK AX·현대오토에버·포스코DX·롯데이노베이트·CJ올리브네트웍스·신세계I&C·대우정보시스템·ITCEN·KT/KT Cloud·Naver Cloud·NHN Cloud·Kakao/Kakao Enterprise·SKT·Megazone·Bespin)을 회사별로 검색하고 삼성SDS 뉴스룸 및 뉴스 피드를 확인했습니다. NHN Cloud 11/10 기사는 기존 수집본과 같은 URL·사건이라 중복 제외했습니다. DART에서 기간 내 대상 업체의 단일판매·공급계약 공시를 찾지 못했고, 100억원 이상 공공·금융 발주 적격 원문도 확인하지 못했습니다. DART는 10:05 KST를 넘긴 수신 항목을 기간 밖으로 제외했습니다. ETNews 두 후보는 각 기사 시각을 RSS와 대조했습니다."
+  },
+  "T1": {
+   "status": "partial",
+   "n": 3,
+   "tried_queries": [
+    "site:datacenterdynamics.com/en/news/ 10 November 2026 data center energy power",
+    "site:datacenterknowledge.com 2026-11-10 data center power AI",
+    "site:datacenterfrontier.com 2026-11-10 AI data center energy",
+    "site:utilitydive.com/news/ 10 November 2026 data center energy AI",
+    "site:latitudemedia.com/news November 10 2026 data center power",
+    "site:nextplatform.com November 10 2026 AI data center infrastructure",
+    "site:blocksandfiles.com November 10 2026 AI infrastructure data center",
+    "site:servethehome.com November 10 2026 data center AI",
+    "site:hpcwire.com November 10 2026 data center power AI",
+    "\"Fluidstack begins construction of 99-acre data center campus in Wythe County\"",
+    "\"TierPoint to appoint Craig Cowden as CEO\"",
+    "\"Principal Asset Management acquires data center outside Amsterdam\"",
+    "\"UK's Met Office completes managed cloud supercomputing service\"",
+    "\"Colt breaks ground on data center in Berlin\"",
+    "\"TensorBay launches 1MW containerized AIPods\"",
+    "\"Boosteroid, Gaw Capital, and Firebird AI plan 480MW data center in Kazakhstan\"",
+    "site:wythecounty.org Fluidstack Solis Arx construction 99 acres November 10 2026",
+    "WDJB Fluidstack Wythe County groundbreaking Solis Arx November 10 2026",
+    "TierPoint Craig Cowden CEO press release November 10 2026",
+    "Principal Asset Management Switch AMS2 acquisition press release November 10 2026",
+    "Colt Berlin 1 groundbreaking H&MV Engineering 10 November 2026 press release",
+    "TensorBay AIPods 1MW launch November 10 2026 official",
+    "site:primeminister.kz Boosteroid Gaw Capital Firebird AI 480MW November 10 2026",
+    "Fluidstack has begun construction Wythe November 10 2026 WDBJ",
+    "AMS2 Principal Switch Datacenters November 10 2026 acquisition",
+    "site:propertynl.com AMS2 Principal Switch 10 november 2026 Woerden",
+    "site:vastgoeddata.nl AMS2 Principal Asset Management November 10 2026",
+    "Principal European Data Centre Fund I acquires the Switch Datacenters AMS2 facility",
+    "Berlin Colt Data Centre Services groundbreaking H&MV November 2026 LinkedIn",
+    "site:linkedin.com/posts Colt Data Centre Services groundbreaking Berlin",
+    "site:linkedin.com/posts/Tensorbay AIPods 1MW November 2026",
+    "Construction works begin at Data Center Valley Kazakhstan November 2026",
+    "site:primeminister.kz/en/news 480 MW Data Center Valley Boosteroid Gaw Capital",
+    "Boosteroid 480 Firebird AI Kazakhstan November 2026",
+    "480 MW Data Center Valley Kazakhstan November 10 2026",
+    "предварительные соглашения Boosteroid 480 МВт Казахстан ноябрь 2026",
+    "signed preliminary agreements 480MW Kazakhstan data center November 2026",
+    "Principal Asset Management adds Dutch asset to data centre fund IPE Real Assets November 10 2026",
+    "data center announces signs power cooling contract",
+    "site.datacenterdynamics.com \"2026\" \"November 10\"",
+    "\"data center\" \"November 10, 2026\" \"capacity\"",
+    "site:nextplatform.com \"2026/11/10\"",
+    "\"Colt\" \"Berlin\" \"November 10, 2026\"",
+    "\"Fluidstack\" \"Wythe\" \"November 10\"",
+    "\"Netcompany\" \"Danish Centre\" \"November 10\"",
+    "\"Met Office\" \"managed cloud\" \"November 10\"",
+    "\"Application filed for $8bn data center project in Quanah\"",
+    "\"TierPoint\" \"Craig Cowden\" \"November 10\"",
+    "\"Principal Asset Management\" \"Amsterdam\" \"November 10, 2026\"",
+    "\"TensorBay\" \"AIPods\"",
+    "HPCwire official news RSS feed 2026",
+    "Oracle cloud infrastructure blog RSS official",
+    "FuelCell Energy Testbed November 10 2026",
+    "site:amd.com 6th Gen November 10 2026",
+    "site:news.lenovo.com 2026 6th Gen November 10",
+    "site:ibm.com Climate Controlled Diamondback November 2026",
+    "site:blogs.oracle.com OCCL 2026 November",
+    "Lenovo ThinkSystem 6th Gen 2026 servers",
+    "IBM at SuperComputing 2026 November 9"
+   ],
+   "tried_sources": [
+    "https://www.datacenterdynamics.com/en/rss/ (열람 2026-11-11 10:06 KST)",
+    "https://www.datacenterknowledge.com/rss.xml (열람 2026-11-11 10:06 KST)",
+    "https://www.datacenterfrontier.com/rss.xml (피드 anti-bot HTML, 홈도 열람)",
+    "https://www.utilitydive.com/feeds/news/ (열람 2026-11-11 10:06 KST; RSS 발행시각 확인)",
+    "https://www.latitudemedia.com/feed/ (열람 2026-11-11 10:06 KST)",
+    "https://www.nextplatform.com/feed/ (열람 2026-11-11 10:06 KST)",
+    "https://www.servethehome.com/feed/ (열람 2026-11-11 10:06 KST)",
+    "https://blocksandfiles.com/feed/ (열람 2026-11-11 10:06 KST)",
+    "https://www.hpcwire.com/feed/ (열람 2026-11-11 10:06 KST; Cloudflare 차단)",
+    "https://www.utilitydive.com/news/ai-boom-could-shift-diesel-generators-backup-everyday-use/873954/ (원문 직접 열람 2026-11-11 10:19 KST)",
+    {
+     "name": "DCD RSS candidate capture provided by parent",
+     "url": "https://www.datacenterdynamics.com/en/rss/",
+     "accessed_kst": "parent run; exact access time not observed in this supplemental run",
+     "result": "20 candidate entries from 2026-11-10 UTC feed capture reviewed; each named candidate article opened through public web search/open"
+    },
+    {
+     "name": "TierPoint press release",
+     "url": "https://www.globenewswire.com/news-release/2026/11/10/3399650/0/en/tierpoint-names-craig-cowden-ceo.html",
+     "accessed_kst": "2026-11-11 10:32:46",
+     "result": "direct curl 403; official release page opened by public web search/open; exact release time 2026-11-10 09:00 ET"
+    },
+    {
+     "name": "PropertyNL AMS2 transaction report",
+     "url": "https://propertynl.com/Nieuws/Principal-Asset-Management-verwerft-datacenter-in-Woerden/4de32b57-2d17-4da8-8545-6ce40ed6af55",
+     "accessed_kst": "2026-11-11 10:32:46",
+     "result": "direct curl 200; page gives local publication time 11:33, 10 November 2026; content and exact transaction scope opened"
+    },
+    {
+     "name": "WDBJ original Fluidstack report",
+     "url": "https://www.wdbj7.com/2026/10/29/fluidstack-hosts-open-house-wythe-county-data-center-protesters-voice-frustration/",
+     "accessed_kst": "2026-11-11 10:32:48",
+     "result": "direct curl 200; published Oct 28 2026 10:13 PM EDT, already reports ground broken"
+    },
+    {
+     "name": "Met Office official report",
+     "url": "https://www.metoffice.gov.uk/blog/2026/met-office-completes-world-first-cloud-supercomputing-transformation",
+     "accessed_kst": "2026-11-11 10:32:50",
+     "result": "direct curl 200; official publication date 2026-11-03"
+    },
+    {
+     "name": "Kazakhstan Prime Minister official report",
+     "url": "https://primeminister.kz/en/news/digital-economy-olzhas-bektenov-holds-meeting-on-the-implementation-of-the-data-center-valley-project-32091",
+     "accessed_kst": "2026-11-11 10:32:50",
+     "result": "direct curl 200; official publication 2026-11-06 09:35; 480MW is described as preliminary agreements"
+    },
+    {
+     "name": "H&MV Engineering LinkedIn post",
+     "url": "https://www.linkedin.com/feed/update/urn:li:activity:7523374012492886017/",
+     "accessed_kst": "2026-11-11 10:32:53",
+     "result": "direct curl 200; public activity page and embedded datePublished metadata show 2026-11-03T13:22:22Z"
+    },
+    {
+     "name": "TensorBay LinkedIn post",
+     "url": "https://www.linkedin.com/posts/tensorbay-aipods-aiinfrastructure-share-7524879144967548929-hL68/",
+     "accessed_kst": "2026-11-11 10:32:53",
+     "result": "direct curl 200; public activity page and embedded datePublished metadata show 2026-11-07T17:03:14Z"
+    },
+    {
+     "name": "IPE Real Assets English report (checked for independent English company release / timeline comparison)",
+     "url": "https://realassets.ipe.com/news/principal-asset-management-adds-dutch-asset-to-data-centre-fund/10139294.article",
+     "accessed_kst": "2026-11-11 10:35 via public web search results",
+     "result": "검색 결과에 2026-11-10T12:21:00Z 발행 및 5,500sqm/20-year leaseback 확인. 최초 보도는 PropertyNL 11:33 CET."
+    },
+    "https://www.hpcwire.com/",
+    "https://newsroom.amd.com/news/6th-gen-epyc-lead-ai-enterprise-computing/",
+    "https://www.globenewswire.com/news-release/2026/11/10/3399370/0/en/fuelcell-energy-to-host-national-laboratory-supported-ai-data-center-power-testbed-in-connecticut-manufacturing-facility.html"
+   ],
+   "failed_sources": [
+    {
+     "name": "Data Center Frontier RSS",
+     "url": "https://www.datacenterfrontier.com/rss.xml",
+     "why": "anti-bot HTML 수신; 기사별 검색과 홈페이지 확인으로 보완"
+    },
+    {
+     "name": "HPCwire RSS",
+     "url": "https://www.hpcwire.com/feed/",
+     "why": "Cloudflare challenge HTML; 기간별 기사 검색으로 보완"
+    },
+    {
+     "name": "GlobeNewswire direct curl for TierPoint release",
+     "url": "https://www.globenewswire.com/news-release/2026/11/10/3399650/0/en/tierpoint-names-craig-cowden-ceo.html",
+     "why": "HTTP 403 via normal curl; public web search/open provided the official issuer release and precise timestamp. No bypass used."
+    },
+    {
+     "name": "Data Center Frontier RSS",
+     "url": "https://www.datacenterfrontier.com/rss.xml",
+     "why": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+     "name": "GlobeNewswire direct HTTP",
+     "url": "https://www.globenewswire.com/news-release/2026/11/10/3399650/0/en/tierpoint-names-craig-cowden-ceo.html",
+     "why": "Direct curl blocked; the same official TierPoint-issued GlobeNewswire release was directly opened through public web search/open, so date, time and text were verified without bypassing the block."
+    },
+    {
+     "name": "www.hpcwire.com",
+     "url": "https://www.hpcwire.com/feed/",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    }
+   ],
+   "note": "전문지 피드·대체 공개 목록에서 후보를 원문 대조했다. AMD 서버 CPU 공급, FuelCell 전원 시험시설, TierPoint 경영진 교체를 반영했다. 앞선 발표의 재보도는 제외했고, AMS2 인수 원보도는 언어 스키마 미지원으로 보류했다."
+  },
+  "T2": {
+   "status": "partial",
+   "n": 1,
+   "tried_queries": [
+    "The Register November 10 2026 enterprise AI cloud security release",
+    "SiliconANGLE November 10 2026 cloud enterprise AI product launch",
+    "Channel Dive November 10 2026 cloud software AI partnership",
+    "CIO Dive November 10 2026 enterprise AI product security",
+    "ETNews November 10 2026 enterprise cloud AI security product",
+    "SUSE Rancher Prime AI agents virtual machines November 10 2026",
+    "Flashpoint Agentic AI November 10 2026",
+    "November 10 2026 enterprise IT vendor launch cybersecurity cloud AI",
+    "site:theregister.com/2026/11/10 cloud AI enterprise",
+    "site:channel-dive.com/news 2026-11-10 AI cloud software",
+    "enterprise cloud security announces signs pricing terms",
+    "클라우드 장애 가격 약관 기업 보안 발표",
+    "site:theregister.com 2026/11/10 enterprise cloud security"
+   ],
+   "tried_sources": [
+    "https://www.theregister.com/headlines.atom (열람 2026-11-11 10:06 KST)",
+    "https://siliconangle.com/feed/ (열람 2026-11-11 10:06 KST; 최신 갱신시각 확인)",
+    "https://www.channeldive.com/feeds/news/ (열람 2026-11-11 10:06 KST)",
+    "https://www.ciodive.com/feeds/news/ (열람 2026-11-11 10:06 KST)",
+    "https://byline.network/feed/ (HTTP 403)",
+    "https://www.suse.com/news/suse-solidifies-position-as-platform-for-ai-workloads/ (원문 직접 열람 2026-11-11 10:19 KST)",
+    "https://siliconangle.com/2026/11/10/suse-points-rancher-primes-ai-agents-at-virtual-machines-and-updates-its-enterprise-linux/ (원문 직접 열람 2026-11-11 10:19 KST)",
+    "https://flashpoint.io/blog/introducing-flashpoint-agentic-ai/ (원문 직접 열람 2026-11-11 10:19 KST)"
+   ],
+   "failed_sources": [
+    {
+     "name": "Byline Network RSS",
+     "url": "https://byline.network/feed/",
+     "why": "HTTP 403; 기사별 검색으로 보완"
+    }
+   ],
+   "note": "The Register·SiliconANGLE·Channel Dive·CIO Dive 피드를 열어보고 기간별 기업발표를 검색했습니다. SUSE와 Flashpoint 발표는 각 회사 원문을 직접 열어 발행일과 제품·출시 상태를 대조했습니다. Byline 피드는 403으로 직접 수신하지 못했습니다. SUSE는 공식 원문 발행 시각을 확정하지 못해 보류했습니다. 날짜 없는 검색을 추가했으나 결과 대부분이 지난 기사여서 검색 실패 의심도 남긴다."
+  },
+  "N4": {
+   "status": "partial",
+   "n": 6,
+   "tried_queries": [
+    "site:blackrock.com investment institute weekly commentary November 9 2026 AI",
+    "site:goldmansachs.com insights November 10 2026 AI infrastructure",
+    "site:blackstone.com insights November 10 2026 data center",
+    "site:kkr.com insights November 2026 AI financing",
+    "\"Jamie Dimon\" \"Larry Fink\" AI November 10 2026",
+    "(\"Jon Gray\" OR \"Bruce Flatt\" OR \"Torsten Slok\") AI November 10 2026",
+    "(\"Michael Cembalest\" OR \"Howard Marks\" OR \"Ray Dalio\") AI November 10 2026",
+    "(\"Greg Jensen\" OR \"Ken Griffin\" OR \"Scott Rubner\" OR \"Jim Esposito\") AI November 2026",
+    "(\"Philippe Laffont\" OR \"Gavin Baker\" OR \"Brad Gerstner\") AI November 2026",
+    "(\"Stan Druckenmiller\" OR \"Paul Tudor Jones\" OR \"Dan Loeb\" OR \"Chase Coleman\") AI November 2026",
+    "(\"Leopold Aschenbrenner\" OR \"Cathie Wood\") AI November 10 2026",
+    "(\"Paul Kedrosky\" OR \"Michael Burry\" OR \"Jim Chanos\" OR \"David Einhorn\") AI bubble November 10 2026",
+    "(\"Orlando Bravo\" OR \"Robert F. Smith\" OR \"Egon Durban\") AI November 2026",
+    "(\"Marc Ganzi\" OR \"Marc Lipschultz\" OR \"Josh Wolfe\" OR \"David Cahn\") AI November 2026",
+    "\"November 10, 2026\" data center financing loan rating",
+    "\"November 10, 2026\" AI investment funding regulation",
+    "\"hedge fund billionaire AI bubble\" November 2026",
+    "\"investor AI capex warning\" November 2026",
+    "\"investor bullish AI stocks\" November 2026",
+    "AI 데이터센터 대출 투자 신용 등급 2026 11 10",
+    "Calibrant Energy Secures $145 Million November 10 2026",
+    "WhiteFiber November 10 2026 300 million Morgan Stanley",
+    "Moody’s S&P Fitch Oracle CoreWeave Nebius rating November 10 2026",
+    "AI startup announces funding November 10 2026",
+    "\"New York\" \"RAISE\" \"November 10, 2026\" registration",
+    "\"Australia\" AI regulator \"10 November 2026\" Albanese",
+    "\"Calibrant\" \"145\" \"PRNewswire\" 2026",
+    "\"PuppyGraph\" \"10\" \"November 10\" 2026 funding",
+    "WhiteFiber announces $300 million term loan Morgan Stanley NC-1",
+    "Calibrant Energy $145 million Investec financing PRNewswire",
+    "PuppyGraph announces raises $10 million",
+    "Sparxity announces Series A $90 million",
+    "\"Calibrant\" \"145 Million\" \"09:02\"",
+    "\"Sparxity\" \"20261110\"",
+    "\"PuppyGraph\" \"November 10, 2026\" \"AM\"",
+    "\"Hochul\" \"November 10, 2026\" \"RAISE\"",
+    "Sparxity Series A site:businesswire.com",
+    "site:pm.gov.au \"AI\" \"10 November 2026\"",
+    "site:industry.gov.au \"10 November 2026\" \"AI\"",
+    "site:brookfield.com press releases November 2026 AI data centers",
+    "site:sparxity.com Series A",
+    "\"PuppyGraph Raises $10M\" \"businesswire.com/news/home\""
+   ],
+   "tried_sources": [
+    "https://www.apollo.com/wealth/insights-news/insights/daily-spark",
+    "https://www.blackrock.com/sa/professional/en/insights/weekly-commentary?switchLocale=Y",
+    "https://www.goldmansachs.com/insights",
+    "https://www.blackstone.com/insights/",
+    "https://www.brookfield.com/views-news/press-releases",
+    "https://www.kkr.com/insights",
+    "https://www.moodys.com/web/en/us/insights.html",
+    "https://www.federalreserve.gov/feeds/speeches_and_testimony.xml",
+    "https://www.imf.org/en/Blogs",
+    "https://www.bankofengland.co.uk/rss/news",
+    "https://www.sec.gov/Archives/edgar/data/2042022/000121390026117723/ea0311622-8k_whitefiber.htm",
+    "https://www.prnewswire.com/news-releases/calibrant-energy-secures-145-million-in-project-financing-including-battery-storage-for-hyperscale-data-center-customer-in-pjm-302934918.html",
+    "https://www.pm.gov.au/media/new-australian-ai-safety-and-security-protections",
+    "https://www.federalreserve.gov/newsevents/speech/bowman20261110a.htm",
+    "https://www.federalreserve.gov/newsevents/speech/waller20261110a.htm",
+    "https://rss.globenewswire.com/news-release/2026/11/10/3399149/0/en/netcompany-invests-in-danish-centre-for-ai-innovation-a-s-the-company-behind-the-gefion-ai-supercomputer.html"
+   ],
+   "failed_sources": [
+    {
+     "name": "Brookfield 이전 보도자료 경로",
+     "url": "https://www.brookfield.com/news-insights/press-releases",
+     "why": "HTTP 404. https://www.brookfield.com/views-news/press-releases 에서 정상 목록 확인."
+    },
+    {
+     "name": "PuppyGraph Business Wire",
+     "url": "https://www.businesswire.com/news/home/20261110709159/en/",
+     "why": "정상 공개 HTTP 요청 시간 초과; 회사 발표문은 읽었으나 원문 배포본의 본문 미확보."
+    },
+    {
+     "name": "Anthropic S-1/A",
+     "url": "https://www.sec.gov/Archives/edgar/data/2130357/000162828026072484/anthropicpbc-sx1ax2.htm",
+     "why": "정상 공개 HTTP 403. 공식 회사 뉴스룸 원문과 SEC submissions 접수일시는 확인했으나 공시 본문 미확보."
+    },
+    {
+     "name": "ARK Invest",
+     "url": "https://www.ark-invest.com/",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+     "name": "Bloomberg original AI loan report",
+     "url": "https://www.bloomberg.com/news/articles/2026-11-05/mystery-seller-puts-up-500-million-data-center-loans-backing-stargate-cyrusone",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+     "name": "Blue Owl",
+     "url": "https://www.blueowlcapital.com/news",
+     "why": "URLError: <urlopen error timed out>"
+    },
+    {
+     "name": "Citadel Securities",
+     "url": "https://www.citadelsecurities.com/insights/",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+     "name": "JPMorgan Eye on the Market",
+     "url": "https://am.jpmorgan.com/us/en/asset-management/adv/insights/eye-on-the-market/",
+     "why": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+     "name": "Reuters direct article",
+     "url": "https://www.reuters.com/business/finance/banks-investors-grow-wary-ai-debt-spooked-by-market-selloff-2026-11-09/",
+     "why": "HTTPError: HTTP Error 401: HTTP Forbidden"
+    },
+    {
+     "name": "Schwab AI investment article",
+     "url": "https://international.schwab.com/story/ai-innovation-cycle-scenarios-and-signposts",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    }
+   ],
+   "note": "기관별 공식 페이지와 낙관·경계 인물, 명단 밖 투자자, 신용·대출·투자·규제 사건을 검색했습니다. 발행 시각 미확인과 원문 접근 실패 후보를 보류했고, 과거 발언이나 주가 등락으로 건수를 채우지 않았습니다. 원문 날짜만 제공하는 PuppyGraph·Sparxity·뉴욕 규제·Anthropic 로드쇼 및 날짜 충돌인 Bessemer 글은 보류 목록에 기록했습니다."
+  },
+  "N2": {
+   "status": "partial",
+   "n": 1,
+   "tried_queries": [
+    "AI research model release OpenAI Anthropic Google DeepMind November 10 2026",
+    "AI lab model November 11 2026 OpenAI Anthropic",
+    "site:openai.com/index/ November 2026 AI announcement",
+    "site:anthropic.com/news 2026 November AI research model",
+    "site:deepmind.google/discover/blog/ November 2026 AI research",
+    "site:ai.meta.com/blog/ 2026 November AI research November 10",
+    "site:mistral.ai/news 2026 November model research",
+    "AI lab research announcement November 10 2026 official AI enterprise study",
+    "OpenAI new enterprise product November 10 2026 business info ChatGPT announcement",
+    "site:openai.com/index/ \"Nov 10, 2026\" business ChatGPT",
+    "AI lab research partnership product announcement November 10 2026 Google DeepMind OpenAI"
+   ],
+   "tried_sources": [
+    "https://openai.com/news/",
+    "https://openai.com/news/rss.xml",
+    "https://openai.com/index/introducing-businesses-chatgpt/",
+    "https://www.anthropic.com/news",
+    "https://deepmind.google/blog/rss.xml",
+    "https://deepmind.google/blog/",
+    "https://ai.meta.com/blog/ (RSS 404)",
+    "https://mistral.ai/news",
+    "https://pr.tsmc.com/chinese/news/3352",
+    "feed/state/seen.json",
+    "work/db_recent.json",
+    "https://newsletter.semianalysis.com/feed",
+    "https://www.interconnects.ai/feed",
+    "https://artificialanalysis.ai/",
+    "https://hai.stanford.edu/news",
+    "https://stratechery.com/",
+    "https://stratechery.com/2026/the-jensen-huang-story-gets-worse-washington-vs-new-york-silicon-valley/"
+   ],
+   "failed_sources": [
+    {
+     "name": "Meta AI Blog RSS",
+     "url": "https://ai.meta.com/blog/rss/",
+     "why": "HTTP 404; Meta AI Blog 메인 페이지는 확인."
+    },
+    {
+     "name": "Stratechery 최신 구독 글",
+     "url": "https://stratechery.com/2026/the-jensen-huang-story-gets-worse-washington-vs-new-york-silicon-valley/",
+     "why": "제목·무료 리드만 공개. 상세 본문은 구독을 요구해 후보로 싣지 않음."
+    },
+    {
+     "name": "Meta AI Blog RSS",
+     "url": "https://ai.meta.com/blog/rss/",
+     "why": "HTTP 404"
+    }
+   ],
+   "note": "OpenAI 사업자 허브·에이전트 발표 1건. TSMC 이사회 투자 건은 TW에 통합. 등록 피드와 연구기관 공개 목록·RSS를 재확인했으며 추가 기관 원문 MKA 평가는 L에 배치했다. SemiAnalysis·Interconnects RSS, Stratechery 무료 부분, Artificial Analysis, Stanford HAI 공개 목록을 추가 직접 확인했다."
+  },
+  "TW": {
+   "status": "partial",
+   "n": 2,
+   "tried_queries": [
+    "台灣 AI伺服器 11月10日 2026 出貨 廣達",
+    "台積電 先進封裝 CoWoS 2026年11月10日 最新",
+    "AI伺服器 鴻海 緯創 緯穎 2026/11/10 營收 出貨",
+    "台灣 AI 資料中心 電力 液冷 2026 11月10日",
+    "site:technews.tw/2026/11/10 AI 伺服器 OR 半導體",
+    "site:money.udn.com/money/story/ AI 伺服器 2026-11-10 台積電",
+    "site:ctee.com.tw 2026/11/10 AI 伺服器 台積電",
+    "site:digitimes.com.tw/tech/dt 2026/11/10 AI server Taiwan",
+    "ASE 2026 October revenue November 10 2026 official monthly revenue AI packaging",
+    "日月光投控 2026年10月營收 886.15億元 2026/11/10 官方",
+    "site:aseglobal.com \"Oct\" \"2026\" \"Net Revenues\" ASE 10",
+    "site:aseglobal.com investor financial monthly revenues November 10 2026 886.15",
+    "site:mops.twse.com.tw \"886.15\" \"日月光投控\"",
+    "MOPS 3711 20261110 ASE Technology monthly revenue official"
+   ],
+   "tried_sources": [
+    "https://www.digitimes.com/rss/daily.xml",
+    "https://feeds.feedburner.com/rsscna/technology",
+    "https://feeds.feedburner.com/rsscna/engnews/",
+    "https://technews.tw/feed/",
+    "https://money.udn.com/money/cate/5591",
+    "https://www.ithome.com.tw/rss",
+    "https://www.trendforce.com/presscenter/news",
+    "https://www.taipeitimes.com/News/biz",
+    "https://www.ctee.com.tw/rss",
+    "https://www.bnext.com.tw/rss",
+    "https://news.cnyes.com/rss/newslist/0",
+    "https://www.wistron.com/ch/Investors/Financials/MonthlyRevenue",
+    "https://www.prnewswire.com/news-releases/ase-technology-holding-co-ltd-announces-monthly-net-revenues-302934142.html",
+    "feed/state/seen.json",
+    "work/db_recent.json",
+    "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000797/tsm-boardx202611xx.htm (SEC acceptance 2026-11-10 13:41:38 UTC)"
+   ],
+   "failed_sources": [
+    {
+     "name": "Commercial Times RSS",
+     "url": "https://www.ctee.com.tw/rss",
+     "why": "HTTP 403; 접근을 우회하지 않음."
+    },
+    {
+     "name": "Business Next RSS",
+     "url": "https://www.bnext.com.tw/rss",
+     "why": "HTTP 404."
+    },
+    {
+     "name": "Cnyes RSS",
+     "url": "https://news.cnyes.com/rss/newslist/0",
+     "why": "HTTP 404."
+    },
+    {
+     "name": "Taipei Times business RSS",
+     "url": "https://www.taipeitimes.com/News/biz/rss",
+     "why": "HTTP 404; 비즈니스 페이지는 열람."
+    },
+    {
+     "name": "Wistron monthly revenue",
+     "url": "https://www.wistron.com/ch/Investors/Financials/MonthlyRevenue",
+     "why": "HTTP 403; 접근을 우회하지 않음."
+    },
+    {
+     "name": "Business Next RSS",
+     "url": "https://www.bnext.com.tw/rss",
+     "why": "HTTP 404"
+    },
+    {
+     "name": "Cnyes RSS",
+     "url": "https://news.cnyes.com/rss/newslist/0",
+     "why": "HTTP 404"
+    },
+    {
+     "name": "Commercial Times RSS",
+     "url": "https://www.ctee.com.tw/rss",
+     "why": "HTTP 403"
+    },
+    {
+     "name": "Taipei Times business RSS",
+     "url": "https://www.taipeitimes.com/News/biz/rss",
+     "why": "HTTP 404"
+    },
+    {
+     "name": "Wistron monthly revenue",
+     "url": "https://www.wistron.com/ch/Investors/Financials/MonthlyRevenue",
+     "why": "HTTP 403"
+    }
+   ],
+   "note": "번체자 검색을 포함한 8회 이상 쿼리와 현지 피드를 확인. 적격 원문은 ASE의 10월 미감사 매출 및 TSMC 이사회 투자 승인 2건. TSMC 승인은 SEC acceptance 시각 22:41 KST로 확인했으며 투자 집행완료가 아님. N3 개인정보 조사 사건은 중복 제외."
+  },
+  "CM": {
+   "status": "empty",
+   "n": 0,
+   "tried_queries": [
+    "site:news.ycombinator.com AI November 10 2026 200 points agent model",
+    "Hacker News November 10 2026 AI model cloud security 500 points",
+    "site:news.ycombinator.com \"Nov 10, 2026\" AI",
+    "GeekNews AI 2026년 11월 10일",
+    "Hacker News November 11 2026 AI agent points 200",
+    "site:news.ycombinator.com/item?id= \"SGLang\" \"Nov 10, 2026\"",
+    "site:news.ycombinator.com/item?id= AI \"November 10, 2026\" points",
+    "site:news.hada.io 2026년 11월 11일 AI",
+    "site:news.hada.io/topic \"AI 코딩 에이전트에 셸 명령 권한\"",
+    "\"셸 명령 권한, 어디까지 주나\" 원문",
+    "site:news.hada.io/topic \"터너리 양자화\" \"30B\" 2026",
+    "site:news.hada.io/topic \"AI 코딩 에이전트에 셸 명령 권한\" \"2026-11-10\""
+   ],
+   "tried_sources": [
+    "https://hn.algolia.com/api/v1/search?tags=front_page",
+    "https://news.ycombinator.com/front?day=2026-11-10",
+    "https://news.hada.io/rss/news",
+    "HN AlphaProof Code story (576 points, same event assigned to L; not duplicated)",
+    "HN AI usage generates a fragile codebase original https://evanxmerz.com/post/ai-usage-generates-a-fragile-codebase/ (original publication 2026-11-07; outside period)"
+   ],
+   "failed_sources": [],
+   "note": "HN front-page and GeekNews RSS were reachable. HN AlphaProof story is the same event selected for L; another high-point AI coding post had original publication 11/07, outside the period. GeekNews leads inspected did not meet a distinct, sufficiently evidenced item threshold. 3 additional variant searches completed."
+  },
+  "L": {
+   "status": "partial",
+   "n": 2,
+   "tried_queries": [
+    "site:epoch.ai/blog November 2026 AI evaluation",
+    "site:metr.org/blog 2026-11 AI benchmark experiment",
+    "site:quantamagazine.org AI research November 2026",
+    "site:arxiv.org 2026 Nov 10 AI benchmark experiment agent evaluation",
+    "site:arcprize.org/blog 2026-11 AI benchmark evaluation",
+    "site:anthropic.com/research November 2026 evaluation benchmark AI",
+    "site:openai.com/index/research 2026-11 AI research evaluation",
+    "AI agent experiment benchmarks November 10 2026 research paper new results",
+    "xAI research announcement November 10 2026 official",
+    "AI research experiment November 10 2026 Nature New Scientist artificial intelligence",
+    "Simon Willison AI research November 10 2026",
+    "Terence Tao AI November 10 2026",
+    "Import AI November 10 2026 research",
+    "site:nature.com/articles November 10 2026 AI research",
+    "site:newscientist.com AI November 10 2026 research",
+    "site:metr.org/blog \"Nov\" \"2026\" AI November 10",
+    "site:epoch.ai/blog November 10 2026 AI research",
+    "AI research experiment November 2026 benchmark \"Nov 10\" agent",
+    "robotics AI research results paper November 2026 zero-shot benchmark",
+    "AI scientific discovery November 10 2026 experiment verified paper",
+    "2026-11-10 artificial intelligence research study experiment"
+   ],
+   "tried_sources": [
+    "https://epoch.ai/latest",
+    "https://metr.org/blog/",
+    "https://www.quantamagazine.org/",
+    "https://arcprize.org/blog",
+    "https://www.anthropic.com/research",
+    "https://openai.com/research/",
+    "https://deepmind.google/blog/introducing-alphaproof-code/",
+    "https://www.science.org/action/doSearch?AllField=AI (403)",
+    "https://news.ycombinator.com/front?day=2026-11-10",
+    "https://x.ai/news (latest dated 2026-11-02; no qualifying item in period)",
+    "https://labs.scale.com/ (public paper list inspected; newest listed paper Sep.17)",
+    "https://www.nature.com/subjects/artificial-intelligence (11/10 list inspected; no qualifying AI result; article bodies redirected to login)",
+    "https://www.newscientist.com/subject/technology/ (search access blocked by robots.txt)",
+    "https://simonwillison.net/ (11/10 entries inspected; model/product reports excluded)",
+    "https://terrytao.wordpress.com/ (11/04–11/10 list inspected; no qualifying research result)",
+    "https://importai.substack.com/feed (public RSS returned XML unsupported by web reader)",
+    "https://importai.substack.com/ (no readable page text)",
+    "https://www.quantamagazine.org/new-research-tests-whether-ai-models-know-their-own-thoughts-20261104/ (11/04; earlier window item inspected)",
+    "https://metr.org/blog/ (latest relevant update Nov.5)",
+    "https://blog.google/innovation-and-ai/models-and-research/gemini-models/multimodal-knowledge-agent-benchmark/ (11/10; benchmark/product launch excluded by L scope)",
+    "https://arxiv.org/abs/2611.09892 (2026-11-06 paper found by date-explicit query; duplicate exact URL exists in seen.json, therefore excluded)",
+    "https://artificialanalysis.ai/articles/google-deepmind-multimodal-knowledge-agent"
+   ],
+   "failed_sources": [
+    {
+     "name": "Science.org AI search",
+     "url": "https://www.science.org/action/doSearch?AllField=AI",
+     "why": "HTTP 403; 검색 페이지 원문을 읽을 수 없음."
+    },
+    {
+     "name": "New Scientist technology",
+     "url": "https://www.newscientist.com/subject/technology/",
+     "why": "검색에서 robots.txt 접근 차단; 우회하지 않음."
+    },
+    {
+     "name": "Import AI public feed",
+     "url": "https://importai.substack.com/feed",
+     "why": "웹 리더가 RSS XML content-type을 지원하지 않아 본문 항목 열람 불가."
+    },
+    {
+     "name": "Science.org AI search",
+     "url": "https://www.science.org/action/doSearch?AllField=AI",
+     "why": "HTTP 403"
+    }
+   ],
+   "note": "7일 창에서 DeepMind의 Signal 코드 형식 검증 공개 1건을 확보. 기간 내 검색된 arXiv 로봇 조작 프리프린트는 seen.json에 이미 게시된 동일 URL이 있어 제외. New Scientist·Import AI 등 접근 제한은 기록. Artificial Analysis와 Google DeepMind의 시각 자료 기반 업무 평가 MKA를 추가 확인했다."
+  },
+  "MEM": {
+   "status": "partial",
+   "n": 2,
+   "tried_queries": [],
+   "tried_sources": [
+    "https://www.dramexchange.com/ (main DRAM Spot Price table read directly)",
+    "https://www.dramexchange.com/Price/Wafer_Spot (Wafer Spot Price table read directly)",
+    "https://www.trendforce.com/price/dram/dram_spot (fallback page checked; DRAMeXchange loaded, fallback not used)"
+   ],
+   "failed_sources": [
+    {
+     "name": "DRAMeXchange Wafer Spot Price",
+     "url": "https://www.dramexchange.com/Price/Wafer_Spot",
+     "why": "표의 최종 갱신이 Nov.2 2026 14:40 (GMT+8)로 stale; 512Gb TLC 수치 미기재."
+    }
+   ],
+   "note": "DRAM 표는 Nov.10 2026 18:10 (GMT+8)로 최신이며 두 Session Average를 기록. Wafer 표 마지막 갱신 Nov.2 2026 14:40 (GMT+8)로 낡아 512Gb TLC 수치는 싣지 않음."
+  },
+  "E": {
+   "status": "partial",
+   "n": 2,
+   "tried_queries": [
+    "site:ir.microsoft.com 2026 November earnings release Microsoft Q1 FY27 results official",
+    "site:abc.xyz/investor 2026 November earnings results Alphabet official",
+    "site:ir.aboutamazon.com 2026 November earnings results Amazon official",
+    "site:investor.atmeta.com 2026 November earnings results Meta official",
+    "site:oracle.com/news/announcements 2026 November quarterly earnings Oracle Q2 FY27 results",
+    "site:investor.accenture.com/news 2026 November earnings results Accenture official",
+    "site:newsroom.ibm.com 2026 November earnings announcement IBM Q3 2026 results",
+    "site:investors.cognizant.com 2026 October November Q3 2026 earnings results official",
+    "site:investors.infosys.com October 2026 Q2 FY27 results press release official",
+    "site:tcs.com/investor-relations October 2026 Q2 FY27 financial results official",
+    "site:Wipro.com/newsroom October 2026 Q2 FY27 results official",
+    "site:hcltech.com October 2026 Q2 FY27 results earnings press release official",
+    "site:techmahindra.com investor relations Q2 FY27 results October 2026 official",
+    "site:ltimindtree.com investors Q2 FY27 results October 2026 official",
+    "site:nttdata.com investors financial results November 2026 official",
+    "site:investors.capgemini.com Q3 2026 revenues October 30 2026",
+    "site:investor.gevernova.com Q3 2026 results earnings release October November 2026",
+    "site:investor.bloomenergy.com Q3 2026 results November 2026 earnings",
+    "site:investors.quantaservices.com Q3 2026 results November 2026",
+    "site:investor.vistracorp.com Q3 2026 results November 2026",
+    "site:ir.amd.com/news-events/ir-calendar AMD Fiscal Third Quarter 2026 Financial Results November 3 official",
+    "site:investor.nvidia.com third quarter financial results 2026 November 2026 official call",
+    "site:investors.broadcom.com 2026 November Q4 results earnings official",
+    "site:ir.marvell.com Q3 fiscal 2027 results 2026 November official",
+    "AMD Financial Analyst Day November 10 2026 official",
+    "AMD November 10 2026 investor event official",
+    "CoreWeave Q3 2026 results November 10 official transcript",
+    "CoreWeave Q3 2026 earnings call transcript November 10",
+    "Nebius investor events November 12 2026 earnings official",
+    "site:corp.kt.com 2026 3분기 경영실적 KT 11월 10일 PDF",
+    "site:corp.kt.com/eng/ir 3Q 2026 KT results November 10 2026",
+    "site:dart.fss.or.kr KT 2026년 3분기 연결재무제표기준영업(잠정)실적 2026-11-10",
+    "KT 2026년 3분기 실적 발표 11월 10일 자료 PDF 공식",
+    "\"/corp/announcements/v1.0/achievements\"",
+    "\"achPreList\" KT earnings API",
+    "site:corp.kt.com/attach/record/2026 3Q26_KT_ER"
+   ],
+   "tried_sources": [
+    "https://ir.amd.com/news-events/ir-calendar",
+    "https://ir.amd.com/news-events",
+    "https://investor.nvidia.com/home/default.aspx",
+    "https://www.sec.gov/Archives/edgar/data/1769628/000176962826000461/coreweave3q26earningspress.htm",
+    "https://investors.coreweave.com/news/news-details/2026/CoreWeave-Announces-Date-of-Third-Quarter-2026-Financial-Results-and-Conference-Call/default.aspx",
+    "https://nebius.com/investor-events",
+    "https://ir.oracle.com/faq/default.aspx",
+    "https://newsroom.ibm.com/2026-10-21-IBM-RELEASES-THIRD-QUARTER-RESULTS",
+    "https://investor.accenture.com/filings-and-reports/earnings-reports",
+    "https://www.tcs.com/who-we-are/newsroom/press-release/tcs-financial-results-q2-fy-2027",
+    "https://www.wipro.com/newsroom/",
+    "https://investors.capgemini.com/en/event/q3-2026-revenues/",
+    "https://www.nttdata.com/global/en/investors",
+    "https://www.techmahindra.com/investors/quarterly-earnings/",
+    "https://investors.quantaservices.com/",
+    "https://investor.bloomenergy.com/events-and-presentations/events-calendar/default.aspx?ShowEvents=FUTURE",
+    "https://investor.vistracorp.com/events-and-presentations?item=73",
+    "feed/work/deep-earnings-audit.json (reference only; not counted as current-run confirmation)",
+    "https://corp.kt.com/html/investors/resources/earnings.html",
+    "https://rdi.kt.com/corp/announcements/v1.0/achievements?langDivType=KOR",
+    "https://corp.kt.com/attach/record/2026/3Q26_KT_ER_PT_KOR_FIN.pdf",
+    "https://corp.kt.com/attach/record/2026/KT%203Q26_FS%20Release_FIN.xlsx",
+    "https://www.microsoft.com/en-us/Investor/earnings/FY-2027-Q1/press-release-webcast",
+    "https://investors.cognizant.com/news-and-events/news/news-details/2026/Cognizant-Reports-Third-Quarter-2026-Results/default.aspx",
+    "https://www.infosys.com/investors/reports-filings/quarterly-results/2026-2027/q2.html",
+    "https://www.hcltech.com/investor-relations/disclosures-under-regulation-30-8",
+    "https://www.ltm.com/investors/financial-results",
+    "https://www.gevernova.com/investors/events/3rd-quarter-2026-earnings-webcast",
+    "https://www.cameco.com/media/news/cameco-reports-2026-third-quarter-results",
+    "https://www.constellationenergy.com/news/2026/11/constellation-reports-third-quarter-2026-results.html",
+    "https://ir.talenenergy.com/news-releases/news-release-details/talen-energy-reports-third-quarter-2026-results-reaffirms-2026",
+    "https://www.eaton.com/us/en-us/company/news-insights/news-releases/2026/eaton-reports-record-third-quarter-2026-results.html",
+    "https://investors.vertiv.com/news/news-details/2026/Vertiv-Reports-Strong-Third-Quarter-2026-with-Net-Sales-Growth-of-61-Organic-Orders-Growth-over-100-and-Diluted-EPS-Growth-of-91-Adjusted-Diluted-EPS-Growth-of-78-Raises-Full-Year-2026-Guidance-Across-All-Key-Metrics/default.aspx",
+    "https://investor.oklo.com/news/news-details/2026/Oklo-Publishes-Third-Quarter-2026-Financial-Results-and-Business-Update/default.aspx",
+    "https://investors.broadcom.com/news-releases/news-release-details/broadcom-inc-announces-third-quarter-fiscal-year-2026-financial",
+    "https://investor.marvell.com/news-events/ir-calendar",
+    "https://www.intc.com/news-events/press-releases/detail/1786/intel-reports-third-quarter-2026-financial-results",
+    "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000797/tsm-boardx202611xx.htm",
+    "https://www.investor.asml.com/news-releases/news-release-details/asml-reports-eu11.7-billion-total-net-sales-and-eu5.0-billion-net-income-q3-2026",
+    "https://www.asm.com/investors/results-center",
+    "https://ir.kla.com/sec-filings/all-sec-filings/content/0000319201-26-000032/exhibit991earningsrelease0.htm",
+    "https://www.appliedmaterials.com/us/en/newsroom/press-releases/081326-applied-materials-announces-third-quarter-2026-results.html",
+    "https://www.tel.com/ir/calendar/",
+    "https://investor.lamresearch.com/2026-10-21-Lam-Research-Corporation-Reports-Financial-Results-for-the-Quarter-Ended-September-27%2C-2026",
+    "https://news.samsung.com/global/samsung-electronics-announces-third-quarter-2026-results",
+    "https://news.skhynix.com/en/q3-2026-business-results/",
+    "https://investors.micron.com/financials/quarterly-results/default.aspx",
+    "https://www.kioxia-holdings.com/en-jp/ir/calendar.html",
+    "https://investor.sandisk.com/news-events/news-releases",
+    "https://investors.delltechnologies.com/news-events/past-events",
+    "https://investors.hpe.com/financial",
+    "https://ir.supermicro.com/events-and-presentations/event-details/2026/Fiscal-1Q-2027-Results-2026-f4vd9OJuFB/default.aspx",
+    "https://investor.lenovo.com/en/financial/results.php",
+    "https://www.quantatw.com/quanta/english/investment/financials_qr3.aspx",
+    "https://www.foxconn.com.tw/en-us/investor-relations/investor-relations-activities/event-calendar",
+    "https://www.wiwynn.com/news/wiwynn-reports-third-quarter-2026-financial-results",
+    "https://www.wistron.com/en/Newsroom/2026-08-04",
+    "https://www.inventec.com/en/investor/9/10",
+    "https://corporate.celestica.com/node/17881",
+    "https://investor.everpuredata.com/news-and-events/events-and-presentations/default.aspx",
+    "https://investors.netapp.com/",
+    "https://ir.spacex.com/investors/",
+    "https://connect.lgcns.com/kr/company/ir/ir-info",
+    "https://www.hyundai-autoever.com/kor/ir/summary/index.do",
+    "https://corp.kt.com/",
+    "https://www.navercorp.com/en/investment/irUpdates",
+    "https://inside.nhn.com/news/985",
+    "https://megazone.com/resources/newsroom"
+   ],
+   "failed_sources": [
+    {
+     "name": "CoreWeave earnings transcript (Benzinga)",
+     "url": "https://www.benzinga.com/news/26/11/63128629/coreweave-q3-2026-earnings-call-transcript",
+     "why": "curl 공개 요청에 Cloudflare 접근 차단 응답; 내용은 열지 않음."
+    },
+    {
+     "name": "CoreWeave earnings transcript (Investing.com)",
+     "url": "https://www.investing.com/news/transcripts/earnings-call-transcript-coreweave-tops-q3-2026-forecast-and-shares-rise-57-93CH-5017354",
+     "why": "curl 공개 요청 HTTP 403; 전문 직접 열람 불가. 로그인·차단 우회하지 않음."
+    },
+    {
+     "name": "KT 공식 실적발표 PDF",
+     "url": "https://corp.kt.com/attach/record/2026/3Q26_KT_ER_PT_KOR_FIN.pdf",
+     "why": "웹 reader에서 PDF URL 접근 오류. 공식 XLSX는 정상 수신되어 수치 근거로 사용."
+    },
+    {
+     "name": "ASML IR",
+     "url": "https://www.investor.asml.com/quarterly-results",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+     "name": "Benzinga transcript",
+     "url": "https://www.benzinga.com/news/26/11/63128629/coreweave-q3-2026-earnings-call-transcript",
+     "why": "Cloudflare 접근 차단; 우회하지 않음."
+    },
+    {
+     "name": "Bespin Global 공식 IR/공시 확인",
+     "url": "https://www.bespinglobal.com/news/",
+     "why": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+     "name": "Constellation IR Q3 calendar",
+     "url": "https://investors.constellationenergy.com/static-files/ec96e639-7e2d-4049-b979-21a286dd16eb",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+     "name": "Eaton IR",
+     "url": "https://www.eaton.com/us/en-us/company/investor-relations/financial-presentations-webcasts.html",
+     "why": "TimeoutError: The read operation timed out"
+    },
+    {
+     "name": "HCLTech 실적 IR",
+     "url": "https://www.hcltech.com/investor-relations/disclosures-under-regulation-30-8",
+     "why": "기존 공식 공시목록 확인; 오늘 직접 fetch는 timeout."
+    },
+    {
+     "name": "HPE IR",
+     "url": "https://investors.hpe.com/news-and-events",
+     "why": "ValueError: 응답 8MB 초과: 접근 가능하나 본문 범위 미검사"
+    },
+    {
+     "name": "Hyundai AutoEver 실적 IR",
+     "url": "https://www.hyundai-autoever.com/kor/ir/summary/index.do",
+     "why": "공식 IR schedule lists Q3 NDR/call at 15:00, date omitted; attachment inaccessible in prior probe."
+    },
+    {
+     "name": "ITCEN 공식 IR/공시 확인",
+     "url": "https://www.itcen.com/",
+     "why": "URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate (_ssl.c:1081)>"
+    },
+    {
+     "name": "Intel 실적 IR",
+     "url": "https://www.intc.com/news-events/press-releases/detail/1786/intel-reports-third-quarter-2026-financial-results",
+     "why": "Q3 results body/table 직접 확인; 발행일 본문 텍스트 미노출."
+    },
+    {
+     "name": "Inventec 실적 IR",
+     "url": "https://www.inventec.com/en/investor/9/10",
+     "why": "공식 IR page monthly revenue table includes Oct; no quarter post date."
+    },
+    {
+     "name": "Investing.com transcript",
+     "url": "https://www.investing.com/news/transcripts/earnings-call-transcript-coreweave-tops-q3-2026-forecast-and-shares-rise-57-93CH-5017354",
+     "why": "HTTP 403; 우회하지 않음."
+    },
+    {
+     "name": "KT 공식 IR 자료",
+     "url": "https://corp.kt.com/attach/record/2026/3Q26_KT_ER_PT_KOR_FIN.pdf",
+     "why": "PDF reader 접근 오류; 공식 XLSX로 수치를 검증"
+    },
+    {
+     "name": "KT 실적 IR",
+     "url": "https://corp.kt.com/",
+     "why": "Earlier official IR/DART probe said Q3 call/material upload Nov 10 15:00 KST; no result body directly retrieved today."
+    },
+    {
+     "name": "LG CNS 실적 IR",
+     "url": "https://connect.lgcns.com/kr/company/ir/ir-info",
+     "why": "공식 IR은 3Q26 release 제목 표시, 게시일 없음; official newsroom result body without visible date."
+    },
+    {
+     "name": "LTIMindtree 실적 IR",
+     "url": "https://www.ltm.com/investors/financial-results",
+     "why": "오늘 공식 페이지 열었으나 dated result rows 미노출."
+    },
+    {
+     "name": "Lenovo 실적 IR",
+     "url": "https://investor.lenovo.com/en/financial/results.php",
+     "why": "공식 결과목록 Q1 FY27 최신이나 날짜 비노출."
+    },
+    {
+     "name": "Marvell 실적 IR",
+     "url": "https://investor.marvell.com/news-events/ir-calendar",
+     "why": "공식 캘린더 열었으나 현재 날짜 row 미표시."
+    },
+    {
+     "name": "Megazone Cloud 공식 IR/공시 확인",
+     "url": "https://www.megazone.com/news/",
+     "why": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+     "name": "Megazone Cloud 실적 IR",
+     "url": "https://megazone.com/resources/newsroom",
+     "why": "Official newsroom no standalone quarterly result; no date claim."
+    },
+    {
+     "name": "Micron 실적 IR",
+     "url": "https://investors.micron.com/financials/quarterly-results/default.aspx",
+     "why": "직접 페이지 dynamic rows blank; official indexed content says Q4 FY26 release 9/30."
+    },
+    {
+     "name": "NHN Cloud 실적 IR",
+     "url": "https://inside.nhn.com/news/985",
+     "why": "NHN consolidated Q3 release Nov10 already seen; not standalone Cloud result."
+    },
+    {
+     "name": "Naver Cloud 실적 IR",
+     "url": "https://www.navercorp.com/en/investment/irUpdates",
+     "why": "Official NAVER parent Q2 2026 date Aug 7; no subsidiary result. Parent Q3 on Nov12 after cutoff."
+    },
+    {
+     "name": "NetApp 실적 IR",
+     "url": "https://investors.netapp.com/",
+     "why": "공식 overview lists Q1 FY27 materials, no dated result row."
+    },
+    {
+     "name": "Oklo SEC 10-Q Q3 2026",
+     "url": "https://www.sec.gov/Archives/edgar/data/1849056/000162828026071319/oklo-20260930.htm",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+     "name": "Pure Storage (Everpure) 실적 IR",
+     "url": "https://investor.everpuredata.com/news-and-events/events-and-presentations/default.aspx",
+     "why": "공식 archive rows dynamic blank; date not re-confirmed."
+    },
+    {
+     "name": "Quanta Computer 실적 IR",
+     "url": "https://www.quantatw.com/quanta/english/investment/financials_qr3.aspx",
+     "why": "공식 statements page FY26 Q2 newest; 게시일 비노출."
+    },
+    {
+     "name": "Rackspace 3Q results release and event schedule",
+     "url": "https://ir.rackspace.com/news-releases/news-release-details/rackspace-technology-reports-third-quarter-2026-results",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+     "name": "Rackspace 공식 배포 실적자료",
+     "url": "https://www.globenewswire.com/news-release/2026/11/09/3399018/0/en/rackspace-technology-reports-third-quarter-2026-results.html",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+     "name": "Shinsegae I&C IR releases",
+     "url": "https://www.sinc.kr/company/investment/irList.do",
+     "why": "URLError: <urlopen error [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: Hostname mismatch, certificate is not valid for 'www.sinc.kr'. (_ssl.c:1081)>"
+    },
+    {
+     "name": "SpaceX 실적 IR",
+     "url": "https://ir.spacex.com/investors/",
+     "why": "공식 IR page has empty Quarterly Results/Events sections; no dated release."
+    },
+    {
+     "name": "TCS IR Q2 FY27",
+     "url": "https://www.tcs.com/who-we-are/newsroom/press-release/tcs-financial-results-q2-fy-2027",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+     "name": "Talen Energy Q3 earnings call",
+     "url": "https://ir.talenenergy.com/events/event-details/talen-energy-corporation-q3-2026-earnings-call",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    },
+    {
+     "name": "Wistron IR",
+     "url": "https://www.wistron.com/",
+     "why": "HTTPError: HTTP Error 403: Forbidden"
+    }
+   ],
+   "note": "공식 IR·발표자료와 기존 게시 목록을 대조했다. CoreWeave 발표자료를 신규 반영하고, Constellation·Oklo·Vistra·Wiwynn의 이미 게시한 자료는 반복하지 않았다. 일부 기업은 공식 발표일·별도 IR·전사본을 확정하지 못해 부분 수집으로 남겼다. AMD 공식 일정에서 해당 날짜의 투자자의 날은 확인하지 못했다. 추가 기업의 공식 IR 재점검 결과를 통합했다. 날짜 미확인·접근 실패 기업은 미확인 상태를 유지한다. KT의 공식 IR API와 연결 재무제표에서 발표 시각과 분기 실적을 추가 확인했다. 콜 전사본은 아직 확보하지 못했다."
+  },
+  "P": {
+   "status": "partial",
+   "n": 5,
+   "tried_queries": [
+    "official podcast releases November 3-11 2026 Sequoia Training Data Dwarkesh Latent Lex Acquired SemiAnalysis No Priors a16z All-In Invest Like Best Cheeky Pint Decoder BG2 Big Technology Stratechery",
+    "site:sources.news OR site:youtube.com/@sourcespod Matt Garman AWS CEO interview podcast November 2026",
+    "site:latent.space/p \"Designing for Agents\" \"Zeno Rocha\"",
+    "site:colossus.com/episode/ \"Sandcastles and Silicon\" \"Eric Vishria\"",
+    "site:blackstone.com/insights/ \"Ari Emanuel\" \"Future of Entertainment\" AI",
+    "site:axios.com/2026/11/09/eric-schmidt-caltech-ai-interview transcript",
+    "Matt Garman AWS CEO interview podcast November 4 2026 November 11 2026 full interview",
+    "Michael Intrator CoreWeave CEO interview podcast November 2026 earnings interview",
+    "Arkady Volozh Nebius CEO interview full interview podcast November 2026",
+    "Satya Nadella Microsoft CEO interview podcast full interview November 2026",
+    "site:lepoint.fr interview Satya Nadella 10 novembre 2026 Microsoft",
+    "Satya Nadella Le Point 10 novembre 2026 interview IA",
+    "Lisa Su interview podcast full interview November 2026",
+    "Sundar Pichai interview podcast November 2026 full interview",
+    "Jensen Huang interview podcast full interview November 4-11 2026",
+    "Dario Amodei interview podcast full interview November 4-11 2026",
+    "Sam Altman interview podcast full interview November 4-11 2026",
+    "Mark Zuckerberg interview podcast full interview November 4-11 2026",
+    "site:allin.com \"Midterm Blood Bath\" \"2026\" All-In Podcast",
+    "All-In podcast November 10 2026 episode data center freeze compute scarcity official",
+    "site:podcasts.apple.com All-In \"Midterm Blood Bath\" 2026 November",
+    "All-In Podcast latest episode November 11 2026 official",
+    "Colossus Sandcastles and Silicon Eric Vishria datePublished JSON-LD"
+   ],
+   "tried_sources": [
+    "https://sources.news/feed",
+    "https://sources.news/p/aws-ceo-matt-garman-1-trillion",
+    "https://latent.space/podcasts/",
+    "https://latent.space/p/resend/",
+    "https://semianalysis.com/weekly/",
+    "https://www.dwarkesh.com/archive",
+    "https://a16z.com/podcasts/a16z-show/",
+    "https://lexfridman.com/podcast/",
+    "https://colossus.com/episode/sandcastles-and-silicon/",
+    "https://www.blackstone.com/insights/article/ari-emanuel-on-the-future-of-entertainment-in-the-age-of-ai/",
+    "https://www.axios.com/2026/11/09/eric-schmidt-caltech-ai-interview",
+    "feed/state/seen.json; feed/work/backfill-deep-20261111.json",
+    "https://sequoiacap.com/series/training-data",
+    "https://www.dwarkesh.com/feed",
+    "https://www.latent.space/feed",
+    "https://www.acquired.fm/episodes",
+    "https://feeds.megaphone.fm/nopriors",
+    "https://allin.com/",
+    "https://cheekypint.transistor.fm/episodes",
+    "https://www.theverge.com/decoder-podcast-with-nilay-patel",
+    "https://podcasts.apple.com/us/podcast/bg2pod-with-brad-gerstner-and-bill-gurley/id1727278168",
+    "https://www.bigtechnology.com/archive",
+    "https://stratechery.com/2026/",
+    "https://www.youtube.com/watch?v=wGDFHa3TkjE",
+    "https://www.dailymotion.com/video/xbvjd0y",
+    "https://podcasts.apple.com/us/podcast/all-in-with-chamath-jason-sacks-friedberg/id1502871393",
+    "https://www.youtube.com/watch?v=8h-gfrVYyAU",
+    "https://colossus.com/episode/sandcastles-and-silicon/"
+   ],
+   "failed_sources": [
+    {
+     "name": "Sources full episode transcript",
+     "url": "https://sources.news/p/aws-ceo-matt-garman-1-trillion",
+     "why": "공식 RSS와 회차 페이지의 소개문·하이라이트는 공개. 전문 transcript는 페이지에 없고 오디오/영상 전체 전사는 확보하지 못함."
+    },
+    {
+     "name": "Invest Like the Best full transcript",
+     "url": "https://colossus.com/episode/sandcastles-and-silicon/",
+     "why": "공식 회차 페이지는 로그인 또는 등록을 요구한다고 표시; 공개 쇼노트/챕터만 확인."
+    },
+    {
+     "name": "All-In Rick Smith official episode",
+     "url": "https://www.youtube.com/watch?v=8h-gfrVYyAU",
+     "why": "All-In 공식 YouTube 채널의 2026-11-10 공개일, 챕터와 설명문 확인. 경찰 기술 중심이라 relevant=false."
+    },
+    {
+     "name": "Colossus Sandcastles & Silicon metadata",
+     "url": "https://colossus.com/episode/sandcastles-and-silicon/",
+     "why": "JSON-LD datePublished 2026-08-11, not Nov 8; outside P seven-day window."
+    },
+    {
+     "name": "Decoder Podcast",
+     "url": "https://www.theverge.com/decoder-podcast",
+     "why": "HTTPError: HTTP Error 404: Not Found"
+    },
+    {
+     "name": "Le Point Satya Nadella official video",
+     "url": "https://www.youtube.com/watch?v=wGDFHa3TkjE",
+     "why": "공식 채널 Le Point, 게시일 2026-11-10, 영상 설명문 확인; 텍스트 전사본은 못 찾음."
+    }
+   ],
+   "note": "P 고정 쇼와 정규 외 CEO 인터뷰를 별도 검색. Sources, Latent Space, Le Point Satya Nadella 신규 영상, Inside Blackstone, Axios, All-In을 검토. All-In 11/07 data-center special은 seen.json에 있어 재게시하지 않고 11/10 Axon episode는 관련 없음으로 메타데이터 보존. Sources/Le Point/확인한 범위만 기록하고 팩은 생성하지 않음. 공식 metadata에서 Invest Like the Best 회차 2026-08-11로 확인되어 기간 밖 보류. Axios 상세 정리는 원문 근거 범위와 질문 순서 불일치로 제외했다."
+  }
+ },
+ "items": [
+  {
+   "id": "2b9fdf24b2d9",
+   "lane": "N1",
+   "cat": "신규계약",
+   "title": "Rackspace, Together AI 추론용 GB300 인프라 다년 계약",
+   "facts": [
+    "Rackspace와 Together AI는 추론 워크로드를 지원할 AI 인프라에 관한 초기 다년 전략 계약을 발표했다.",
+    "Rackspace는 NVIDIA GB300 NVL72와 Spectrum-X 네트워크 기반 인프라를 제공·운영할 계획이며, 배치는 2027년 예정이라고 밝혔다.",
+    "Rackspace 의무는 자금조달, 시설·전력·GPU·네트워크 장비 확보 등 조건 충족에 달려 있고, 별도 공동 영업 LOI는 비구속적이다."
+   ],
+   "evidence": [
+    "dedicated NVIDIA GB300 NVL72 infrastructure connected with NVIDIA Spectrum-X Ethernet networking",
+    "Deployment is planned for 2027",
+    "non-binding letter of intent (LOI)",
+    "financing condition"
+   ],
+   "essential_facts": [
+    {
+     "fact": "초기 다년 계약은 발표됐지만 Rackspace의 이행은 금융조달·시설·전력·장비 확보 등 조건부이며, 배치는 2027년 계획이다.",
+     "url": "https://www.globenewswire.com/news-release/2026/11/10/3399517/0/en/rackspace-and-together-ai-announce-strategic-agreement-to-support-enterprise-ai-inference.html",
+     "scope": "발표상 계약 조건과 계획 시점; 용량·계약금액은 공개되지 않았고 별도 공동영업 LOI는 비구속적"
+    }
+   ],
+   "business_signal": "GPU 추론 인프라 운영 계약 사례이나 자금조달·전력·시설 조건과 고객 수요가 실제 배치 규모·시점의 선행조건으로 남아 있다.",
+   "source": "GlobeNewswire (Rackspace 발표)",
+   "url": "https://www.globenewswire.com/news-release/2026/11/10/3399517/0/en/rackspace-and-together-ai-announce-strategic-agreement-to-support-enterprise-ai-inference.html",
+   "refs": [
+    {
+     "url": "https://ir.rackspace.com/news-releases/news-release-details/rackspace-and-together-ai-announce-strategic-agreement-support",
+     "source": "Rackspace Investor Relations",
+     "pub": "2026-11-10"
+    }
+   ],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 22:30",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 3
+  },
+  {
+   "id": "380b2f0bdeff",
+   "lane": "N1",
+   "cat": "신규계약",
+   "title": "Rackspace, Blacksmith에 버지니아 약 2MW 컴퓨팅·저장 용량 공급",
+   "facts": [
+    "Rackspace와 개발자 인프라 업체 Blacksmith는 전용 AMD EPYC 컴퓨팅과 저장장치 약 2MW(IT·수전 구분 미상)를 공급하는 다년 계약을 발표했다.",
+    "용량은 버지니아 북부에 배치되며 초기 배치는 2027년 초로 예상된다고 양사는 밝혔다.",
+    "발표 자료에는 계약 금액이 제시되지 않았다."
+   ],
+   "evidence": [
+    "powered by AMD EPYC CPUs",
+    "approximately 2 MW of capacity",
+    "expected to begin deploying in early 2027",
+    "Northern Virginia"
+   ],
+   "essential_facts": [
+    {
+     "fact": "다년 공급 계약의 약 2MW 용량은 버지니아 북부에 배치되며 초기 배치는 2027년 초 예상이다.",
+     "url": "https://www.globenewswire.com/news-release/2026/11/10/3399492/0/en/blacksmith-taps-rackspace-to-accelerate-software-deployments-to-production.html",
+     "scope": "회사 발표상 전용 AMD EPYC 컴퓨팅·저장 용량; 계약 금액 및 실제 가동 시점은 미공개·예정"
+    }
+   ],
+   "business_signal": "AI 코딩 증가가 CPU 중심 CI 워크로드의 장기 인프라 수요로 연결된다는 공급자 설명과 함께 구체 용량 계약이 공개됐다.",
+   "source": "GlobeNewswire (Rackspace 발표)",
+   "url": "https://www.globenewswire.com/news-release/2026/11/10/3399492/0/en/blacksmith-taps-rackspace-to-accelerate-software-deployments-to-production.html",
+   "refs": [
+    {
+     "url": "https://ir.rackspace.com/news-releases/news-release-details/blacksmith-taps-rackspace-accelerate-software-deployments",
+     "source": "Rackspace Investor Relations",
+     "pub": "2026-11-10"
+    }
+   ],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 22:20",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 3,
+   "basis": "미상"
+  },
+  {
+   "id": "27cdca54ba9d",
+   "lane": "T2",
+   "cat": "보안",
+   "title": "Flashpoint, 위협정보 워크플로용 에이전트형 AI 발표",
+   "facts": [
+    "Flashpoint는 자사 위협정보 워크플로에 특화 AI 에이전트를 넣는 Flashpoint Agentic AI를 발표했다.",
+    "회사는 Flashpoint Ignite의 Agentic Hub에서 대화형 분석, 브리핑, 경보 설정·분류, PIR 관리와 Echosec 에이전트 등을 제공한다고 설명했다.",
+    "제품의 고객 배포 현황·가격·일반 제공 시점은 발표에서 확인되지 않았다."
+   ],
+   "evidence": [
+    "Today, Flashpoint is introducing Flashpoint Agentic AI, a new offering that brings purpose-built AI agents into the intelligence workflows practitioners use every day."
+   ],
+   "essential_facts": [
+    {
+     "fact": "Flashpoint가 위협정보 제품군에 에이전트형 AI 기능을 발표했다.",
+     "url": "https://flashpoint.io/blog/introducing-flashpoint-agentic-ai/",
+     "scope": "벤더 발표; 고객 배포·가격·일반 제공 여부는 이 발표로 확인되지 않음"
+    }
+   ],
+   "business_signal": "사이버 위협 인텔리전스 제품에서 분석·경보 분류 작업을 에이전트 워크플로로 묶으려는 제품 발표다.",
+   "source": "Flashpoint",
+   "url": "https://flashpoint.io/blog/introducing-flashpoint-agentic-ai/",
+   "refs": [],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 22:59",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 3
+  },
+  {
+   "id": "8ce0cf2dfcf6",
+   "lane": "N3",
+   "cat": "정책·규제",
+   "title": "개인정보위, Anthropic의 Claude 개인정보 유출 신고 정식 조사 착수",
+   "facts": [
+    "전자신문은 개인정보보호위원회가 Anthropic의 개인정보 유출 신고에 대한 사전 검토를 마치고 정식 조사에 착수했다고 보도했다.",
+    "보도에 따르면 Anthropic은 지난달 말 국내 기업용 계정 100여 개의 정보 유출 사실을 개인정보위에 신고했다.",
+    "조사 착수 단계로 위반 여부·책임 소재·피해 규모에 대한 조사 결론은 아직 확인되지 않았다."
+   ],
+   "evidence": [
+    "사전 검토를 마치고 조사에 착수했다고 밝혔다.",
+    "지난달 31일 국내 기업용 계정 100여개의 정보가 외부로 유출됐다는 사실"
+   ],
+   "essential_facts": [
+    {
+     "fact": "개인정보위가 Anthropic의 유출 신고를 사전 검토한 뒤 정식 조사에 착수했다.",
+     "url": "https://www.etnews.com/20261110000476",
+     "scope": "전자신문 보도; 조사 착수 사실만 확인되며 위법 판단·책임·피해 규모는 미확정"
+    },
+    {
+     "fact": "Anthropic이 10월 31일 국내 기업용 계정 100여 개 관련 유출 사실을 신고했다고 보도됐다.",
+     "url": "https://www.etnews.com/20261110000476",
+     "scope": "개인정보위 조사결과가 아닌 전자신문의 Anthropic 신고 내용 보도"
+    }
+   ],
+   "business_signal": "한국 개인정보 규제기관의 생성형 AI 서비스 관련 정식 조사로, 사실관계와 기업 계정 정보의 취급 통제가 쟁점이 됐다.",
+   "source": "전자신문",
+   "url": "https://www.etnews.com/20261110000476",
+   "refs": [],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 18:51",
+   "lang": "ko",
+   "verified": true,
+   "paywall": false,
+   "followup": true,
+   "new_fact": "개인정보위가 신고 사전 검토 뒤 정식 조사에 착수했다.",
+   "rank_hint": 3
+  },
+  {
+   "id": "45068ec056dc",
+   "lane": "N3",
+   "cat": "신규계약",
+   "title": "피앤피시큐어, 국내 저축은행 본사에 화면정보 유출 방지 솔루션 구축",
+   "facts": [
+    "전자신문 보도에 따르면 국내 저축은행 한 곳이 피앤피시큐어의 화면정보 유출 방지 솔루션 FaceLocker를 도입했다.",
+    "회사는 본사 구축을 완료했으며 IT·감사 등 주요 업무 부서에 적용했다고 밝혔다.",
+    "고객사 이름·계약 금액·계약 기간은 공개되지 않았다. 협력사·위탁사 확대 적용은 검토 중이다."
+   ],
+   "evidence": [
+    "본사 구축을 완료했다고 11일 밝혔다.",
+    "협력사와 위탁사의 업무 환경에도 솔루션을 확대 적용하는 방안을 검토하고 있다."
+   ],
+   "essential_facts": [
+    {
+     "fact": "국내 저축은행 한 곳이 FaceLocker를 도입해 본사 구축을 완료했다고 피앤피시큐어가 밝혔다.",
+     "url": "https://www.etnews.com/20261111000016",
+     "scope": "고객사는 익명; IT·감사 등 주요 업무 부서 언급; 계약금액·기간·외부 지점 확산 미공개"
+    }
+   ],
+   "business_signal": "금융기관 본사 업무 환경에 화면정보 유출 방지와 얼굴 기반 사용자 확인 솔루션이 구축된 공급 사례다.",
+   "source": "전자신문",
+   "url": "https://www.etnews.com/20261111000016",
+   "refs": [],
+   "date": "11/11",
+   "pub": "2026-11-11",
+   "published_kst": "2026-11-11 09:00",
+   "lang": "ko",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 2,
+   "kind": "수주",
+   "client": "국내 저축은행(이름 비공개)",
+   "client_type": "금융",
+   "contractor": "피앤피시큐어",
+   "amount": null,
+   "domain": "보안",
+   "term": "비공개"
+  },
+  {
+   "id": "c4d6f75b54dd",
+   "lane": "N4",
+   "cat": "PE·VC·투자",
+   "title": "WhiteFiber, 데이터센터 건설용 3억 달러 대출 약정 체결",
+   "facts": [
+    "WhiteFiber의 간접 자회사들이 Morgan Stanley Senior Funding을 주선사로 3억 달러 대출 약정을 체결했다고 공시했다.",
+    "첫 대출 실행에는 데이터센터의 준비 상태와 고객 인수 확인 등 조건이 붙었으며, 공시 기준으로 자금은 아직 실행되지 않았다."
+   ],
+   "evidence": [
+    "$300.0 million of term loan commitments",
+    "no loans had been funded under the Credit Agreement.",
+    "readiness and customer acceptance"
+   ],
+   "business_signal": "데이터센터 건설 금융이 고객 인수와 준공 조건에 연결된 약정으로 확인됐다.",
+   "source": "WhiteFiber 공시",
+   "url": "https://www.sec.gov/Archives/edgar/data/2042022/000121390026117723/ea0311622-8k_whitefiber.htm",
+   "refs": [],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 20:40",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 4,
+   "event_key": "whitefiber-nc1-300m-loan-20261110",
+   "published_time_source": "https://data.sec.gov/submissions/CIK0002042022.json"
+  },
+  {
+   "id": "afa2e78775a3",
+   "lane": "N4",
+   "cat": "PE·VC·투자",
+   "title": "Calibrant, 데이터센터 저장장치 포함 1억4500만 달러 금융 조달",
+   "facts": [
+    "Calibrant는 Investec 주도로 미국 태양광·배터리 저장장치 포트폴리오에 대한 1.45억 달러 부채 조달을 마쳤다고 발표했다.",
+    "이 포트폴리오에는 PJM 지역 하이퍼스케일 데이터센터 고객에 공급하는 120메가와트시 배터리 저장장치가 포함된다."
+   ],
+   "evidence": [
+    "close of a $145 million debt facility led by Investec",
+    "a 120 megawatt-hour (MWh) battery energy storage system (BESS)",
+    "hyperscale data center customer"
+   ],
+   "business_signal": "하이퍼스케일 데이터센터용 온사이트 저장장치가 실제 금융 조달 대상에 포함됐다.",
+   "source": "Calibrant 보도자료",
+   "url": "https://www.prnewswire.com/news-releases/calibrant-energy-secures-145-million-in-project-financing-including-battery-storage-for-hyperscale-data-center-customer-in-pjm-302934918.html",
+   "refs": [
+    {
+     "url": "https://www.calibrantenergy.com/resources/calibrant-energy-secures-145-million-in-project-financing",
+     "source": "Calibrant",
+     "pub": "2026-11-10"
+    }
+   ],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 23:02",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 4,
+   "event_key": "calibrant-145m-project-finance-20261110"
+  },
+  {
+   "id": "0875bda845a1",
+   "lane": "N4",
+   "cat": "정책·규제",
+   "title": "호주 정부, 프런티어 AI 의무 안전기준·전담 규제기관 제안",
+   "facts": [
+    "호주 정부는 자국에서 운영하려는 프런티어 AI 기업에 의무 안전·보안 기준을 적용하는 입법 방침을 발표했다.",
+    "새 전담 규제기관을 통한 집행과 독립적인 모델 평가 허용 등을 제안했다. 법률 세부사항은 추가 검토와 협의를 거쳐 공개할 예정이라고 밝혔다."
+   ],
+   "evidence": [
+    "strong mandatory safety and security protections",
+    "enforced by a new targeted regulator for AI safety",
+    "Allow independent evaluation of their models"
+   ],
+   "business_signal": "호주에서 프런티어 AI를 공급하는 기업의 안전·평가 의무와 감독 체계에 관한 입법 방침이 제시됐다.",
+   "source": "호주 총리실",
+   "url": "https://www.pm.gov.au/media/new-australian-ai-safety-and-security-protections",
+   "refs": [],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 11:22",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 4,
+   "event_key": "australia-frontier-ai-safety-legislation-20261110"
+  },
+  {
+   "id": "cacce2454860",
+   "lane": "N4",
+   "cat": "PE·VC·투자",
+   "title": "Netcompany, 덴마크 AI 슈퍼컴퓨터 운영사에 3.25억 크로네 투자",
+   "facts": [
+    "Netcompany는 Gefion을 운영하는 DCAI의 신주에 3.25억 덴마크 크로네를 투자하기로 약정했다. 기존 주주를 포함한 전체 투자액은 약 5억 덴마크 크로네다.",
+    "거래 완료 후 Netcompany 지분은 23.7%가 될 예정이다. 발표 시점에는 당일 거래 완료를 예상했으며 완료 사실로 단정하지 않는다.",
+    "DCAI는 AI 컴퓨팅과 운영 역량에 투자하고, Netcompany는 접근 통제·모니터링·보안을 위한 소프트웨어와 운영 역량을 제공한다고 밝혔다."
+   ],
+   "evidence": [
+    "DKK 325 million",
+    "approximately DKK 500 million in aggregate",
+    "EIFO and Netcompany each will hold 23.7%."
+   ],
+   "business_signal": "IT서비스 업체가 소버린 AI 운영사에 지분을 투자하고 GPU 시설을 기업용 서비스로 운영하는 소프트웨어·보안 역할을 맡는다.",
+   "source": "Netcompany 공시",
+   "url": "https://rss.globenewswire.com/news-release/2026/11/10/3399149/0/en/netcompany-invests-in-danish-centre-for-ai-innovation-a-s-the-company-behind-the-gefion-ai-supercomputer.html",
+   "refs": [],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 15:43",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 4,
+   "event_key": "netcompany-dcai-primary-investment-20261110"
+  },
+  {
+   "id": "03fce933b04b",
+   "lane": "N2",
+   "cat": "AI·모델",
+   "title": "OpenAI, ChatGPT 내 기업 허브와 사업자 에이전트 베타 발표",
+   "facts": [
+    "OpenAI는 ChatGPT 내 사업자 등록·정보 관리 기능을 Business Hub 베타로 제공한다.",
+    "인증된 기업은 주요 정보를 수정하고 가격·재고가 포함된 상품 피드를 직접 등록할 수 있다.",
+    "Business Agents는 미국 내 적격 전자상거래·온라인 서비스 기업에 제공되며 기업은 이를 광고 도착지로 후원할 수 있다."
+   ],
+   "essential_facts": [
+    {
+     "fact": "Business Hub 베타에서 기업은 인증 후 정보를 수정하고 가격·재고가 있는 셀프서비스 상품 피드를 등록할 수 있다.",
+     "url": "https://openai.com/index/introducing-businesses-chatgpt/",
+     "scope": "OpenAI가 발표한 베타 기능이며 기업 등록·정보 수정은 인증 이후 가능"
+    },
+    {
+     "fact": "Business Agents는 미국 내 적격 전자상거래 및 온라인 서비스 기업에 제공된다.",
+     "url": "https://openai.com/index/introducing-businesses-chatgpt/",
+     "scope": "발표 시점의 국가·업종 자격 제한을 보존; 모든 사업자 대상 아님"
+    }
+   ],
+   "evidence": [
+    "once verified, update key details and add self-service product feeds",
+    "eligible ecommerce and online service businesses in the United States."
+   ],
+   "business_signal": "기업의 사업 정보와 상품 피드를 ChatGPT에 직접 공급하고 Business Agent를 통해 상담·광고 연결을 하는 신규 유통 경로를 베타로 열었다. 이용 통계는 집계형이며 일정 상호작용 기준을 충족해야 제공된다고 회사가 밝혔다.",
+   "source": "OpenAI",
+   "url": "https://openai.com/index/introducing-businesses-chatgpt/",
+   "refs": [
+    {
+     "url": "https://openai.com/news/rss.xml",
+     "source": "OpenAI RSS",
+     "pub": "2026-11-10"
+    }
+   ],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 19:00",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 4,
+   "published_kst_source": "OpenAI RSS pubDate Tue, 10 Nov 2026 10:00:00 GMT (= 2026-11-10 19:00 KST)"
+  },
+  {
+   "id": "a40ddf6f11a9",
+   "lane": "TW",
+   "cat": "PE·VC·투자",
+   "title": "TSMC 이사회, Anthropic·OpenAI 지분 투자 한도 승인",
+   "facts": [
+    "TSMC 이사회는 Anthropic 보통주를 최대 5억 달러 한도에서 인수하는 안을 승인했다.",
+    "주당 인수 가격은 Anthropic의 IPO 가격이며, OpenAI Group 우선주 인수도 최대 5억 달러 한도에서 승인했다.",
+    "이는 이사회 승인으로, 투자 집행 또는 취득 완료를 뜻하지 않는다."
+   ],
+   "essential_facts": [
+    {
+     "fact": "TSMC 이사회는 Anthropic 보통주 인수를 최대 5억 달러 한도에서 승인했고, 주당 가격은 해당 기업의 IPO 가격으로 정했다.",
+     "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000797/tsm-boardx202611xx.htm",
+     "scope": "2026-11-10 이사회 승인; SEC 접수시각 13:41:38 UTC(22:41:38 KST), 한도 내 투자 승인으로 집행 완료 아님"
+    },
+    {
+     "fact": "TSMC 이사회는 OpenAI Group 우선주 인수도 최대 5억 달러 한도에서 승인했다.",
+     "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000797/tsm-boardx202611xx.htm",
+     "scope": "2026-11-10 이사회 승인; 투자 집행 완료를 뜻하지 않음"
+    }
+   ],
+   "evidence": [
+    "not to exceed US$500 million",
+    "Anthropic’s common shares",
+    "OpenAI’s preferred stock",
+    "per share initial public offering price"
+   ],
+   "business_signal": "파운드리 사업자가 AI 모델 기업 두 곳에 직접 투자하는 안을 승인했으며, 공지에는 투자 한도와 Anthropic 가격 조건이 제시됐다. 승인과 집행을 구분한다.",
+   "source": "TSMC / SEC Form 6-K",
+   "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000797/tsm-boardx202611xx.htm",
+   "refs": [
+    {
+     "url": "https://pr.tsmc.com/english/news/3352",
+     "source": "TSMC English press release",
+     "pub": "2026-11-10"
+    }
+   ],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 22:41",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 5,
+   "published_kst_source": "SEC filing acceptanceDateTime 2026-11-10T13:41:38.000Z (= 2026-11-10 22:41:38 KST)"
+  },
+  {
+   "id": "3a60652f0de4",
+   "lane": "TW",
+   "cat": "실적",
+   "title": "ASE의 10월 ATM 매출 NT$568.4억, 전년 대비 57.7% 증가",
+   "facts": [
+    "ASE Technology Holding은 미감사 연결 매출 자료를 발표했다.",
+    "조립·테스트·재료(ATM) 부문 매출은 NT$56,840 million으로 전년 동월 대비 57.7% 증가했다.",
+    "회사는 해당 월별 매출을 미감사로 표시했다."
+   ],
+   "essential_facts": [
+    {
+     "fact": "ASE의 October 2026 ATM 미감사 매출은 NT$56,840 million으로 전년 동월 대비 57.7% 증가했다.",
+     "url": "https://www.prnewswire.com/news-releases/ase-technology-holding-co-ltd-announces-monthly-net-revenues-302934142.html",
+     "scope": "ASE의 2026-11-10 발표; assembly, testing and materials 부문; 전년 동월 비교"
+    }
+   ],
+   "evidence": [
+    "Net revenues for ATM assembly, testing and material business are as follows:",
+    "Net revenues | 56,840 | 52,674 | 36,039 | +7.9% | +57.7%"
+   ],
+   "business_signal": "대만 후공정 업체의 월별 ATM 부문 매출 증가를 보여주는 회사 발표 수치다. 공시는 AI 수요와의 인과를 따로 제시하지 않아 이를 추정하지 않는다.",
+   "source": "ASE Technology Holding / PR Newswire",
+   "url": "https://www.prnewswire.com/news-releases/ase-technology-holding-co-ltd-announces-monthly-net-revenues-302934142.html",
+   "refs": [],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 16:00",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 4
+  },
+  {
+   "id": "0a8db3a4fdd8",
+   "lane": "E",
+   "cat": "실적",
+   "title": "CoreWeave, 계약잔고와 연말 활성 전력 전망 발표",
+   "facts": [
+    "회사는 분기 말 리베뉴 백로그를 약 1,325억 달러로 제시했다.",
+    "회사는 2026년 말 1.85GW 초과 활성 전력을 계속 예상한다고 밝혔다(IT·수전 구분 미상)."
+   ],
+   "essential_facts": [
+    {
+     "fact": "2026년 3분기 말 리베뉴 백로그는 약 1,325억 달러였다.",
+     "url": "https://www.sec.gov/Archives/edgar/data/1769628/000176962826000461/coreweave3q26earningspress.htm",
+     "scope": "공식 2026-09-30 기준치; 계약 이행 및 서비스 제공 조건에 따른 향후 매출 인식 추정 포함"
+    },
+    {
+     "fact": "회사는 2026년 말 활성 전력 1.85GW 초과를 계속 예상했다.",
+     "url": "https://www.sec.gov/Archives/edgar/data/1769628/000176962826000461/coreweave3q26earningspress.htm",
+     "scope": "회사의 연간 전망이며 확정 실적이 아님. 활성 전력 용량은 IT·수전 구분 미상."
+    }
+   ],
+   "evidence": [
+    "Revenue backlog was approximately $132.5 billion as of September 30, 2026.",
+    "more than 1.85 gigawatts of active power at year-end"
+   ],
+   "business_signal": "AI 클라우드 사업의 계약잔고와 전력 증설 전망을 회사가 제시했으며, 연말 용량 수치는 전망이다.",
+   "source": "CoreWeave / SEC 공시",
+   "url": "https://www.sec.gov/Archives/edgar/data/1769628/000176962826000461/coreweave3q26earningspress.htm",
+   "refs": [],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-11 06:05",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 5,
+   "company": "CoreWeave",
+   "key": "crwv",
+   "quarter": "3Q26",
+   "transcript_url": "",
+   "call_deep": false,
+   "investor_day": false,
+   "release_only": true,
+   "notes": [],
+   "mem_note": null,
+   "call_status": "call_confirmed_transcript_not_available",
+   "basis": "미상"
+  },
+  {
+   "id": "325d219f85b9",
+   "lane": "T1",
+   "cat": "데이터센터·인프라",
+   "title": "AMD, 차세대 EPYC 서버 CPU 일반 공급 시작",
+   "facts": [
+    "AMD는 6세대 EPYC SP7 기반 서버 플랫폼의 출하가 시작됐다고 발표했다.",
+    "Microsoft Azure와 OCI의 해당 CPU 기반 클라우드 인스턴스는 출시 예정으로 구분했다."
+   ],
+   "evidence": [
+    "6th Gen AMD EPYC SP7 CPU-based platforms are now shipping",
+    "cloud instances from Microsoft Azure and OCI are coming soon."
+   ],
+   "business_signal": "서버 공급사 출하와 클라우드 인스턴스 출시 예정 단계가 구분된 기업용 CPU 공급 발표다.",
+   "source": "AMD",
+   "url": "https://newsroom.amd.com/news/6th-gen-epyc-lead-ai-enterprise-computing/",
+   "refs": [],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-11 00:39",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 4
+  },
+  {
+   "id": "b2af93a987d5",
+   "lane": "T1",
+   "cat": "데이터센터·인프라",
+   "title": "FuelCell Energy, AI 데이터센터 전원 통합 시험시설 추진",
+   "facts": [
+    "FuelCell Energy는 국립연구소 NLR이 주도하고 Argonne이 참여하는 StabilityMax 연구에 참여한다고 발표했다.",
+    "회사는 Connecticut에 연료전지 시험시설을 조성해 배터리·전력전자·제어장치와 AI 데이터센터 부하의 통합 운전을 검증할 계획이다.",
+    "시험·모델링 연구 발표이며 실제 데이터센터의 상용 주전원 공급 계약 체결 발표는 아니다."
+   ],
+   "evidence": [
+    "StabilityMax, a three-year collaborative project",
+    "FuelCell Energy will develop a fuel cell test facility in Connecticut"
+   ],
+   "business_signal": "연료전지와 저장장치의 데이터센터 부하 대응을 공동 시험하는 연구 계획이다.",
+   "source": "FuelCell Energy",
+   "url": "https://www.globenewswire.com/news-release/2026/11/10/3399370/0/en/fuelcell-energy-to-host-national-laboratory-supported-ai-data-center-power-testbed-in-connecticut-manufacturing-facility.html",
+   "refs": [],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 21:30",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 4
+  },
+  {
+   "id": "19a9345fdbcc",
+   "lane": "N1",
+   "cat": "데이터센터·인프라",
+   "title": "Lenovo, 서버와 AI 구축·운영 서비스 확대 발표",
+   "facts": [
+    "Lenovo는 6세대 AMD EPYC 9006 SP7 기반 ThinkSystem 서버와 스토리지·네트워크·액체냉각을 묶은 제품군을 발표했다.",
+    "GPU 배치·구성·최적화와 대규모 클러스터 검증 등 AI 구축·운영 서비스를 확대한다고 밝혔다.",
+    "Digital Realty 코로케이션 시설 이용을 연결하는 서비스를 추가했다."
+   ],
+   "evidence": [
+    "new Lenovo ThinkSystem servers powered by 6th Generation AMD EPYC™ 9006 SP7 processors",
+    "Colocation Services with Digital Realty",
+    "Expanded Hybrid AI Factory Services"
+   ],
+   "business_signal": "서버 판매와 GPU 구축·운영, 코로케이션 연결을 함께 제공하는 공급 범위 확대 발표다.",
+   "source": "Lenovo",
+   "url": "https://news.lenovo.com/pressroom/press-releases/lenovo-accelerates-ai-and-hpc-convergence-with-next-generation-infrastructure/",
+   "refs": [],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-11 02:00",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 4
+  },
+  {
+   "id": "8de2cc640d97",
+   "lane": "T1",
+   "cat": "데이터센터·인프라",
+   "title": "TierPoint, Craig Cowden을 차기 CEO로 선임",
+   "facts": [
+    "TierPoint가 Craig Cowden을 차기 CEO로 선임했다고 발표했다.",
+    "선임 효력은 2027년 초부터 발생하며 현 CEO Jerry Kent는 이사회 Executive Chairman을 맡을 예정이다.",
+    "발표문은 Kent와 그의 투자회사 Cequel III가 Argo Infrastructure Partners와 함께 TierPoint 지분을 계속 보유한다고 밝혔다."
+   ],
+   "evidence": [
+    "today announced Craig Cowden as its next CEO",
+    "Cowden’s appointment is effective January 4, 2027"
+   ],
+   "essential_facts": [
+    {
+     "fact": "TierPoint는 Craig Cowden을 차기 CEO로 선임하고, 2027년 1월 4일부터 현 CEO Jerry Kent가 이사회 Executive Chairman을 맡는다고 발표했다.",
+     "url": "https://www.globenewswire.com/news-release/2026/11/10/3399650/0/en/tierpoint-names-craig-cowden-ceo.html",
+     "scope": "TierPoint 발표상 향후 예정된 경영진 교체; 효력 발생 전이며 구체적인 사업·투자전략 변경 발표는 없음"
+    }
+   ],
+   "business_signal": "미국 데이터센터·클라우드 사업자의 CEO 교체 일정이 확정됐으나, 회사 발표는 운영전략 변경을 함께 제시하지 않았다.",
+   "source": "TierPoint",
+   "url": "https://www.globenewswire.com/news-release/2026/11/10/3399650/0/en/tierpoint-names-craig-cowden-ceo.html",
+   "refs": [],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 23:00",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 3
+  },
+  {
+   "id": "3227b0b1a129",
+   "lane": "E",
+   "cat": "실적",
+   "title": "KT, 3분기 연결 영업수익·영업이익 발표",
+   "facts": [
+    "KT는 11월 10일 오후 3시에 2026년 3분기 실적을 발표했다.",
+    "공식 연결 손익계산서의 3분기 영업수익은 6,997.5십억원, 영업이익은 505.3십억원이다."
+   ],
+   "evidence": [
+    "2026 3분기 실적발표 자료",
+    "11월 10일(화) 오후 3시",
+    "KRW Billion\t3Q 26\n영업수익\t6,997.5\n영업이익\t505.3"
+   ],
+   "business_signal": "공식 실적자료에서 KT의 3분기 연결 매출과 영업이익을 확인했다.",
+   "source": "KT 공식 IR 실적발표 자료",
+   "url": "https://corp.kt.com/attach/record/2026/KT%203Q26_FS%20Release_FIN.xlsx",
+   "refs": [
+    {
+     "url": "https://corp.kt.com/attach/record/2026/3Q26_KT_ER_PT_KOR_FIN.pdf",
+     "source": "KT 공식 실적발표 자료",
+     "pub": "2026-11-10"
+    },
+    {
+     "url": "https://corp.kt.com/html/investors/resources/earnings.html",
+     "source": "KT 공식 IR 실적발표 목록",
+     "pub": "2026-11-10"
+    },
+    {
+     "url": "https://rdi.kt.com/corp/announcements/v1.0/achievements?langDivType=KOR",
+     "source": "KT 공식 IR 실적발표 API",
+     "pub": "2026-11-10"
+    }
+   ],
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 15:00",
+   "lang": "ko",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 3,
+   "company": "KT",
+   "key": "kt",
+   "quarter": "3Q26",
+   "transcript_url": "",
+   "call_deep": false,
+   "investor_day": false,
+   "notes": [],
+   "release_only": true,
+   "publication_evidence": {
+    "url": "https://rdi.kt.com/corp/announcements/v1.0/achievements?langDivType=KOR",
+    "field": "ptDateInfo",
+    "value": "11월 10일(화) 오후 3시",
+    "meaning": "공식 IR에 기재된 발표 시각; 업로드 시각으로 표시하지 않음"
+   },
+   "collection_note": "공식 IR API와 연결된 XLSX를 확인했다. 콜 전사본·콜 발언은 확인하거나 생성하지 않았다.",
+   "evidence_kind": "원문 필드·표 셀 발췌",
+   "evidence_locations": [
+    {
+     "source_url": "https://rdi.kt.com/corp/announcements/v1.0/achievements?langDivType=KOR",
+     "fields": [
+      "ptTitle",
+      "ptDateInfo"
+     ]
+    },
+    {
+     "source_url": "https://corp.kt.com/attach/record/2026/KT%203Q26_FS%20Release_FIN.xlsx",
+     "sheet": "KT / IFRS_연결_손익계산서",
+     "cells": [
+      "B4",
+      "AB4",
+      "C5",
+      "AB5",
+      "C51",
+      "AB51"
+     ]
+    }
+   ]
+  }
+ ],
+ "finance": [
+  {
+   "id": "2b7b524d13f1",
+   "who": "연준 감독 부의장 Michelle W. Bowman",
+   "stance": "경계",
+   "theme": "AI 설비투자·자금 조달",
+   "title": "연준 Bowman, AI 부채 증가와 조달 비용 상승 위험 언급",
+   "claim": "Bowman은 AI 관련 부채가 올해 8000억 달러를 넘길 전망이라고 말했다. AI 매출이 비용에 못 미치면 조달 비용 상승과 신용 접근 축소가 증설을 늦출 수 있다고 경고했다.",
+   "evidence": [
+    "and is on track to exceed $800 billion this year.",
+    "higher financing costs, and reduced access to credit."
+   ],
+   "url": "https://www.federalreserve.gov/newsevents/speech/bowman20261110a.htm",
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-11 05:30",
+   "type": "글",
+   "daily_worthy": false,
+   "business_signal": "AI 사업자의 매출 실현과 금융 조달 조건을 함께 점검해야 한다는 감독당국자의 발언이다.",
+   "verified": true,
+   "paywall": false,
+   "rank_hint": 4
+  },
+  {
+   "id": "8cdfc14340a4",
+   "who": "연준 이사 Christopher J. Waller",
+   "stance": "중립",
+   "theme": "AI 설비투자·자금 조달",
+   "title": "연준 Waller, AI 관련 첨단 장비 투자 증가세 언급",
+   "claim": "Waller는 기업 투자가 계속 빠르게 늘었으며 특히 AI 구축과 관련된 첨단 장비 투자가 강했다고 말했다.",
+   "evidence": [
+    "investment by businesses continued to surge, especially in high-tech equipment associated with the artificial intelligence (AI) buildout."
+   ],
+   "url": "https://www.federalreserve.gov/newsevents/speech/waller20261110a.htm",
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "published_kst": "2026-11-10 18:00",
+   "type": "글",
+   "daily_worthy": false,
+   "business_signal": "연준 인사가 기업 설비투자 증가의 주요 배경으로 AI 관련 장비 수요를 언급했다.",
+   "verified": true,
+   "paywall": false,
+   "rank_hint": 3
+  }
+ ],
+ "podcasts": [
+  {
+   "id": "02abcbb9bb18",
+   "podcast": "Sources with Alex Heath",
+   "title": "Matt Garman이 AWS의 AI·클라우드 성장과 데이터센터 증설을 설명한다",
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "url": "https://sources.news/p/aws-ceo-matt-garman-1-trillion",
+   "guests": [
+    "Matt Garman (AWS CEO)"
+   ],
+   "relevant": true,
+   "basis": "쇼노트",
+   "importance": 5,
+   "famous": true,
+   "notes": [
+    {
+     "t": "공식 소개문 1",
+     "speaker": "Alex Heath (진행자)",
+     "point": "Amazon의 AWS가 향후 5~10년 사이 연 매출 1조 달러 규모가 될 수 있다는 회사 전망을 두고 인터뷰했다고 소개한다.",
+     "evidence": "trillion-dollar revenue"
+    },
+    {
+     "t": "공식 소개문 2",
+     "speaker": "Matt Garman (AWS CEO)",
+     "point": "Garman은 AI 에이전트가 기업의 데이터를 함께 써야 하는 점이 기존 핵심 시스템의 클라우드 이전을 앞당긴다고 설명한다.",
+     "evidence": "AI is accelerating"
+    },
+    {
+     "t": "공식 소개문 3",
+     "speaker": "Matt Garman (AWS CEO)",
+     "point": "그는 추론 컴퓨팅이 장기 규모의 1% 미만이라고 보고, 가격이 50% 낮아질 때마다 이용량이 약 10배로 늘었다고 말했다. 이는 Garman의 추정·주장이다.",
+     "evidence": "less than 1 percent"
+    },
+    {
+     "t": "공식 소개문 4",
+     "speaker": "Matt Garman (AWS CEO)",
+     "point": "공식 소개는 AWS가 14초마다 GPU 한 대를 추가하고 수년간 용량 부족을 예상한다고 전한다. 배정 방식과 투자 위험도 대담 주제에 포함됐다.",
+     "evidence": "one GPU every 14 seconds"
+    },
+    {
+     "t": "공식 소개문 5",
+     "speaker": "Matt Garman (AWS CEO)",
+     "point": "공식 소개문은 Nova 팀의 인력·데이터·인프라 재정비에도 AWS 자체 프런티어 모델 개발 전략을 유지한다는 Garman의 설명을 전한다.",
+     "evidence": "build frontier models"
+    },
+    {
+     "t": "공식 소개문 6",
+     "speaker": "Matt Garman (AWS CEO)",
+     "point": "발행자는 Trainium의 AWS 외부 판매 결정과 자동 추론 연구로 에이전트가 정해진 규칙을 따르게 하는 구상을 소개한다.",
+     "evidence": "sell Trainium chips outside AWS"
+    },
+    {
+     "t": "수집 상태",
+     "speaker": "수집 상태",
+     "point": "원문 미확보: 시도한 곳 Sources 공식 RSS(https://sources.news/feed)와 회차 페이지(https://sources.news/p/aws-ceo-matt-garman-1-trillion)를 열어 소개문·하이라이트를 확인했습니다. 전문 전사본은 공개 페이지에 없고 오디오/영상은 텍스트 전문으로 열리지 않았습니다. 우회하지 않고 7일 안에 다시 확인합니다.",
+     "evidence": ""
+    }
+   ],
+   "terms": [
+    "추론(inference): 학습된 모델을 실행해 결과를 생성하는 계산",
+    "자동 추론(automated reasoning): 규칙의 성립을 논리적으로 점검하는 기법"
+   ],
+   "bias": "AWS 최고경영자의 회사 전략·성장 전망 발언으로 회사 이해관계가 반영됨. 발언 정리는 발행자 설명과 하이라이트 기준.",
+   "transcript_url": ""
+  },
+  {
+   "id": "1b9619ecc4ba",
+   "podcast": "Latent Space",
+   "title": "Zeno Rocha가 에이전트용 소프트웨어 발견·도구 설계를 논의한다",
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "url": "https://latent.space/p/resend/",
+   "guests": [
+    "Zeno Rocha (Resend 공동창업자·CEO)"
+   ],
+   "relevant": true,
+   "basis": "전문(공식 전사본)",
+   "importance": 3,
+   "famous": false,
+   "notes": [
+    {
+     "t": "00:00:12",
+     "speaker": "Zeno Rocha (Resend CEO)",
+     "point": "Zeno Rocha는 녹음 당시 Resend가 430만 이용자에게 서비스를 제공한다고 말했다. 회사의 자체 설명이며 현재치로 일반화하지 않는다.",
+     "evidence": "four point three million users"
+    },
+    {
+     "t": "00:06:39",
+     "speaker": "Zeno Rocha / 진행자",
+     "point": "AEO 대화에서 진행자는 Claude Code가 Resend를 60% 넘게 추천한다고 언급했다. 이 대목은 진행자의 관찰이다.",
+     "evidence": "60% plus"
+    },
+    {
+     "t": "00:23:45",
+     "speaker": "Zeno Rocha",
+     "point": "그는 이메일 인프라 사업을 택한 결정과 오픈소스 React Email을 초기 유통 경로로 활용한 과정을 설명했다.",
+     "evidence": "React Email"
+    },
+    {
+     "t": "00:37:56",
+     "speaker": "Zeno Rocha / 진행자",
+     "point": "MCP 사용량에 관한 대화에서 진행자가 백만 회가 넘는 MCP 호출을 언급했다.",
+     "evidence": "over a million MCP calls"
+    },
+    {
+     "t": "00:40:11",
+     "speaker": "Zeno Rocha",
+     "point": "원격 MCP를 구현하려면 OAuth가 필요해 권한 모델을 다시 살펴봐야 했고, 이어 RBAC와 리소스 접근을 다뤘다고 설명했다.",
+     "evidence": "permissions model"
+    },
+    {
+     "t": "00:41:54",
+     "speaker": "Zeno Rocha",
+     "point": "B2B 구매자는 데이터 연결에 공식 MCP가 있는지 보고, 소프트웨어 제공자가 직접 유지하지 않는 연동은 신뢰하기 어렵다는 관점을 말했다.",
+     "evidence": "own this piece of integration"
+    }
+   ],
+   "terms": [
+    "AEO(answer engine optimization): 답변 엔진에서 제품이 검색·추천되도록 정보를 제공하는 방식",
+    "MCP: 모델이 외부 도구와 상호작용할 때 쓰는 프로토콜"
+   ],
+   "bias": "Resend 공동창업자의 자사 제품·고객 및 개발자 경험 설명. 수치의 기준 시점은 녹음 당시이며 독립 검증 수치로 단정하지 않음.",
+   "transcript_url": "https://rss.beehiiv.com/podcasts/transcriptions/01a1c6ff-5771-7df7-ba35-b6306c6494aa.vtt"
+  },
+  {
+   "id": "68031f4cb7c6",
+   "podcast": "Inside Blackstone",
+   "title": "Ari Emanuel이 AI 시대 엔터테인먼트 산업을 논의한다",
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "url": "https://www.blackstone.com/insights/article/ari-emanuel-on-the-future-of-entertainment-in-the-age-of-ai/",
+   "guests": [
+    "Ari Emanuel (MARI 창업자·주요 투자자)"
+   ],
+   "relevant": false,
+   "basis": "쇼노트",
+   "importance": 1,
+   "famous": true,
+   "notes": [
+    {
+     "t": "공식 소개",
+     "speaker": "Christine Anderson (진행자)",
+     "point": "해당 회차에는 MARI의 Ari Emanuel과의 대담 외에 Blackstone CFO Michael Chae 및 투자부문 책임자 Chris James 대화가 포함된다.",
+     "evidence": "this week’s episode"
+    },
+    {
+     "t": "AI 관련 대화",
+     "speaker": "Ari Emanuel",
+     "point": "그는 AI가 영화·TV 제작비를 낮추고 제작량과 창작을 늘릴 수 있다고 전망하면서 제작 현장 노동의 조정 필요성도 언급한다.",
+     "evidence": "AI is gonna have an incredible unlock of creativity"
+    },
+    {
+     "t": "라이브 경험",
+     "speaker": "Ari Emanuel",
+     "point": "그는 스포츠·공연 등 오프라인 라이브 경험은 AI가 중개하기 어렵고 상대 가치가 커질 수 있다는 관점을 제시한다.",
+     "evidence": "You cannot disintermediate live"
+    },
+    {
+     "t": "범위 판단",
+     "speaker": "수집 상태",
+     "point": "대화의 중심은 엔터테인먼트·라이브 이벤트 사업이며 대상 독자의 IT서비스·클라우드·AI 인프라 사업과 직접 관련성이 낮아 relevant=false로 분류했다.",
+     "evidence": "November 10, 2026"
+    },
+    {
+     "t": "AI 관련 대화",
+     "speaker": "Ari Emanuel",
+     "point": "Emanuel은 AI를 전면 생성 영화에 적용하는 데에는 소비자 수요가 불확실하지만 제작비를 낮추는 활용은 경제성이 있을 수 있다고 말했다.",
+     "evidence": "black and white"
+    }
+   ],
+   "terms": [],
+   "bias": "Ari Emanuel은 MARI를 운영하며 라이브 이벤트와 콘텐츠 제작 사업에 이해관계가 있음.",
+   "transcript_url": "https://www.blackstone.com/insights/article/ari-emanuel-on-the-future-of-entertainment-in-the-age-of-ai/"
+  },
+  {
+   "id": "518bab9c3927",
+   "podcast": "Le Point interview",
+   "title": "Satya Nadella가 AI의 인간 통제·보안·사업 영향을 논의한다",
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "url": "https://www.youtube.com/watch?v=wGDFHa3TkjE",
+   "guests": [
+    "Satya Nadella (Microsoft CEO)"
+   ],
+   "relevant": true,
+   "basis": "쇼노트",
+   "importance": 4,
+   "famous": true,
+   "notes": [
+    {
+     "t": "공식 영상 소개",
+     "speaker": "Guillaume Grallet (Le Point 과학·기술 편집장)",
+     "point": "Le Point가 Microsoft CEO Satya Nadella와 AI의 기술 변화 및 인간 통제 경계에 관해 진행한 영상 인터뷰다.",
+     "evidence": "exclusive interview"
+    },
+    {
+     "t": "공식 영상 소개",
+     "speaker": "Satya Nadella",
+     "point": "영상 소개는 초지능이 인간을 강화하고 인간 통제 아래 있어야 한다는 견해를 전면에 둔다.",
+     "evidence": "empower humans"
+    },
+    {
+     "t": "공식 영상 소개",
+     "speaker": "Satya Nadella",
+     "point": "프랑스 AI 기업 Mistral과의 전략적 제휴가 대담 주제로 소개됐다.",
+     "evidence": "Mistral AI"
+    },
+    {
+     "t": "공식 영상 소개",
+     "speaker": "Satya Nadella",
+     "point": "자율형 사이버 위협과 강력한 AI 모델 통제도 다룬다고 소개됐다.",
+     "evidence": "cyber threats"
+    },
+    {
+     "t": "공식 영상 소개",
+     "speaker": "Satya Nadella",
+     "point": "AI 거품 우려와 경제 전반의 확산이 논의 항목에 포함됐다고 발행자가 적었다.",
+     "evidence": "tech bubble"
+    },
+    {
+     "t": "수집 상태",
+     "speaker": "수집 상태",
+     "point": "원문 미확보: 시도한 곳 Le Point 공식 YouTube 채널(https://www.youtube.com/watch?v=wGDFHa3TkjE)과 공식 Dailymotion 게시물(https://www.dailymotion.com/video/xbvjd0y)을 열어 제목·발행일·설명문을 확인했습니다. 공개 영상의 텍스트 전사본은 미확보했습니다. 우회하지 않고 7일 안에 다시 확인합니다.",
+     "evidence": ""
+    }
+   ],
+   "terms": [
+    "인간 통제(human control): 강력한 AI가 사람의 개입·중단 권한 안에서 동작해야 한다는 주장"
+   ],
+   "bias": "Microsoft CEO의 회사 전략 및 AI 산업에 관한 공개 발언. 현재 발언 전문을 대조하지 못해 영상 설명문에 한정.",
+   "transcript_url": "",
+   "refs": [
+    {
+     "url": "https://www.dailymotion.com/video/xbvjd0y",
+     "source": "Le Point official Dailymotion",
+     "pub": "2026-11-10"
+    }
+   ]
+  },
+  {
+   "id": "ce982a096b94",
+   "podcast": "All-In",
+   "title": "Axon CEO Rick Smith가 경찰 기술·감시와 로봇을 논의한다",
+   "date": "11/10",
+   "pub": "2026-11-10",
+   "url": "https://www.youtube.com/watch?v=8h-gfrVYyAU",
+   "guests": [
+    "Rick Smith (Axon CEO)"
+   ],
+   "relevant": false,
+   "basis": "쇼노트",
+   "importance": 2,
+   "famous": true,
+   "notes": [
+    {
+     "t": "00:00",
+     "speaker": "David Friedberg / Rick Smith",
+     "point": "회차 소개는 Axon 최고경영자 Rick Smith와의 대화라고 명시한다.",
+     "evidence": "Axon CEO Rick Smith joins David Friedberg"
+    },
+    {
+     "t": "02:39",
+     "speaker": "Rick Smith",
+     "point": "공식 챕터는 TASER에서 Axon으로 이어진 회사 역사와 기업공개까지의 흐름을 주제로 제시한다.",
+     "evidence": "History of TASER/Axon"
+    },
+    {
+     "t": "09:05",
+     "speaker": "Rick Smith",
+     "point": "경찰 고객 사업, 기업공개, SEC 조사 및 소프트웨어 전환이 챕터 항목으로 표시된다.",
+     "evidence": "pivoting to software"
+    },
+    {
+     "t": "20:47",
+     "speaker": "Rick Smith",
+     "point": "바디 카메라와 Flock 관련 감시 우려를 다룬다고 공식 챕터에 적혀 있다.",
+     "evidence": "police body cam"
+    },
+    {
+     "t": "45:24",
+     "speaker": "Rick Smith",
+     "point": "로봇 시스템과 드론의 향후 역할을 논의한다고 공식 회차가 표시한다.",
+     "evidence": "robotic systems and drones"
+    }
+   ],
+   "terms": [],
+   "bias": "Axon 최고경영자의 회사 및 경찰 기술 관련 견해.",
+   "transcript_url": "",
+   "refs": [
+    {
+     "url": "https://podcasts.apple.com/us/podcast/freedom-vs-safety-axon-ceo-rick-smith-on-the-future/id1502871393?i=1000801085089",
+     "source": "Apple Podcasts",
+     "pub": "2026-11-10"
+    }
+   ],
+   "notes_tail": "관련 분야와 멀어 relevant=false. 발행자 공식 챕터만 반영; AI 관련성이 없는 경찰·감시·드론 산업 대담."
+  }
+ ],
+ "lens": {
+  "items": [
+   {
+    "id": "428ac4b42c0b",
+    "kind": "브레이크스루",
+    "field": "컴퓨터과학",
+    "title": "Google DeepMind, Signal 암호 프로토콜의 실제 구현 코드 형식 검증 사례 공개",
+    "facts": [
+     "Google DeepMind는 에이전트가 Signal 프로토콜의 컴파일된 실제 코드에서 핵심 보안 속성을 정리증명했고, Lean이 증명을 기계적으로 검사했다고 밝혔다.",
+     "연구자와 AI가 보안 목표를 정식 명세로 옮겼고 인간 전문가가 모든 명세를 검토했다. 회사는 에이전트가 육백만 줄이 넘는 Lean 코드를 만들었다고 설명했다.",
+     "DeepMind는 검증에 네 주가 걸렸으며 과거에는 전문가 팀이 수년 걸릴 작업이었다고 주장했다."
+    ],
+    "evidence": [
+     "human experts reviewing every one",
+     "generating over six million lines of Lean",
+     "verification process took just four weeks"
+    ],
+    "why_fun": "프로토콜 설계의 수학적 보장을 넘어 실제 기기에서 실행되는 컴파일 코드까지 검증 대상으로 삼았다는 점이 범위 확장이다.",
+    "ai_now": "에이전트가 증명을 만들었지만 무엇을 증명할지는 연구자와 전문가가 명세하고 검토했으며, Lean 검사와 사람의 일부 코드 검토가 함께 들어간 사례다.",
+    "source": "Google DeepMind",
+    "url": "https://deepmind.google/blog/introducing-alphaproof-code/",
+    "date": "11/10",
+    "pub": "2026-11-10",
+    "verified": true,
+    "essential_facts": [
+     {
+      "fact": "DeepMind 연구팀은 Signal의 컴파일된 실제 코드에서 핵심 보안 속성을 정리증명했다고 보고했다.",
+      "url": "https://deepmind.google/blog/introducing-alphaproof-code/",
+      "scope": "Google DeepMind의 2026-11-10 연구 발표 주장; 기술 논문을 별도로 참고하라고 연결"
+     },
+     {
+      "fact": "전문가가 모든 명세를 검토했으며 Lean 에이전트 검증 과정은 네 주 걸렸다고 회사가 밝혔다.",
+      "url": "https://deepmind.google/blog/introducing-alphaproof-code/",
+      "scope": "기간·절차는 DeepMind 발표 기준; 독립 복제 확인 아님"
+     }
+    ]
+   },
+   {
+    "id": "e4986eb6b67a",
+    "kind": "현주소",
+    "field": "업무",
+    "title": "복잡한 시각 자료 기반 업무 평가, 최고 고난도 기준 충족률 57%",
+    "facts": [
+     "Artificial Analysis와 Google DeepMind는 도면·스캔 등 시각 자료에서 산출물을 만드는 10개 산업의 실제 업무 200개를 평가 과제로 제시했다.",
+     "최고 모델의 고난도 평가 기준 가중 충족률은 57%였다. 이는 완성한 업무의 비율이나 일반 정답률과 다른 지표다.",
+     "Word 문서와 텍스트 파일 산출물 과제에서는 어느 모델도 같은 지표로 52%를 넘지 못했다."
+    ],
+    "evidence": [
+     "200 private real-world visual tasks across 10 industries",
+     "Climb WSR of 57%",
+     "no model passes 52% on either"
+    ],
+    "why_fun": "시각 자료를 읽고 파일을 완성하는 과정에서는 모델별 강점이 산업과 산출물 유형에 따라 달랐다.",
+    "ai_now": "사람이 만든 평가 기준에 따른 제한된 실험으로, 최고 모델도 까다로운 산출물 요건을 모두 충족하지 못했다.",
+    "source": "Artificial Analysis",
+    "url": "https://artificialanalysis.ai/articles/google-deepmind-multimodal-knowledge-agent",
+    "date": "11/10",
+    "pub": "2026-11-10",
+    "verified": true
+   }
+  ],
+  "tracker_news": []
+ },
+ "mem_spot": {
+  "source_url": "https://www.dramexchange.com/",
+  "last_update": "Nov.10 2026 18:10 (GMT+8)",
+  "series": [
+   {
+    "key": "dram-ddr5-16gb-spot",
+    "date": "2026-11-10",
+    "value": 60.167
+   },
+   {
+    "key": "dram-ddr4-8gb-spot-weekly",
+    "date": "2026-11-10",
+    "value": 45.0
+   }
+  ],
+  "status": "ok",
+  "note": "DRAM 두 표 Session Average는 Nov.10 2026 18:10 (GMT+8) 갱신. 512Gb TLC wafer 표는 Nov.2 2026 14:40 (GMT+8)로 오래되어 값을 싣지 않음."
+ },
+ "packs": [],
+ "calendar": [
+  {
+   "date": "2026-11-10",
+   "company": "CoreWeave",
+   "what": "실적 콜",
+   "confirmed": true,
+   "url": "https://investors.coreweave.com/news/news-details/2026/CoreWeave-Announces-Date-of-Third-Quarter-2026-Financial-Results-and-Conference-Call/default.aspx",
+   "detail": "3분기 실적 발표·실적 콜"
+  },
+  {
+   "date": "2026-11-12",
+   "company": "Nebius",
+   "what": "실적 콜",
+   "confirmed": true,
+   "url": "https://nebius.com/investor-events",
+   "detail": "3분기 실적 발표·실적 콜"
+  },
+  {
+   "date": "2026-11-17",
+   "company": "NVIDIA",
+   "what": "실적 콜",
+   "confirmed": true,
+   "url": "https://investor.nvidia.com/news/news-details/2026/NVIDIA-Sets-Conference-Call-for-Third-Quarter-Financial-Results/default.aspx",
+   "detail": "3분기 실적 콜"
+  },
+  {
+   "date": "2026-11-17",
+   "company": "Microsoft",
+   "what": "행사",
+   "confirmed": true,
+   "url": "https://ignite.microsoft.com/en-US/home",
+   "detail": "Ignite: 클라우드·AI 행사 (11/17–11/20)"
+  },
+  {
+   "date": "2026-12-01",
+   "company": "AMD",
+   "what": "행사",
+   "confirmed": true,
+   "url": "https://ir.amd.com/news-events/ir-calendar",
+   "detail": "UBS Global Technology and AI Conference"
+  }
+ ],
+ "checks": {
+  "passed": true,
+  "fixed": [
+   "원문과 다른 인용, 재보도 발행일, 계약·발표 단계 및 용량 기준을 원문 대조해 정정했다.",
+   "실제 전사본이 없는 회차는 공개 소개문 범위로 표시하고 미확보 원문을 재시도 목록에 남겼다.",
+   "날짜 파일·latest·index 일치, 숫자·한자·enum·중복·파일 크기는 게시 전에 자동 검사한다."
+  ],
+  "dropped": [
+   {
+    "id": "",
+    "url": "https://www.datacenterdynamics.com/en/news/riot-platforms-signs-910mw-agreement-with-unnamed-frontier-ai-lab/",
+    "why": "계약 자체는 검색됐으나 원 발표·사건일이 2026-11-09로 고정 기간 시작 전이어서 제외"
+   },
+   {
+    "id": "",
+    "url": "https://group.softbank/en/news/press/20261109",
+    "why": "공식 발표일 2026-11-09로 기간 밖; 11/10 후속 보도는 새 전개가 아닌 재보도로 제외"
+   },
+   {
+    "id": "",
+    "url": "https://www.telekom.com/en/media/media-information/archive",
+    "why": "기업 발표가 2026-11-09로 기간 밖이며 100MW 이상 조건에도 미달"
+   },
+   {
+    "id": "",
+    "url": "https://www.utilitydive.com/news/ai-boom-could-shift-diesel-generators-backup-everyday-use/873954/",
+    "why": "과거 전력정책을 근거로 한 의견 기고이며 이번 기간의 실제 전원 전환·확정 계약·설계 변경을 확인하지 못해 제외."
+   },
+   {
+    "id": "",
+    "url": "https://www.suse.com/news/suse-solidifies-position-as-platform-for-ai-workloads/",
+    "why": "공식 SUSE 발표문은 날짜만 제공. 2차 기사 시각을 회사 원문 시각으로 대신하지 않고 보류."
+   },
+   {
+    "id": "",
+    "url": "https://www.datacenterdynamics.com/en/news/application-filed-for-8bn-data-center-project-in-quanah-texas/",
+    "why": "공식 등록일 2026-10-27로 기간 밖. 11월 10일 기사는 앞선 신청 재보도이며 새 계약·착공·용량 변경을 확인하지 못함."
+   },
+   {
+    "id": "",
+    "url": "https://www.bessemertrust.com/insights/financing-the-ai-buildout-what-it-means-for-corporate-bond-markets",
+    "why": "화면 날짜는 11/10이나 JSON-LD 최초 발행은 11/09. 수정일 변경만으로 새 사실을 확인할 수 없어 보류."
+   },
+   {
+    "id": "",
+    "url": "https://www.governor.ny.gov/news/governor-hochul-declares-ny-will-lead-nation-ai-science-and-safety-launches-new-research",
+    "why": "원문 본문·현지 11/10 발행일은 직접 확인했으나 시각이 없어 일간 경계를 확정할 수 없음."
+   },
+   {
+    "id": "",
+    "url": "https://www.puppygraph.com/blog/series-a",
+    "why": "회사 원문·현지 11/10 발행일과 자금 조달 사실은 확인. 회사 글은 시각을 제공하지 않음. Business Wire 배포본 시각은 확인했으나 원문 URL은 응답 시간 초과이며 회사 글 시각으로 대입하지 않음."
+   },
+   {
+    "id": "",
+    "url": "https://www.businesswire.com/news/home/20261110433588/en/Sparxity-Closes-Series-A-Bringing-Total-Funding-to-$90M",
+    "why": "원문 본문은 웹 리더로 확인. 발행 시각은 재전송본에만 표시되어 원문 시각으로 추정하지 않고 보류."
+   },
+   {
+    "id": "",
+    "url": "https://www.anthropic.com/news/roadshow-launch",
+    "why": "11/10 기업공개 로드쇼 발표 원문은 확인. 회사 데이터의 publishedOn은 날짜뿐이고 JSON-LD 자정은 정확한 시각인지 불명확. SEC 접수 시각은 확인했지만 S-1/A 본문 접근403. SEC 접수 시각을 회사 글 발행시각으로 바꾸지 않고 보류."
+   },
+   {
+    "id": "",
+    "url": "",
+    "why": "후보 0건: 유효한 HN 원문 후보는 L에서 선택한 동일 사건이거나 원문 발행일이 기간 밖; GeekNews 검색도 검증 가능한 별도 적격 원문 미확인."
+   },
+   {
+    "id": "",
+    "url": "",
+    "why": "512Gb TLC wafer spot 표의 갱신일이 2026-11-02여서 값 보류."
+   },
+   {
+    "id": "",
+    "url": "",
+    "why": "11/10 18:51 KST 개인정보위 Anthropic/Claude 조사 착수 사건은 N3 담당; 조사 착수 새 전개를 N2/TW 후보로 중복하지 않음."
+   },
+   {
+    "id": "",
+    "url": "https://ir.amd.com/news-events/ir-calendar",
+    "why": "공식 IR 달력의 최신 Past/Upcoming Events에는 11/03 Q3 results 및 12/01 UBS tech conference가 있으며 11/10 Financial Analyst Day는 표시되지 않음. 2025 Analyst Day 정보와 혼동 가능성 있으나 추정하지 않음."
+   },
+   {
+    "id": "",
+    "url": "https://colossus.com/episode/sandcastles-and-silicon/",
+    "why": "독립검토에서 공식 회차 JSON-LD datePublished=2026-08-11T09:09:57+00:00, dateModified=2026-08-18 확인. 표기 08.11.2026은 8월 11일로, P 7일 기간 밖. 후보와 재시도에서 제외."
+   },
+   {
+    "id": "",
+    "url": "https://www.axios.com/2026/11/09/eric-schmidt-caltech-ai-interview",
+    "why": "확보된 공개 원문 범위로 회차 상세 발언 정리의 근거를 충분히 보존하기 어려워 제외. 질문 순서와 직접 인용 일부가 정확하지 않아 원문 재대조 후보로 남김."
+   },
+   {
+    "id": "",
+    "url": "https://blogs.oracle.com/cloud-infrastructure/oci-occl-net-plugin",
+    "why": "원문 발행일 2026-11-06, HPCwire 재게재 11월 10일. 원문 기준 기간 밖."
+   },
+   {
+    "id": "",
+    "url": "https://community.ibm.com/community/user/blogs/jasmita-yechuri/2026/11/09/ibm-at-supercomputing-2026",
+    "why": "앞선 공식 행사 예고를 HPCwire가 재게재. 새로운 제품 출시·구매 수치를 확인하지 못해 제외."
+   },
+   {
+    "id": "",
+    "url": "https://www.wdbj7.com/2026/10/29/fluidstack-hosts-open-house-wythe-county-data-center-protesters-voice-frustration/",
+    "why": "DCD의 11/10 기사는 기간 안이지만 WDBJ 원보도가 10/28에 이미 ‘broken ground’를 보도했으므로 이번 기간의 신규 착공 전개로 싣지 않음."
+   },
+   {
+    "id": "",
+    "url": "https://www.metoffice.gov.uk/blog/2026/met-office-completes-world-first-cloud-supercomputing-transformation",
+    "why": "공식 운영 개시 발표가 11/03로 기간 밖이며 DCD 기사는 재보도."
+   },
+   {
+    "id": "",
+    "url": "https://www.linkedin.com/feed/update/urn:li:activity:7523374012492886017/",
+    "why": "H&MV Engineering의 원 게시물이 기간 시작 전이므로 DCD의 후속 보도만으로 기간 내 신규 전개라 판단하지 않음."
+   },
+   {
+    "id": "",
+    "url": "https://www.linkedin.com/posts/tensorbay-aipods-aiinfrastructure-share-7524879144967548929-hL68/",
+    "why": "AIPods 출시를 알린 회사 원 게시물이 기간 시작 전이어서 기간 중 DCD 재보도만으로 싣지 않음."
+   },
+   {
+    "id": "",
+    "url": "https://primeminister.kz/en/news/digital-economy-olzhas-bektenov-holds-meeting-on-the-implementation-of-the-data-center-valley-project-32091",
+    "why": "정부 원문은 11/06 공표해 기간 밖. 발표 내용도 예비 합의로 확정 계약이나 착공으로 표현하지 않음."
+   },
+   {
+    "id": "177ec7661045",
+    "url": "https://propertynl.com/Nieuws/Principal-Asset-Management-verwerft-datacenter-in-Woerden/4de32b57-2d17-4da8-8545-6ce40ed6af55",
+    "why": "PropertyNL이 최초 원보도이며 네덜란드어(lang=nl)로 작성됐다. 현재 feed/tools/validate.py의 lang enum은 ko|en|zh|ja만 허용하므로 원문 URL·언어 사실성을 지키기 위해 번역본으로 대체하지 않고 보류한다. IPE 영문 후속보도는 2026-11-10 12:21 UTC였으나 최초보도가 아니다."
+   }
+  ]
+ }
+}

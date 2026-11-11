@@ -1,17 +1,17 @@
 {
  "format": "collector-index/1",
- "updated_kst": "2026-11-11 10:37",
+ "updated_kst": "2026-11-11 10:58",
  "daily": {
-  "latest": "2026-11-10",
-  "url": "feed/daily/2026-11-10.json",
+  "latest": "2026-11-11",
+  "url": "feed/daily/2026-11-11.json",
   "status": "partial",
-  "revision": 4,
+  "revision": 1,
   "counts": {
-   "items": 12,
-   "finance": 0,
-   "podcasts": 14,
-   "packs": 3,
-   "lens": 4
+   "items": 18,
+   "finance": 2,
+   "podcasts": 5,
+   "packs": 0,
+   "lens": 2
   },
   "empty_lanes": [
    "CM"
@@ -33,13 +33,13 @@
  "files": [
   {
    "url": "feed/QUESTIONS.md",
-   "bytes": 8619,
-   "made_kst": "2026-11-11 10:31"
+   "bytes": 9336,
+   "made_kst": "2026-11-11 10:57"
   },
   {
    "url": "feed/SPEC.md",
    "bytes": 56302,
-   "made_kst": "2026-11-11 10:31"
+   "made_kst": "2026-11-11 10:57"
   },
   {
    "url": "feed/daily/2026-11-10.json",
@@ -47,34 +47,39 @@
    "made_kst": "2026-11-10 16:46"
   },
   {
+   "url": "feed/daily/2026-11-11.json",
+   "bytes": 125677,
+   "made_kst": "2026-11-11 10:57"
+  },
+  {
    "url": "feed/daily/latest.json",
-   "bytes": 107956,
-   "made_kst": "2026-11-10 16:46"
+   "bytes": 125677,
+   "made_kst": "2026-11-11 10:57"
   },
   {
    "url": "feed/health.json",
-   "bytes": 201350,
-   "made_kst": "2026-11-11 09:39"
+   "bytes": 319962,
+   "made_kst": "2026-11-11 10:57"
   },
   {
    "url": "feed/src/iv-ceg-3q26-call.json",
    "bytes": 10183,
-   "made_kst": "2026-11-11 10:31"
+   "made_kst": "2026-11-11 10:57"
   },
   {
    "url": "feed/src/iv-oklo-3q26-call.json",
    "bytes": 11560,
-   "made_kst": "2026-11-11 10:31"
+   "made_kst": "2026-11-11 10:57"
   },
   {
    "url": "feed/src/iv-vst-3q26-call.json",
    "bytes": 10745,
-   "made_kst": "2026-11-11 10:31"
+   "made_kst": "2026-11-11 10:57"
   },
   {
    "url": "feed/state/seen.json",
-   "bytes": 6188,
-   "made_kst": "2026-11-11 10:37"
+   "bytes": 12384,
+   "made_kst": "2026-11-11 10:58"
   },
   {
    "url": "feed/weekly/2026-W46.json",
@@ -87,5 +92,5 @@
    "made_kst": "2026-11-10 16:45"
   }
  ],
- "notes": "일간 2026-11-10 / 주간 2026-W46 묶음입니다. 미확보 자료는 partial 및 health에 기록했습니다."
+ "notes": "일간 2026-11-11 / 주간 2026-W46 묶음입니다. 미확보 자료는 partial 및 health에 기록했습니다."
 }

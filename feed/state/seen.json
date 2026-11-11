@@ -1,5 +1,5 @@
 {
- "updated_kst": "2026-11-11 10:37",
+ "updated_kst": "2026-11-11 10:58",
  "entries": [
   {
    "url": "https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx/",
@@ -210,6 +210,195 @@
    "pub": "2026-11-04",
    "posted": "2026-11-11",
    "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://www.globenewswire.com/news-release/2026/11/10/3399517/0/en/rackspace-and-together-ai-announce-strategic-agreement-to-support-enterprise-ai-inference.html",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.globenewswire.com/news-release/2026/11/10/3399492/0/en/blacksmith-taps-rackspace-to-accelerate-software-deployments-to-production.html",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://flashpoint.io/blog/introducing-flashpoint-agentic-ai/",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.etnews.com/20261110000476",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.etnews.com/20261111000016",
+   "event_key": "",
+   "pub": "2026-11-11",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/2042022/000121390026117723/ea0311622-8k_whitefiber.htm",
+   "event_key": "whitefiber-nc1-300m-loan-20261110",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.prnewswire.com/news-releases/calibrant-energy-secures-145-million-in-project-financing-including-battery-storage-for-hyperscale-data-center-customer-in-pjm-302934918.html",
+   "event_key": "calibrant-145m-project-finance-20261110",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.pm.gov.au/media/new-australian-ai-safety-and-security-protections",
+   "event_key": "australia-frontier-ai-safety-legislation-20261110",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://rss.globenewswire.com/news-release/2026/11/10/3399149/0/en/netcompany-invests-in-danish-centre-for-ai-innovation-a-s-the-company-behind-the-gefion-ai-supercomputer.html",
+   "event_key": "netcompany-dcai-primary-investment-20261110",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://openai.com/index/introducing-businesses-chatgpt/",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/1046179/000104617926000797/tsm-boardx202611xx.htm",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.prnewswire.com/news-releases/ase-technology-holding-co-ltd-announces-monthly-net-revenues-302934142.html",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.sec.gov/Archives/edgar/data/1769628/000176962826000461/coreweave3q26earningspress.htm",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://newsroom.amd.com/news/6th-gen-epyc-lead-ai-enterprise-computing/",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.globenewswire.com/news-release/2026/11/10/3399370/0/en/fuelcell-energy-to-host-national-laboratory-supported-ai-data-center-power-testbed-in-connecticut-manufacturing-facility.html",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://news.lenovo.com/pressroom/press-releases/lenovo-accelerates-ai-and-hpc-convergence-with-next-generation-infrastructure/",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.globenewswire.com/news-release/2026/11/10/3399650/0/en/tierpoint-names-craig-cowden-ceo.html",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://corp.kt.com/attach/record/2026/KT%203Q26_FS%20Release_FIN.xlsx",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.federalreserve.gov/newsevents/speech/bowman20261110a.htm",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.federalreserve.gov/newsevents/speech/waller20261110a.htm",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://sources.news/p/aws-ceo-matt-garman-1-trillion",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://latent.space/p/resend/",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.blackstone.com/insights/article/ari-emanuel-on-the-future-of-entertainment-in-the-age-of-ai/",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.youtube.com/watch?v=wGDFHa3TkjE",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://www.youtube.com/watch?v=8h-gfrVYyAU",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://deepmind.google/blog/introducing-alphaproof-code/",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
+  },
+  {
+   "url": "https://artificialanalysis.ai/articles/google-deepmind-multimodal-knowledge-agent",
+   "event_key": "",
+   "pub": "2026-11-10",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-11.json"
   }
  ]
 }
