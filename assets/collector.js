@@ -24,7 +24,7 @@
   if(group&&Object.hasOwn(sectorLabels,group.id))return group.id;
   return ['서버','스토리지','서버·스토리지'].includes(record.sector)?'supply_chain':Object.keys(sectorLabels).find(k=>sectorLabels[k]===record.sector)||'other';
  }
- async function earnings(params=new URLSearchParams(),reports=[],policy={}){
+ async function earnings(params=new URLSearchParams(),reports=[],policy={},reader={}){
   const index=await load('feed/index.json'),id=params.get('id');
   if(id){
    const name='feed/src/'+id+'.json';filePath(name);
@@ -34,14 +34,31 @@
   }
   const packs=(await packRegistry(index,{})).filter(x=>['earnings_call','investor_day'].includes(x.kind));
   const legacy=list(reports).filter(isEarnings),rows=[...packs.map(x=>({...x,category:'원문 팩',date:x.date||'',description:`${list(x.segments).length}개 발언을 순서대로 정리했습니다. 핵심 수치 ${list(x.numbers).length}개와 ${list(x.segments).some(s=>s.t==='qa')?'질의응답':'준비 발언'}을 원문 출처와 함께 확인하실 수 있습니다.`,url:packLink(x)})),...legacy.map(x=>({...x,category:'콜 기록',date:x.call_date||x.source_date,description:x.overview,url:'earnings--'+encodeURIComponent(x.id)+'.html'}))].sort((a,b)=>b.date.localeCompare(a.date));
+  await Promise.all(rows.map(async row=>{try{row.reading=row.kind?pack(row):reader.loadReport&&reader.renderReport?reader.renderReport(await reader.loadReport(row.id)):'';}catch{row.reading='';}}));
   const groups=list(policy.coverage_groups),selected=Object.hasOwn(sectorLabels,params.get('sector'))?params.get('sector'):'';
   for(const row of rows)row.earnings_sector=earningsSector(row,groups);
   const sectors=[['','전체'],...Object.entries(sectorLabels)];
   const tabs=`<nav class="cl-sector-tabs" aria-label="실적 업종">${sectors.map(([id,label])=>`<a href="earnings.html${id?'?sector='+id:''}" ${selected===id?'aria-current="page"':''}>${label}<span>${rows.filter(r=>!id||r.earnings_sector===id).length}</span></a>`).join('')}</nav>`;
   const coverage=groups.length?`<details class="cl-coverage-list"><summary>업종별 수집 대상 기업 ${groups.reduce((n,g)=>n+list(g.companies).length,0)}곳</summary><p class="cl-muted">수집 대상 목록입니다. 아래 기업 모두의 콜이 게시됐다는 뜻은 아닙니다. 공개 실적·전사본이 없는 기업은 자료 미확보로 남깁니다.</p>${groups.filter(g=>!selected||g.id===selected).map(g=>`<section><h3>${esc(g.label)} <small>${list(g.companies).length}곳</small></h3><p class="cl-muted">${esc(g.description)}</p><p>${g.companies.length?g.companies.map(c=>esc(c.name)).join(' · '):'아직 지정된 대상이 없습니다. 미분류 기업의 콜을 모읍니다.'}</p></section>`).join('')}</details>`:'';
-  const html=`<div class="collector-view earnings-view"><header class="cl-heading"><div><p class="cl-kicker">MARKET BRIEFING / EARNINGS CALLS</p><h1>실적 콜</h1><p>준비 발언과 질문·답변을 업종별로 읽습니다.</p></div><div class="cl-heading-date"><span>공개 자료</span><b>${rows.length}<small>편</small></b><small>각 자료의 원문일·확인 범위 기준</small></div></header>${tabs}${coverage}<p class="cl-muted">질문·답변의 맥락과 핵심 메시지를 중심으로 정리합니다. 원문을 다시 확인하지 못한 범위는 각 본문에 표시합니다.</p><section data-cl-scope data-cl-sector="${selected}">${controls({category:['원문 팩','콜 기록'],placeholder:'기업·분기·실적 콜 검색'})}<div class="cl-earnings-grid">${rows.map(x=>`<article class="cl-pack-card" data-cl-record data-cl-category="${esc(x.category)}" data-cl-sector="${x.earnings_sector}" ${selected&&selected!==x.earnings_sector?'hidden':''}><div class="cl-meta">${tag('neutral',sectorLabels[x.earnings_sector])}<span>${esc(x.company)}</span><time>${esc(x.date)}</time></div><h2><a href="${x.url}">${esc(x.title)}</a></h2><p class="cl-muted">${esc(x.period||'')}</p><p>${esc(x.description)}</p><a class="cl-text-link" href="${x.url}">발언·확인 범위 읽기 →</a></article>`).join('')||blank()}</div></section></div>`;
+  const html=`<div class="collector-view earnings-view"><header class="cl-heading"><div><p class="cl-kicker">MARKET BRIEFING / EARNINGS CALLS</p><h1>실적 콜</h1><p>준비 발언과 질문·답변을 업종별로 읽습니다.</p></div><div class="cl-heading-date"><span>공개 자료</span><b>${rows.length}<small>편</small></b><small>각 자료의 원문일·확인 범위 기준</small></div></header>${tabs}${coverage}<p class="cl-muted">현재 게시물은 선별한 발언의 한국어 요약이며, 전체 콜 번역이 아닙니다. 공개된 본문은 아래에서 이어 읽을 수 있습니다.</p><section data-cl-scope data-cl-sector="${selected}">${controls({category:['원문 팩','콜 기록'],placeholder:'기업·분기·실적 콜 검색'})}<nav class="cl-call-jump" aria-label="기업별 본문 목차">${rows.filter(x=>!selected||x.earnings_sector===selected).map(x=>`<a href="#call-${esc(x.id)}">${esc(x.company)} · ${esc(x.period||x.date)}</a>`).join('')}</nav><div class="cl-earnings-grid cl-continuous-reader">${rows.map(x=>`<article id="call-${esc(x.id)}" class="cl-pack-card cl-call-entry" data-cl-record data-cl-category="${esc(x.category)}" data-cl-sector="${x.earnings_sector}" ${selected&&selected!==x.earnings_sector?'hidden':''}><div class="cl-meta">${tag('neutral',sectorLabels[x.earnings_sector])}<span>${esc(x.company)}</span><time>${esc(x.date)}</time></div>${x.reading?inlineReading(x.reading,x.id):`<h2>${esc(x.title)}</h2><p>본문을 불러오지 못했습니다. <a href="${x.url}">같은 사이트의 본문 열기</a></p>`}<footer class="cl-call-permalink"><a href="${x.url}">이 콜의 개별 주소</a><a href="#content">맨 위로</a></footer></article>`).join('')||blank()}</div></section></div>`;
   return {html,title:'실적 콜'};
  }
+ function inlineReading(html,id){
+  const prefix='call-'+id+'-';
+  return html.replace(/<div class="(?:report-reader-tools|cl-reader-tools)">[^]*?<\/div>/g,'')
+   .replace(/<footer class="cl-reader-end">[^]*?<\/footer>/g,'')
+   .replace(/<h1>/g,'<h2>').replace(/<\/h1>/g,'</h2>')
+   .replace(/id="([^"]+)"/g,(_,value)=>`id="${esc(prefix+value)}"`)
+   .replace(/href="([^"]+)"/g,(attribute,value)=>{
+    const raw=value.replace(/&amp;/g,'&');
+    if(/^(?:#earnings\?|earnings[^?#]*\?)/.test(raw)){
+     const section=new URLSearchParams(raw.slice(raw.indexOf('?')+1)).get('section');
+     if(section)return `href="#${esc(prefix+'section-'+section)}"`;
+    }
+    return raw.startsWith('#')?`href="#${esc(prefix+raw.slice(1))}"`:attribute;
+   });
+ }
+
  const tag=(s,label=states[s]||s)=>`<span class="cl-tag cl-${['ok','partial','fail','empty','stale'].includes(s)?s:'neutral'}">${esc(label)}</span>`;
  const blank=message=>`<p class="cl-empty">${esc(message||'이 기간에 확인된 자료가 없습니다.')}</p>`;
  const evidence=value=>{const xs=typeof value==='string'?[value]:list(value);return xs.length?`<details class="cl-evidence"><summary>원문 근거 ${xs.length>1?xs.length+'개':''}</summary>${xs.map(x=>`<blockquote>${esc(x)}</blockquote>`).join('')}</details>`:'';};
@@ -106,7 +123,7 @@
   }
   container.querySelector('[data-cl-edition]')?.addEventListener('change',e=>{location.href=e.target.value;});
   container.querySelector('[data-cl-print]')?.addEventListener('click',()=>window.print());
-  const item=params.get('item'),section=params.get('section'),fragment=typeof location!=='undefined'&&/^#cl-(?:numbers|prepared|qa|section-[A-Z0-9]+)$/.test(location.hash)?location.hash.slice(1):'';if(item||section||fragment){const target=document.getElementById(item?'cl-item-'+item:section?'cl-section-'+section:fragment);if(target){target.tabIndex=-1;target.classList.add('cl-highlight');target.focus({preventScroll:true});target.scrollIntoView({block:'start'});}}
+  const item=params.get('item'),section=params.get('section'),fragment=typeof location!=='undefined'&&/^#(?:cl-(?:numbers|prepared|qa|section-[A-Z0-9]+)|call-[a-zA-Z0-9_.:-]+)$/.test(location.hash)?location.hash.slice(1):'';if(item||section||fragment){const target=document.getElementById(item?'cl-item-'+item:section?'cl-section-'+section:fragment);if(target){target.tabIndex=-1;target.classList.add('cl-highlight');target.focus({preventScroll:true});target.scrollIntoView({block:'start'});}}
  }
  async function related(tab){
   const mapping={desk:['최신 수집 자료',''],summary:['함께 읽을 최신 수집 자료',''],news:['원문에서 확인한 새 소식','news'],interviews:['새 팟캐스트·인터뷰','podcast'],'ai-state':['새 AI 현주소 관측','lens'],finance:['새 금융권 자료','finance'],gpu:['사업자별 GPU 요금 관측','G'],memory:['메모리·부품 가격 관측','M'],weekly:['함께 볼 주간 관측 데이터','weekly'],events:['공식 실적·행사 일정','CAL'],sources:['Collector 수집 상태','status']};
@@ -119,5 +136,5 @@
    return `<aside class="cl-related" data-collector-related="${esc(tab)}"><div class="cl-related-head"><div><p class="cl-kicker">COLLECTOR · ${esc(target.startsWith('weekly-')?index.weekly.latest:index.daily.latest)}</p><h2>${esc(label)}</h2><p>${esc(count)} · ${esc(states[target.startsWith('weekly-')?index.weekly.status:index.daily.status]||'')}</p></div><a href="${link(target,extra)}">수집 자료에서 읽기 →</a></div>${cards.length?`<div class="cl-related-grid">${cards.map(x=>`<a href="${x.url?.startsWith('feed/src/')?packLink(x):link(target,{...extra,item:x.id||''})}"><strong>${esc(x.title)}</strong><small>${esc(x.company||x.source||x.pub||'')} →</small></a>`).join('')}</div>`:''}</aside>`;
   }catch{return `<aside class="cl-related"><p>수집 자료의 최신 상태를 확인하지 못했습니다. <a href="collector.html">수집 자료 다시 열기 →</a></p></aside>`;}
  }
- return {page,earnings,earningsSector,sectorLabels,emphasize,isEarnings,isCallPack,packLink,mount,related,setTransport:fn=>{transport=fn;cache.clear();},reset:()=>cache.clear(),card,pack,daily,weekly,gpu,models,capacity,filePath,mergeParts,link,esc};
+ return {page,earnings,inlineReading,earningsSector,sectorLabels,emphasize,isEarnings,isCallPack,packLink,mount,related,setTransport:fn=>{transport=fn;cache.clear();},reset:()=>cache.clear(),card,pack,daily,weekly,gpu,models,capacity,filePath,mergeParts,link,esc};
 });

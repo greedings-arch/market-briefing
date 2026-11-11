@@ -389,7 +389,7 @@
         if (token !== generation) return;
         const id = params.get('id');
         if (!id || id.startsWith('iv-')) {
-          const result = await window.Collector.earnings(params, reports.items, config.reports);
+          const result = await window.Collector.earnings(params, reports.items, config.reports, {loadReport: id => json('reports/' + encodeURIComponent(id)), renderReport: r => views.reports.detail(r)});
           if (token !== generation) return;
           $('#content').className = 'collector-host';
           $('#content').innerHTML = result.html;
@@ -581,7 +581,7 @@
     }
   });
   window.addEventListener('hashchange', () => {
-    if (['collector', 'earnings'].includes(active) && /^#cl-/.test(location.hash)) return;
+    if (['collector', 'earnings'].includes(active) && /^#(?:cl-|call-)/.test(location.hash)) return;
     show();
   });
   window.addEventListener('popstate', show);
