@@ -227,3 +227,5 @@
 .report-commentary .report-references p{margin:12px 0}
 @media(max-width:700px){.report-commentary .report-original-source{padding:16px 18px}.report-commentary .report-chapter .report-chapter-subtitle{font-size:15px}.report-commentary .comment p{font-size:15px}.report-commentary-toc>div>a{font-size:14px}.report-commentary .report-bar-row{grid-template-columns:108px minmax(0,1fr) 64px}.report-commentary .report-value-tag{font-size:9px}}
 @media print{.report-commentary .report-original-source{break-inside:avoid}.report-commentary .comment p{font-size:10.5pt}.report-commentary .report-commentary-toc a{font-size:10pt}}
+
+.report-call .report-dialogue{margin:16px 0;padding:0 0 0 16px;border-left:2px solid #d9e2eb;background:transparent}.report-call .report-dialogue.question{margin-top:26px;border-left-color:#809ab1}.report-call .report-block strong{font-weight:750;color:#173c60}.report-call .report-citation{font-size:10px;margin-top:5px}.report-call .report-call-scope{font-size:12px;color:var(--muted);line-height:1.8}.report-call .report-section{margin-top:32px}.report-call .dialogue-speaker{font-size:12px}.report-call .report-methodology{margin-top:40px}
