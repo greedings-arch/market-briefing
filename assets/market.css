@@ -233,3 +233,6 @@
 /* One navigation level across investment tools and source pages. */
 .unified-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:16px 0}.unified-tabs a{border:1px solid var(--line,#d5deea);border-radius:3px;padding:10px 12px;font-size:13px}.review-history>summary{cursor:pointer;font-size:20px;font-weight:700;padding:16px 0}.merged-valuation{border-top:2px solid #c8d5e4;padding-top:32px}
 @media(max-width:600px){.unified-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.unified-tabs a{text-align:center;margin:0;padding:10px 4px;font-size:11px}}
+
+/* Navigation focuses the reading region without drawing a browser frame. */
+#content:focus{outline:none}
