@@ -1,5 +1,5 @@
 {
- "updated_kst": "2026-11-11 10:57",
+ "updated_kst": "2026-11-11 13:02",
  "sources": [
   {
    "name": "AMD IR calendar",
@@ -6936,6 +6936,39 @@
    "consecutive_failures": 0
   },
   {
+   "name": "20VC",
+   "url": "https://www.thetwentyminutevc.com/",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
+   "name": "AMD 공식 채널",
+   "url": "https://www.youtube.com/@AMD",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
+   "name": "AWS 공식 채널",
+   "url": "https://www.youtube.com/@amazonwebservices",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
    "name": "Acquired",
    "url": "https://podcasts.apple.com/us/podcast/acquired/id1050462261",
    "lane": "P",
@@ -6986,6 +7019,17 @@
    "consecutive_failures": 0
   },
   {
+   "name": "Anthropic 공식 채널",
+   "url": "https://www.youtube.com/@anthropic-ai",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
    "name": "BG2 Pod",
    "url": "https://www.bg2pod.com/",
    "lane": "P",
@@ -7031,6 +7075,28 @@
    "run_id": "collector-daily-20261111-1005"
   },
   {
+   "name": "Bloomberg Technology",
+   "url": "https://www.bloomberg.com/technology",
+   "lane": "P",
+   "last_ok": "",
+   "last_fail": "2026-11-11 12:57",
+   "why": "HTTP Error 403: Forbidden",
+   "checked_scope": "개별 대담 미확인; 제한 우회 없음",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 1
+  },
+  {
+   "name": "CNBC Technology",
+   "url": "https://www.cnbc.com/technology/",
+   "lane": "P",
+   "last_ok": "",
+   "last_fail": "2026-11-11 12:57",
+   "why": "HTTP Error 403: Forbidden",
+   "checked_scope": "개별 대담 미확인; 제한 우회 없음",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 1
+  },
+  {
    "name": "Cheeky Pint",
    "url": "https://feeds.transistor.fm/cheeky-pint-with-john-collison",
    "lane": "P",
@@ -7066,6 +7132,17 @@
    "consecutive_failures": 1
   },
   {
+   "name": "Conversations with Tyler",
+   "url": "https://conversationswithtyler.com/",
+   "lane": "P",
+   "last_ok": "",
+   "last_fail": "2026-11-11 12:57",
+   "why": "HTTP Error 403: Forbidden",
+   "checked_scope": "개별 대담 미확인; 제한 우회 없음",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 1
+  },
+  {
    "name": "Decoder Podcast",
    "url": "https://www.theverge.com/decoder-podcast",
    "lane": "P",
@@ -7089,6 +7166,61 @@
    "bytes_read": 780293,
    "sha256": "17c7ce43e385c2a5b49b272184205920e63d118064d6d9455b567cb44563ba41",
    "run_id": "collector-daily-20261111-1005"
+  },
+  {
+   "name": "Fortune",
+   "url": "https://fortune.com/",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
+   "name": "Goldman Sachs Podcasts",
+   "url": "https://www.goldmansachs.com/insights/podcasts",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
+   "name": "Google Cloud 공식 채널",
+   "url": "https://www.youtube.com/@googlecloudtech",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
+   "name": "Google DeepMind Podcast",
+   "url": "https://deepmind.google/the-podcast/",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
+   "name": "Intel 공식 채널",
+   "url": "https://www.youtube.com/@Intel",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
   },
   {
    "name": "Invest Like the Best",
@@ -7216,6 +7348,17 @@
    "consecutive_failures": 1
   },
   {
+   "name": "Lenny’s Podcast",
+   "url": "https://www.lennysnewsletter.com/podcast",
+   "lane": "P",
+   "last_ok": "",
+   "last_fail": "2026-11-11 12:57",
+   "why": "HTTP Error 403: Forbidden",
+   "checked_scope": "개별 대담 미확인; 제한 우회 없음",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 1
+  },
+  {
    "name": "Lex Fridman",
    "url": "https://lexfridman.com/feed/podcast/",
    "lane": "P",
@@ -7229,6 +7372,83 @@
    "bytes_read": 2097227,
    "sha256": "840d0bece0eaa4341bf606a27a06843b0fd36c55d2e8455a46a4793960d4d6c8",
    "run_id": "collector-daily-20261111-1005"
+  },
+  {
+   "name": "MIT Sloan Management Review",
+   "url": "https://sloanreview.mit.edu/audio/",
+   "lane": "P",
+   "last_ok": "",
+   "last_fail": "2026-11-11 12:57",
+   "why": "HTTP Error 403: Forbidden",
+   "checked_scope": "개별 대담 미확인; 제한 우회 없음",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 1
+  },
+  {
+   "name": "Microsoft WorkLab",
+   "url": "https://www.microsoft.com/en-us/worklab/podcast",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
+   "name": "Microsoft 공식 채널",
+   "url": "https://www.youtube.com/@Microsoft",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
+   "name": "Morgan Stanley Thoughts on the Market",
+   "url": "https://www.morganstanley.com/insights/podcasts/thoughts-on-the-market",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
+   "name": "NVIDIA 공식채널",
+   "url": "https://www.youtube.com/@NVIDIA",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
+   "name": "OpenAI 공식 채널",
+   "url": "https://www.youtube.com/@OpenAI",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
+   "name": "SK hynix 공식 채널",
+   "url": "https://www.youtube.com/@SKhynix",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
   },
   {
    "name": "SemiAnalysis Weekly",
@@ -7326,6 +7546,17 @@
    "run_id": "collector-daily-20261111-1005"
   },
   {
+   "name": "Stanford eCorner",
+   "url": "https://ecorner.stanford.edu/",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
    "name": "Stratechery 2026 archive",
    "url": "https://stratechery.com/2026/",
    "lane": "P",
@@ -7339,6 +7570,39 @@
    "bytes_read": 305513,
    "sha256": "64eab1b971c16eb7722b4555f8dbe7fbef2a448ed925f79f938645666e6a9223",
    "run_id": "collector-daily-20261111-1005"
+  },
+  {
+   "name": "TSMC 공식 채널",
+   "url": "https://www.youtube.com/@tsmc",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
+   "name": "The Logan Bartlett Show",
+   "url": "https://www.youtube.com/@TheLoganBartlettShow",
+   "lane": "P",
+   "last_ok": "2026-11-11 12:57",
+   "last_fail": "",
+   "why": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "checked_scope": "공식 발견 경로 HTTP 확인; 개별 대담 검증 아님",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 0
+  },
+  {
+   "name": "WSJ Videos",
+   "url": "https://www.wsj.com/video",
+   "lane": "P",
+   "last_ok": "",
+   "last_fail": "2026-11-11 12:57",
+   "why": "HTTP Error 403: Forbidden",
+   "checked_scope": "개별 대담 미확인; 제한 우회 없음",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 1
   },
   {
    "name": "a16z Podcast Network",
@@ -7399,6 +7663,17 @@
    "bytes_read": 1135344,
    "sha256": "68c60a5f55fec546baf7269b12c2e40966a7d0ca55202f4f8ee7cb3339afa547",
    "run_id": "collector-daily-20261111-1005"
+  },
+  {
+   "name": "삼성전자 반도체 공식 채널",
+   "url": "https://www.youtube.com/@SamsungSemiconductor",
+   "lane": "P",
+   "last_ok": "",
+   "last_fail": "2026-11-11 12:57",
+   "why": "HTTP Error 404: Not Found",
+   "checked_scope": "개별 대담 미확인; 제한 우회 없음",
+   "run_id": "interview-wide-20261111",
+   "consecutive_failures": 1
   },
   {
    "name": "AMD 원문",

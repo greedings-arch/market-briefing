@@ -1,6 +1,6 @@
 {
  "format": "collector-index/1",
- "updated_kst": "2026-11-11 10:58",
+ "updated_kst": "2026-11-11 13:06",
  "daily": {
   "latest": "2026-11-11",
   "url": "feed/daily/2026-11-11.json",
@@ -34,12 +34,12 @@
   {
    "url": "feed/QUESTIONS.md",
    "bytes": 9336,
-   "made_kst": "2026-11-11 10:57"
+   "made_kst": "2026-11-11 13:03"
   },
   {
    "url": "feed/SPEC.md",
-   "bytes": 56302,
-   "made_kst": "2026-11-11 10:57"
+   "bytes": 60594,
+   "made_kst": "2026-11-11 13:03"
   },
   {
    "url": "feed/daily/2026-11-10.json",
@@ -58,28 +58,28 @@
   },
   {
    "url": "feed/health.json",
-   "bytes": 319962,
-   "made_kst": "2026-11-11 10:57"
+   "bytes": 329433,
+   "made_kst": "2026-11-11 13:02"
   },
   {
    "url": "feed/src/iv-ceg-3q26-call.json",
    "bytes": 10183,
-   "made_kst": "2026-11-11 10:57"
+   "made_kst": "2026-11-11 13:03"
   },
   {
    "url": "feed/src/iv-oklo-3q26-call.json",
    "bytes": 11560,
-   "made_kst": "2026-11-11 10:57"
+   "made_kst": "2026-11-11 13:03"
   },
   {
    "url": "feed/src/iv-vst-3q26-call.json",
    "bytes": 10745,
-   "made_kst": "2026-11-11 10:57"
+   "made_kst": "2026-11-11 13:03"
   },
   {
    "url": "feed/state/seen.json",
    "bytes": 12384,
-   "made_kst": "2026-11-11 10:58"
+   "made_kst": "2026-11-11 13:06"
   },
   {
    "url": "feed/weekly/2026-W46.json",
