@@ -1,15 +1,15 @@
 {
  "format": "collector-index/1",
- "updated_kst": "2026-11-11 07:20",
+ "updated_kst": "2026-11-11 09:40",
  "daily": {
   "latest": "2026-11-10",
   "url": "feed/daily/2026-11-10.json",
   "status": "partial",
-  "revision": 3,
+  "revision": 4,
   "counts": {
-   "items": 10,
+   "items": 12,
    "finance": 0,
-   "podcasts": 9,
+   "podcasts": 14,
    "packs": 3,
    "lens": 4
   },
@@ -22,7 +22,7 @@
   "latest": "2026-W46",
   "url": "feed/weekly/2026-W46.json",
   "status": "partial",
-  "revision": 4,
+  "revision": 5,
   "empty_sections": [
    "LAB",
    "CX",
@@ -33,57 +33,57 @@
  "files": [
   {
    "url": "feed/QUESTIONS.md",
-   "bytes": 7240,
-   "made_kst": "2026-11-11 07:19"
+   "bytes": 8619,
+   "made_kst": "2026-11-11 09:39"
   },
   {
    "url": "feed/SPEC.md",
-   "bytes": 49113,
-   "made_kst": "2026-11-11 07:19"
+   "bytes": 50281,
+   "made_kst": "2026-11-11 09:39"
   },
   {
    "url": "feed/daily/2026-11-10.json",
-   "bytes": 89934,
+   "bytes": 107956,
    "made_kst": "2026-11-10 16:46"
   },
   {
    "url": "feed/daily/latest.json",
-   "bytes": 89934,
+   "bytes": 107956,
    "made_kst": "2026-11-10 16:46"
   },
   {
    "url": "feed/health.json",
-   "bytes": 183887,
-   "made_kst": "2026-11-11 01:17"
+   "bytes": 201350,
+   "made_kst": "2026-11-11 09:39"
   },
   {
    "url": "feed/src/iv-ceg-3q26-call.json",
    "bytes": 30370,
-   "made_kst": "2026-11-11 07:19"
+   "made_kst": "2026-11-11 09:39"
   },
   {
    "url": "feed/src/iv-oklo-3q26-call.json",
    "bytes": 40813,
-   "made_kst": "2026-11-11 07:19"
+   "made_kst": "2026-11-11 09:39"
   },
   {
    "url": "feed/src/iv-vst-3q26-call.json",
    "bytes": 30017,
-   "made_kst": "2026-11-11 07:19"
+   "made_kst": "2026-11-11 09:39"
   },
   {
    "url": "feed/state/seen.json",
-   "bytes": 4694,
-   "made_kst": "2026-11-11 07:20"
+   "bytes": 6188,
+   "made_kst": "2026-11-11 09:40"
   },
   {
    "url": "feed/weekly/2026-W46.json",
-   "bytes": 264042,
+   "bytes": 283865,
    "made_kst": "2026-11-10 16:45"
   },
   {
    "url": "feed/weekly/latest.json",
-   "bytes": 264042,
+   "bytes": 283865,
    "made_kst": "2026-11-10 16:45"
   }
  ],

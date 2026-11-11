@@ -1,5 +1,5 @@
 {
- "updated_kst": "2026-11-11 07:20",
+ "updated_kst": "2026-11-11 09:40",
  "entries": [
   {
    "url": "https://blog.google/innovation-and-ai/infrastructure-and-cloud/global-network/tpu-8i-max-and-8tx/",
@@ -159,6 +159,55 @@
    "url": "https://psi.inc/research/aaronson-ambainis/",
    "event_key": "",
    "pub": "2026-11-06",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://openai.com/index/chatgpt-enterprise-aws-marketplace",
+   "event_key": "",
+   "pub": "2026-11-09",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://openai.com/index/control-room",
+   "event_key": "",
+   "pub": "2026-11-09",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://sequoiacap.com/podcast/a-model-for-everyone-how-ronak-from-trajectory-is-building-products-for-continual-learning",
+   "event_key": "",
+   "pub": "2026-11-05",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://www.theverge.com/podcast/1024438/willy-shih-supply-chain-ai-chips-ram-where-does-my-stuff-come-from-book",
+   "event_key": "",
+   "pub": "2026-11-05",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://www.theverge.com/podcast/1029038/ai-cybersecurity-hackers-data-breach-dark-age-alex-stamos",
+   "event_key": "",
+   "pub": "2026-11-07",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://www.theverge.com/podcast/1029684/riaa-mitch-glazier-napster-ai-labels-music",
+   "event_key": "",
+   "pub": "2026-11-09",
+   "posted": "2026-11-11",
+   "document": "daily/2026-11-10.json"
+  },
+  {
+   "url": "https://colossus.com/episode/the-productive-investor/",
+   "event_key": "",
+   "pub": "2026-11-04",
    "posted": "2026-11-11",
    "document": "daily/2026-11-10.json"
   }

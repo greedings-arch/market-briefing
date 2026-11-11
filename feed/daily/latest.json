@@ -1,7 +1,7 @@
 {
  "format": "collector-daily/1",
  "date": "2026-11-10",
- "revision": 3,
+ "revision": 4,
  "made_kst": "2026-11-10 16:46",
  "period": {
   "from": "2026-11-09 09:00",
@@ -11,7 +11,7 @@
  "lanes": {
   "N1": {
    "status": "partial",
-   "n": 1,
+   "n": 2,
    "tried_queries": [
     "site:nvidianews.nvidia.com OR site:cloudblog.withgoogle.com OR site:blogs.microsoft.com AI cloud data center power November 9 2026",
     "AI data center power contract 100 MW November 9 2026 Equinix Digital Realty NTT Vantage",
@@ -56,11 +56,11 @@
      "why": "HTTP 403; RSS 본문 접근 차단"
     }
    ],
-   "note": "필수 전력 점검 세 항목: 확인했으나 없음. 고정 전력 점검 결과: ① 데이터센터 사업자의 100MW 이상 전력·용량 계약은 11/09 09:00~11/10 16:20 기간 새 발표를 확인하지 못했습니다. NTT Global Data Centers–Bloom Energy 900MW 계약은 11/05 발표로 이번 일간 기간 밖입니다. ② 현장·자체 발전을 주전원으로 조달한다는 신규 발표도 기간 내 확인되지 않았습니다; 같은 NTT–Bloom 계약이 11/05의 기간 밖 사례입니다. ③ 하이퍼스케일러·네오클라우드의 전력 조달 방식 변경도 기간 내 공개 발표를 찾지 못했습니다. Google TPU 원문은 Google 블로그에서 확인했습니다."
+   "note": "필수 전력 점검 세 항목: 확인했으나 없음. 고정 전력 점검 결과: ① 데이터센터 사업자의 100MW 이상 전력·용량 계약은 11/09 09:00~11/10 16:20 기간 새 발표를 확인하지 못했습니다. NTT Global Data Centers–Bloom Energy 900MW 계약은 11/05 발표로 이번 일간 기간 밖입니다. ② 현장·자체 발전을 주전원으로 조달한다는 신규 발표도 기간 내 확인되지 않았습니다; 같은 NTT–Bloom 계약이 11/05의 기간 밖 사례입니다. ③ 하이퍼스케일러·네오클라우드의 전력 조달 방식 변경도 기간 내 공개 발표를 찾지 못했습니다. Google TPU 원문은 Google 블로그에서 확인했습니다. 보완: 기존 TPU 8tx 후보와 고정전력 ① 100MW 이상 용량계약 ② 자체·온사이트 발전 ③ 하이퍼스케일러·네오클라우드 조달방식 변경을 재대조. ②의 Anthropic-Caterpillar 1.7GW 발전기 거래를 DCD 원문에서 재확인했으나 11/09만 표시되고 시각이 없어 일간 시작 경계 적격성을 입증 못함. 세 필수점검 결과: ① 추가 적격 원문 없음, ② 보류 1건, ③ 추가 적격 변화 없음. OpenAI 공식 RSS 시각을 대조한 기업용 ChatGPT의 AWS 조달 채널 추가 발표를 반영했습니다."
   },
   "N2": {
    "status": "partial",
-   "n": 1,
+   "n": 2,
    "tried_queries": [
     "OpenAI news November 9 2026 model release official",
     "Google DeepMind November 9 2026 AI blog model release",
@@ -120,7 +120,7 @@
      "why": "HTTP 403; 페이지 접근 차단"
     }
    ],
-   "note": "공식 목록과 연구 출처를 재확인해 AWS의 Claude 모델 제공 후보 1건을 추가했다. 일부 랩 페이지 접근과 경계일 시각 확인이 남아 partial이다. 재개 후 지정 연구 출처의 공개 목록/RSS를 다시 확인했다. AWS 모델 제공 원문과 공식 RSS 시각이 확인돼 후보를 추가했다. Epoch·AA의 11/09 글과 HAI의 11/10 글은 정확한 경계시각을 확인하지 못해 보류했다."
+   "note": "기존 피드·원문 확인 기록을 보존했습니다. OpenAI 공식 RSS와 상세 원문에서 연구 워크로드 통제 시스템의 기간 내 발행을 확인했습니다. 기업용 ChatGPT의 AWS 조달 채널 발표는 중복 없이 N1에 배정했습니다. Anthropic 공개 원문과 AWS 공급 발표의 실제 시각도 대조했습니다."
   },
   "N3": {
    "status": "partial",
@@ -258,7 +258,7 @@
      "why": "HTTP 403; RSS 본문 접근 차단"
     }
    ],
-   "note": "17개 지정 기업군의 날짜별 수주·공급계약·선정·차세대/발주 검색을 기업별로 수행하고, DART 최근공시 전항목 및 100억원 이상 공공·금융 발주를 확인했습니다. NHN클라우드 용량 목표 기사 1건을 확인했습니다. CJ올리브네트웍스의 공공 미디어 SI 수주 기사도 원문은 열었으나 11/09 날짜만 있고 시각이 없어 경계일 규칙에 따라 보류했습니다. 지정 피드 중 iNews24·뉴스핌 RSS는 404, Byline RSS는 403입니다."
+   "note": "17개 지정 기업군의 날짜별 수주·공급계약·선정·차세대/발주 검색을 기업별로 수행하고, DART 최근공시 전항목 및 100억원 이상 공공·금융 발주를 확인했습니다. NHN클라우드 용량 목표 기사 1건을 확인했습니다. CJ올리브네트웍스의 공공 미디어 SI 수주 기사도 원문은 열었으나 11/09 날짜만 있고 시각이 없어 경계일 규칙에 따라 보류했습니다. 지정 피드 중 iNews24·뉴스핌 RSS는 404, Byline RSS는 403입니다. 보완: 기존 17개 기업별 수주·공급계약·사업자선정·차세대 검색, DART, 공공·금융 발주 전수 기록을 재사용. CJ올리브네트웍스 공식 뉴스룸 11/09 기사 원문 날짜 및 사업 내용 확인. 게시 시각이 공개되지 않아 09:00 시작 경계 적격성 미확인으로 held. 신규 확정 후보 없음."
   },
   "T1": {
    "status": "partial",
@@ -303,7 +303,7 @@
      "why": "HTTP 403; feed 차단, 홈페이지 대체 페이지는 열림"
     }
    ],
-   "note": "지정 전문지 검색·피드 확인에서 Anthropic 발전기 계약 기사 원문을 열었으나 DCD는 11/09 날짜만 표시하고 시각은 제시하지 않아 Q04 경계일 규칙에 따라 보류했습니다. 11/09~10 기간으로 확인된 후보는 없습니다. HPCwire RSS는 HTTP 403이나 사이트 본문 대체 검색은 열렸습니다. DCD 가스발전 계약 기사에서 최초 FT 보도 링크를 확인했다. FT는 제목/구독 장벽만 표시하고 발행일·시각을 직접 확인하지 못해 보류했다."
+   "note": "지정 전문지 검색·피드 확인에서 Anthropic 발전기 계약 기사 원문을 열었으나 DCD는 11/09 날짜만 표시하고 시각은 제시하지 않아 Q04 경계일 규칙에 따라 보류했습니다. 11/09~10 기간으로 확인된 후보는 없습니다. HPCwire RSS는 HTTP 403이나 사이트 본문 대체 검색은 열렸습니다. DCD 가스발전 계약 기사에서 최초 FT 보도 링크를 확인했다. FT는 제목/구독 장벽만 표시하고 발행일·시각을 직접 확인하지 못해 보류했다. 보완: DCD Anthropic 발전기 기사를 원문에서 다시 확인해 held에 명시. DCD 페이지의 표시 날짜는 2026-11-09이며 게시 시각은 페이지에 나타나지 않음. 기간 경계 미확정. HPCwire RSS HTTP 403은 지정 datacenter 주제 목록의 공개 대체 경로가 열려 기존 검색에서 확인했으나, 접근 상태는 RSS 실패로 보존."
   },
   "T2": {
    "status": "partial",
@@ -337,7 +337,7 @@
      "why": "HTTP 403; RSS 본문 접근 차단"
     }
    ],
-   "note": "Wiz 원문으로 메인 URL·출처를 바꾸고 원문 문장을 사용했습니다. 원문 HTML의 공개 article:published_time은 2026-11-09 09:56:32 -05:00이며 KST 2026-11-09 23:56으로 시작 경계 안입니다. 지정 Byline Network RSS는 HTTP 403으로 lane은 partial입니다."
+   "note": "Wiz 원문으로 메인 URL·출처를 바꾸고 원문 문장을 사용했습니다. 원문 HTML의 공개 article:published_time은 2026-11-09 09:56:32 -05:00이며 KST 2026-11-09 23:56으로 시작 경계 안입니다. 지정 Byline Network RSS는 HTTP 403으로 lane은 partial입니다. 보완: 기존 Wiz 원문과 Register 등 원문검증 결과 재사용. Byline RSS 403은 기존 실패 상태; 공식 검색/개별 기사 대체경로 확인 기록을 보존하며 추가 적격 원문은 확정되지 않음."
   },
   "TW": {
    "status": "partial",
@@ -402,7 +402,7 @@
      "why": "HTTP 404; 지정 RSS 주소 없음"
     }
    ],
-   "note": "공식 매출자료 재확인 결과 TSMC는 원문 11/10 공시와 IR 달력 13:30 Asia/Taipei를 확인해 후보 1건에 반영했습니다. Quanta 공식 IR/MOPS는 11/09 날짜와 NT$353,250m, 월증가 8.6%, 연증가 104.0%를 확인했으나 시각이 없어 09:00 KST 시작 경계 확인 전까지 held로 분리했습니다. Foxconn(11/05), Wistron·Wiwynn(11/06), Inventec(11/04)은 일간 구간 밖입니다. RSS 일부 접근 실패가 남아 lane은 partial입니다."
+   "note": "공식 매출자료 재확인 결과 TSMC는 원문 11/10 공시와 IR 달력 13:30 Asia/Taipei를 확인해 후보 1건에 반영했습니다. Quanta 공식 IR/MOPS는 11/09 날짜와 NT$353,250m, 월증가 8.6%, 연증가 104.0%를 확인했으나 시각이 없어 09:00 KST 시작 경계 확인 전까지 held로 분리했습니다. Foxconn(11/05), Wistron·Wiwynn(11/06), Inventec(11/04)은 일간 구간 밖입니다. RSS 일부 접근 실패가 남아 lane은 partial입니다. 보완: 기존 TSMC 10월 매출 후보 1건 유지. Quanta 공식 IR 표의 10월 조정 연결매출 NT$353,250 million, 전월비 +8.6%, 전년비 +104.0%를 다시 대조했으나 MOPS·IR 모두 11/09 날짜 외 공개 시각을 확인할 수 없어 held 유지. Foxconn 11/05, Wistron·Wiwynn 11/06, Inventec 11/04 공시는 일간 기간 밖."
   },
   "CM": {
    "status": "empty",
@@ -425,7 +425,7 @@
     "https://news.hada.io/rss/news"
    ],
    "failed_sources": [],
-   "note": "Hacker News/GeekNews 공개 피드 및 커뮤니티 검색을 완료했으며 기간 내 사업 AI·IT서비스·클라우드·데이터센터 관련 확인 가능한 커뮤니티 신호가 없어 empty로 기록합니다."
+   "note": "Hacker News/GeekNews 공개 피드 및 커뮤니티 검색을 완료했으며 기간 내 사업 AI·IT서비스·클라우드·데이터센터 관련 확인 가능한 커뮤니티 신호가 없어 empty로 기록합니다. 보완: 기존 기간 내 Hacker News 200점 이상 및 GeekNews 원문 확인/검색 11회 기록을 재사용. 적격 원문 신호 없음. 이미 수행한 전수검색과 피드 확인이 기록되어 있어 empty를 유지."
   },
   "N4": {
    "status": "partial",
@@ -528,22 +528,12 @@
      "why": "웹 reader에서 가져오지 못했습니다."
     },
     {
-     "name": "Federal Reserve feed",
-     "url": "https://www.federalreserve.gov/feeds/speeches_and_testimony.xml",
-     "why": "웹 reader가 XML 콘텐츠 유형을 거부합니다."
-    },
-    {
-     "name": "Bank of England feed",
-     "url": "https://www.bankofengland.co.uk/rss/news",
-     "why": "웹 reader가 XML 콘텐츠 유형을 거부합니다."
-    },
-    {
      "name": "Reuters direct article",
      "url": "https://www.reuters.com/business/finance/banks-investors-grow-wary-ai-debt-spooked-by-market-selloff-2026-11-09/",
      "why": "Reuters 및 reut.rs 직접 접근은 HTTP 401 또는 차단 상태였습니다. Reuters 제휴 배포본에서 본문을 확인했으며 직접 URL의 slug와 날짜는 추정했습니다."
     }
    ],
-   "note": "20회 이상 실제 검색 및 SPEC N4 기관·일일 인물·주간기관 명단 원문/공개페이지 점검. 이번 일간 기간 내 본문검증 가능한 AI 금융 후보를 확보하지 못함. Reuters 재전재 후보는 Reuters 직접 URL·시각 확인 불가로 제외; Bloomberg ING 원문 11/05 기간 밖, Vector는 재가공 기사여서 제외. 일부 XML/차단된 도메인은 failed_sources에 남김; 결과가 지난 날짜/일반 시황 위주여서 검색 실패 의심."
+   "note": "기존 기관·인물·신용 점검과 추가 낙관·경계 검색을 대조했습니다. Fed·영란은행의 XML과 Brookfield 목록은 직접 요청으로 확인했습니다. 추가 금융 발언은 원발언이 기간 밖이거나 게시 시각·일자를 확정하지 못해 보류했습니다."
   },
   "E": {
    "status": "partial",
@@ -638,7 +628,15 @@
     "site:investor.lenovo.com/en/financial/results 2026 2027 Q1 results August 2026",
     "site:investor.wistron.com 2026 third quarter financial results November 2026",
     "site:inventec.com/ir 2026 third quarter financial results October November",
-    "site:quantatw.com 2026 Q3 financial results November 2026 investor"
+    "site:quantatw.com 2026 Q3 financial results November 2026 investor",
+    "official IR 2026 Q3 LG CNS SK AX Hyundai AutoEver Lotte Innovate earnings release date",
+    "site:connect.lgcns.com/kr/company/ir/ir-info 2026 3Q earnings",
+    "site:hyundai-autoever.com/kor/ir/summary 2026년 3분기 컨퍼런스콜",
+    "site:lotteinnovate.com/ko/investment/relationinvestors/ir 2026 3분기",
+    "KT 3Q 2026 official earnings call November 10 IR",
+    "NHN Cloud standalone Q3 2026 official earnings",
+    "CJ OliveNetworks Q3 2026 results official",
+    "ITCEN 2026 Q3 earnings official"
    ],
    "tried_sources": [
     "Alphabet IR",
@@ -732,14 +730,28 @@
     "Celestica",
     "Pure Storage",
     "NetApp",
-    "Official IR pages (grouped company searches)"
+    "Official IR pages (grouped company searches)",
+    "LG CNS IR",
+    "SK AX official site",
+    "Hyundai AutoEver IR",
+    "Lotte Innovate IR",
+    "CJ OliveNetworks newsroom",
+    "Daewoo Information Systems entity check",
+    "ITCEN official site",
+    "KT IR resources",
+    "KT Cloud official",
+    "NAVER IR",
+    "NHN newsroom",
+    "Kakao Enterprise official",
+    "Megazone newsroom",
+    "Bespin Global newsroom"
    ],
    "failed_sources": [],
-   "note": "공식 IR의 최근 실적 발표일·콜 일정에 대한 관측 66개를 기록했다. 중복을 제외한 기업은 65개사이며, 추가 14개사는 일자 미표기·별도 실적 공개 부재·회사 식별 문제·접근 제약으로 확정하지 못했다. 전사본을 끝까지 확인한 콜은 연결된 심층 팩으로 제공한다. Wiwynn·Rackspace는 공개시각까지 확인한 공식 실적발표 자료만 후보로 포함했다. CoreWeave와 Rackspace의 예정 콜은 시험 마감 이후이며, Shinsegae I&C의 11/06 자료는 실제 콜이 확인되지 않아 3영업일 예외를 적용하지 않았다. 미확정 기업은 재시도 목록에 보존한다."
+   "note": "공식 IR의 최근 실적 발표일·콜 일정에 대한 관측 66개를 기록했다. 중복을 제외한 기업은 65개사이며, 추가 14개사는 일자 미표기·별도 실적 공개 부재·회사 식별 문제·접근 제약으로 확정하지 못했다. 전사본을 끝까지 확인한 콜은 연결된 심층 팩으로 제공한다. Wiwynn·Rackspace는 공개시각까지 확인한 공식 실적발표 자료만 후보로 포함했다. CoreWeave와 Rackspace의 예정 콜은 시험 마감 이후이며, Shinsegae I&C의 11/06 자료는 실제 콜이 확인되지 않아 3영업일 예외를 적용하지 않았다. 미확정 기업은 재시도 목록에 보존한다. 보완: 14개 미확정 회사를 회사별 공식 경로로 대조. 기간 밖 LG CNS 10월 자료 외에는 별도 실적일·콜 원문을 확정하지 못함. Lotte Innovate 공식 IR/뉴스룸은 정상 접근됐으나 결과목록이 비어 있고, 모회사 자료로 대체하지 않아 partial 유지."
   },
   "P": {
    "status": "partial",
-   "n": 9,
+   "n": 14,
    "tried_queries": [
     "site:sequoiacap.com/series/training-data November 2026 Training Data episode",
     "site:dwarkesh.com/p November 2026 podcast episode",
@@ -764,7 +776,18 @@
     "Latent Space 공식 Handshake 에피소드 transcript VTT 직접 열기: HTTP 403 (2026-11-11 00:xx KST 관측)",
     "SemiAnalysis Weekly Ep.043 공식 transcript 페이지·RSS 오디오·YouTube chapters 확인: 공식 페이지 transcript coming soon (2026-11-11 00:xx KST 관측)",
     "Invest Like the Best Ep.499 공식 Colossus 전사 전문 열기: transcript 로그인 제한 확인 (2026-11-11 00:xx KST 관측)",
-    "All-In 공식 11/07 episode archive 및 YouTube 링크 열기: 공개 쇼노트 확인 (2026-11-11 00:xx KST 관측)"
+    "All-In 공식 11/07 episode archive 및 YouTube 링크 열기: 공개 쇼노트 확인 (2026-11-11 00:xx KST 관측)",
+    "official podcast releases November 3-10 2026 Sequoia Dwarkesh Latent Lex Acquired SemiAnalysis No Priors a16z All-In Invest Like Best Cheeky Pint Decoder BG2 Big Technology Stratechery",
+    "site:semianalysis.com/weekly/episodes/ep-042 GDPx November 3 2026",
+    "Decoder episode archive Nov 2026 official page",
+    "Stratechery 2026 archive Nov 3-10 individual episode pages",
+    "Big Technology official archive November 3 2026",
+    "Sequoia Training Data official transcript full read",
+    "site:theverge.com/decoder-podcast-with-nilay-patel Nov 5 7 9 2026 official episodes",
+    "site:colossus.com/episode/the-productive-investor 2026-11-04 transcript",
+    "site:colossus.com/episode/trillion-dollar-goalposts 2026-11-06 transcript",
+    "site:bigtechnology.com/archive Nov 3 2026 OpenAI Adam Fry",
+    "site:stratechery.com/2026 November 3 9 2026 podcast archive"
    ],
    "tried_sources": [
     "Sequoia Training Data",
@@ -801,17 +824,22 @@
      "why": "공식 에피소드의 transcript 링크이나 직접 요청이 HTTP 403; 로그인 우회 없이 전사문을 읽지 못함."
     },
     {
-     "name": "SemiAnalysis Weekly Ep.043 transcript",
-     "url": "https://semianalysis.com/weekly/episodes/ep-043/",
-     "why": "공식 페이지가 transcript coming soon으로 표시; 2026-11-11 00시대 KST 재확인 시에도 공개 전사문 없음. 공개 RSS는 오디오 링크만 확인."
-    },
-    {
      "name": "Invest Like the Best Ep.499 full transcript",
      "url": "https://colossus.com/episode/trillion-dollar-goalposts/",
      "why": "공식 페이지에서 전사 전문은 로그인/등록 요구. 공개 구간과 show notes만 확인했으며 우회하지 않음."
+    },
+    {
+     "name": "Latent Space Handshake transcript",
+     "url": "https://rss.beehiiv.com/podcasts/transcriptions/01a1c104-0c36-7bb0-9cd9-d552c4d789a7.vtt",
+     "why": "공식 VTT 접근 HTTP 403/unsupported MIME, 전문 미확보."
+    },
+    {
+     "name": "Invest Like the Best EP499 transcript",
+     "url": "https://www.joincolossus.com/",
+     "why": "공식 transcript 전체는 로그인 제한; 공개 show notes만 확인."
     }
    ],
-   "note": "지정 쇼 목록 16개를 검색·공식 사이트 기준으로 확인했고 기간 내 에피소드 9건을 등록했다. 일부 공식 피드와 전사본은 직접 접근 제한이 있어 전체 목록의 7일 내 누락 여부를 확정하지 못해 partial 유지. Latent Space·SemiAnalysis Weekly·All-In은 공식 에피소드 페이지를 열어 메타데이터/쇼노트를 확인. Latent Space Handshake VTT는 HTTP 403, SemiAnalysis Ep.043 전사본은 공식 페이지에 준비 중으로 표시, Colossus Ep.499 전체 전사본은 로그인 제한. 쇼노트 기반 항목은 발표자 발언으로 인용하지 않고 출처를 쇼노트로 표시."
+   "note": "지정된 쇼의 기존 목록과 공식 공개 페이지를 대조해 공개 에피소드 노트를 보완했습니다. 날짜·본문·공개 노트가 부족한 자료와 아직 공개되지 않았거나 로그인 제한이 있는 전사본은 보류·재시도 목록에 남겼습니다. 중요도 4 이상에서 원문을 확보하지 못한 경우 등급을 낮추지 않고 미확보 범위를 표시합니다."
   },
   "L": {
    "status": "partial",
@@ -848,7 +876,7 @@
     "https://psi.inc/research/aaronson-ambainis/"
    ],
    "failed_sources": [],
-   "note": "11회 이상 검색. Anthropic 11/05 이용 분석, arXiv 11/06 조작 정책 논문, Quanta 11/04 내부 상태 감지 실험 보도를 확인. 지정 기관/저자/저널 원문 목록은 점검했으나 METR 최신 글은 AI 능력 실측이 아니며 ARC·OpenAI 최신 글은 기간 내 해당 후보 없음. Nature·Science·New Scientist 경로 일부 접근 제한. 전체 지면 최신 글 정합성 최종확인 미완료라 partial. Import AI가 가리킨 PSI 11/06 1차 연구 발표를 직접 열고 연구진 주장·형식검증·사람 책임 범위를 구분해 후보를 추가했다."
+   "note": "11회 이상 검색. Anthropic 11/05 이용 분석, arXiv 11/06 조작 정책 논문, Quanta 11/04 내부 상태 감지 실험 보도를 확인. 지정 기관/저자/저널 원문 목록은 점검했으나 METR 최신 글은 AI 능력 실측이 아니며 ARC·OpenAI 최신 글은 기간 내 해당 후보 없음. Nature·Science·New Scientist 경로 일부 접근 제한. 전체 지면 최신 글 정합성 최종확인 미완료라 partial. Import AI가 가리킨 PSI 11/06 1차 연구 발표를 직접 열고 연구진 주장·형식검증·사람 책임 범위를 구분해 후보를 추가했다. 보완: 기존 lens 4건(11/04~11/06)을 재사용하고 METR 공식 Updates와 Epoch AI 공개 검색, 11/09~10 AI 평가 검색을 보완. 11/05 METR 연구 보도는 이미 기존 항목에 포함. Google의 11/10 Multimodal Knowledge Agent 자체 벤치마크 발표는 회사 자체 벤치마크 홍보 제외 기준에 해당하고 마감 시각도 미확정. 새 독립 측정·검증·브레이크스루 후보 없음."
   },
   "MEM": {
    "status": "partial",
@@ -865,7 +893,7 @@
      "why": "공개 표의 마지막 갱신이 2026-11-02 14:40 GMT+8로 기간 밖(stale); 상세 가격 링크는 로그인 페이지로 이동하여 최신 NAND TLC 값 미확보"
     }
    ],
-   "note": "DRAM 표의 Last Update는 11/10 14:40 GMT+8, DDR5 16Gb 60.167 및 DDR4 8Gb 45.000 확인. 공개 Wafer Spot 표의 Last Update는 11/02 14:40으로 기간 밖이어서 NAND TLC 값은 제외; 상세 링크는 로그인 페이지로 이동. MEM 두 DRAM 값 status ok, 레인은 partial."
+   "note": "11월 11일 재확인한 DRAM 표입니다. 웨이퍼 표는 11월 2일 갱신에 머물러 숫자 배열에서 제외했습니다."
   }
  },
  "items": [
@@ -1392,6 +1420,72 @@
      "source_lines": "182"
     }
    ]
+  },
+  {
+   "id": "9c331579e229",
+   "lane": "N1",
+   "cat": "클라우드",
+   "title": "OpenAI, ChatGPT Enterprise를 AWS Marketplace에서 제공",
+   "facts": [
+    "OpenAI는 ChatGPT Enterprise를 AWS Marketplace에서 구매할 수 있다고 발표했다.",
+    "기업은 기존 AWS 계정에서 서비스를 구매·관리하고 적격 지출을 AWS 약정에 반영할 수 있다.",
+    "OpenAI는 기업용 ChatGPT가 Amazon Bedrock의 OpenAI 모델과 별도의 이용 방식이라고 설명했다."
+   ],
+   "evidence": [
+    "Today, ChatGPT Enterprise is available through AWS Marketplace."
+   ],
+   "business_signal": "AWS 조달·결제 경로를 추가해 기업용 AI 구매 및 도입 절차를 단순화하는 유통 채널 확장이다.",
+   "source": "OpenAI",
+   "url": "https://openai.com/index/chatgpt-enterprise-aws-marketplace",
+   "refs": [
+    {
+     "url": "https://openai.com/news/rss.xml",
+     "source": "OpenAI News RSS",
+     "pub": "2026-11-09"
+    }
+   ],
+   "date": "11/09",
+   "pub": "2026-11-09",
+   "published_kst": "2026-11-10 04:00",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 4
+  },
+  {
+   "id": "f37b680abcf7",
+   "lane": "N2",
+   "cat": "AI·모델",
+   "title": "OpenAI 연구 추론 워크로드를 통제하는 Control Room 공개",
+   "facts": [
+    "OpenAI는 연구 인프라의 모델 워크로드를 추적하고 안전·보안 우려가 생기면 중단하는 Control Room을 설명했다.",
+    "Control Room은 연구 추론 워크로드를 연결하며, 중단 지시를 받은 작업의 후속 모델 출력을 차단하도록 설계됐다.",
+    "OpenAI는 Control Room을 연구 인프라에 이미 배치했다고 밝혔다."
+   ],
+   "evidence": [
+    "Control Room is already deployed across our research infrastructure, where the need is greatest."
+   ],
+   "business_signal": "대형 모델 연구에서 추론 작업별 승인·중단 제어가 운영 인프라의 일부로 적용되는 흐름을 보여준다.",
+   "source": "OpenAI",
+   "url": "https://openai.com/index/control-room",
+   "refs": [
+    {
+     "url": "https://openai.com/news/rss.xml",
+     "source": "OpenAI News RSS",
+     "pub": "2026-11-09"
+    }
+   ],
+   "date": "11/09",
+   "pub": "2026-11-09",
+   "published_kst": "2026-11-09 22:00",
+   "lang": "en",
+   "verified": true,
+   "paywall": false,
+   "followup": false,
+   "new_fact": "",
+   "rank_hint": 3
   }
  ],
  "finance": [],
@@ -1775,7 +1869,7 @@
    "guests": "Ramtin Naimi, Patrick O’Shaughnessy",
    "relevant": true,
    "basis": "쇼노트",
-   "importance": 3,
+   "importance": 4,
    "famous": false,
    "notes": [
     {
@@ -1807,6 +1901,12 @@
      "speaker": "쇼노트",
      "point": "공식 쇼노트는 벤처 기업의 시장 규모 기대가 커지는 현상을 주제로 제시한다.",
      "evidence": "moved from $10 billion to a trillion"
+    },
+    {
+     "t": "확보 범위",
+     "speaker": "확인 기록",
+     "point": "원문 미확보: 시도한 곳 공식 Colossus 전사본 링크. 로그인 제한으로 공개 쇼노트만 확인했습니다.",
+     "evidence": ""
     }
    ],
    "terms": [
@@ -1867,6 +1967,255 @@
    "bias": "출연자는 원자력 연료 스타트업 공동창업자·CEO",
    "transcript_url": null,
    "published_kst": "2026-11-03 21:45"
+  },
+  {
+   "id": "f72f0f7b0984",
+   "podcast": "Sequoia Training Data",
+   "title": "Trajectory의 Ronak Malde가 기업 모델의 지속학습 제품화를 설명한다",
+   "date": "11/05",
+   "pub": "2026-11-05",
+   "url": "https://sequoiacap.com/podcast/a-model-for-everyone-how-ronak-from-trajectory-is-building-products-for-continual-learning",
+   "guests": "Ronak Malde",
+   "relevant": true,
+   "basis": "전문(공식 전사본)",
+   "importance": 3,
+   "famous": false,
+   "notes": [
+    {
+     "t": "1",
+     "speaker": "Ronak Malde",
+     "point": "그는 현재 에이전트가 온라인으로 경험을 축적하기보다 오프라인 배치로 갱신되는 상태라고 설명하고, Trajectory가 모델 학습·평가·배포를 한 흐름으로 묶으려 한다고 말했다.",
+     "evidence": "pseudo continual learning"
+    },
+    {
+     "t": "2",
+     "speaker": "Ronak Malde",
+     "point": "그는 회사마다 무엇이 좋은 결과인지 알고 있지만 이를 실제 모델 개선으로 옮기기 어렵다며, 운영 데이터와 사용자 피드백을 개선 과정에 연결하는 제품을 만들고 있다고 설명했다.",
+     "evidence": "what good looks like"
+    },
+    {
+     "t": "3",
+     "speaker": "Ronak Malde",
+     "point": "Harvey 사례에서 법률 업무에 특화한 자체 평가 기준을 만들고, 공개 모델을 학습해 기준 성능을 높였다고 설명했다. 전사본은 정확도 개선과 비용 차이를 함께 제시한다.",
+     "evidence": "4% to 18%"
+    },
+    {
+     "t": "4",
+     "speaker": "Ronak Malde",
+     "point": "제품은 에이전트 실행 흔적과 평가 기준을 가져와 모델을 학습·평가·배포하도록 구성됐다. 초기 고객은 Harvey와 Rogo 같은 AI 기업이며 NVIDIA 등 대기업도 사용한다고 말했다.",
+     "evidence": "one-click train interface"
+    },
+    {
+     "t": "5",
+     "speaker": "Ronak Malde",
+     "point": "그는 반복해서 쌓인 과업 경험을 모델에 반영하고, 작업별로 더 효율적인 모델을 frontier 모델과 나눠 쓰는 방향을 제시했다. 장기적으로는 사용자와 함께 학습하도록 인간을 계속 과정에 포함해야 한다고 주장했다.",
+     "evidence": "keep humans in the loop"
+    }
+   ],
+   "terms": [
+    "지속학습",
+    "에이전트 trace",
+    "GRPO",
+    "rollout",
+    "intelligence density"
+   ],
+   "bias": "출연자는 Trajectory 공동창업자 겸 CEO로 자사 제품·기술의 효용을 설명한다.",
+   "transcript_url": "https://sequoiacap.com/podcast/a-model-for-everyone-how-ronak-from-trajectory-is-building-products-for-continual-learning"
+  },
+  {
+   "id": "56c190950731",
+   "podcast": "Decoder",
+   "title": "Willy Shih가 AI 붐의 공급망 비용과 제조 이전의 제약을 설명한다",
+   "date": "11/05",
+   "pub": "2026-11-05",
+   "url": "https://www.theverge.com/podcast/1024438/willy-shih-supply-chain-ai-chips-ram-where-does-my-stuff-come-from-book",
+   "guests": "Willy Shih",
+   "relevant": true,
+   "basis": "쇼노트",
+   "importance": 3,
+   "famous": false,
+   "notes": [
+    {
+     "t": "1",
+     "speaker": "쇼노트",
+     "point": "The Verge는 경제학자 Willy Shih와 AI 인프라 확장기에 공급망 경제성이 어떻게 작동하는지 논의한다고 소개한다.",
+     "evidence": "Willy Shih"
+    },
+    {
+     "t": "2",
+     "speaker": "쇼노트",
+     "point": "소개문은 미국 내 제조시설 건설에 필요한 공급망·산업 기반이 갖춰지지 않은 사례를 짚는다.",
+     "evidence": "support a fab"
+    },
+    {
+     "t": "3",
+     "speaker": "쇼노트",
+     "point": "대담은 관세와 미국 내 공장 유치 논쟁에도 실제 리쇼어링이 아직 널리 실현되지 않았다는 문제를 다룬다.",
+     "evidence": "mostly haven’t materialized"
+    },
+    {
+     "t": "4",
+     "speaker": "쇼노트",
+     "point": "소개문은 AI 인프라 구축이 전 세계의 컴퓨팅 자원을 크게 소비하고 있다고 설명한다.",
+     "evidence": "computing resources"
+    },
+    {
+     "t": "5",
+     "speaker": "쇼노트",
+     "point": "중국이 제조 허브를 유지하는 배경과 글로벌 공급망의 경제성을 논의한다고 안내한다.",
+     "evidence": "global manufacturing powerhouse"
+    }
+   ],
+   "terms": [],
+   "bias": "출연자·진행자가 각자 소속/역할에 따른 관점을 제시할 수 있음.",
+   "transcript_url": "https://www.theverge.com/podcast/1024438/willy-shih-supply-chain-ai-chips-ram-where-does-my-stuff-come-from-book",
+   "published_kst": "2026-11-06 00:00"
+  },
+  {
+   "id": "055e03fe8fc4",
+   "podcast": "Decoder",
+   "title": "Alex Stamos가 AI 공격 확산과 사이버 방어의 전환을 논의한다",
+   "date": "11/07",
+   "pub": "2026-11-07",
+   "url": "https://www.theverge.com/podcast/1029038/ai-cybersecurity-hackers-data-breach-dark-age-alex-stamos",
+   "guests": "Alex Stamos",
+   "relevant": true,
+   "basis": "쇼노트",
+   "importance": 3,
+   "famous": false,
+   "notes": [
+    {
+     "t": "1",
+     "speaker": "쇼노트",
+     "point": "Nilay Patel은 Cognition 보안책임자 Alex Stamos와 현재 사이버보안 업계의 대응 상황을 논의한다고 소개한다.",
+     "evidence": "what a mess cybersecurity is"
+    },
+    {
+     "t": "2",
+     "speaker": "쇼노트",
+     "point": "공식 소개는 AI가 해킹·침해·공격을 가속하며 기존 보안 산업의 부담을 키우는 상황을 다룬다.",
+     "evidence": "AI-boosted waves of hacks"
+    },
+    {
+     "t": "3",
+     "speaker": "쇼노트",
+     "point": "대화는 국가 행위자와 민간 행위자가 AI로 취약점을 찾아 공격에 활용하는 문제를 다룬다.",
+     "evidence": "detect and exploit vulnerabilities"
+    },
+    {
+     "t": "4",
+     "speaker": "쇼노트",
+     "point": "출연자는 방어 체계가 새 공격 능력에 적응하는 동안 어두운 과도기를 겪을 수 있다고 본다.",
+     "evidence": "dark age"
+    },
+    {
+     "t": "5",
+     "speaker": "쇼노트",
+     "point": "공식 소개는 AI 생성 허위정보가 소셜 플랫폼에서 관리될 문제도 언급한다.",
+     "evidence": "AI-powered misinformation"
+    }
+   ],
+   "terms": [],
+   "bias": "출연자·진행자가 각자 소속/역할에 따른 관점을 제시할 수 있음.",
+   "transcript_url": "https://www.theverge.com/podcast/1029038/ai-cybersecurity-hackers-data-breach-dark-age-alex-stamos",
+   "published_kst": "2026-11-08 00:00"
+  },
+  {
+   "id": "bce465cdb584",
+   "podcast": "Decoder",
+   "title": "RIAA CEO Mitch Glazier가 AI 학습 저작권과 표시 문제를 논의한다",
+   "date": "11/09",
+   "pub": "2026-11-09",
+   "url": "https://www.theverge.com/podcast/1029684/riaa-mitch-glazier-napster-ai-labels-music",
+   "guests": "Mitch Glazier",
+   "relevant": false,
+   "basis": "쇼노트",
+   "importance": 2,
+   "famous": false,
+   "notes": [
+    {
+     "t": "1",
+     "speaker": "쇼노트",
+     "point": "Nilay Patel은 RIAA CEO 겸 회장 Mitch Glazier와 AI 시대의 음악산업 대응을 논의한다고 소개한다.",
+     "evidence": "Mitch Glazier"
+    },
+    {
+     "t": "2",
+     "speaker": "쇼노트",
+     "point": "소개문은 창작자와 업계가 허가 없이 작품을 학습에 사용하는 행위에 우려를 표한다고 설명한다.",
+     "evidence": "training without permission"
+    },
+    {
+     "t": "3",
+     "speaker": "쇼노트",
+     "point": "대담은 AI 생성물 확산과 콘텐츠 표시 문제가 음악산업의 주요 쟁점이 됐다고 안내한다.",
+     "evidence": "flooding our feeds with slop"
+    },
+    {
+     "t": "4",
+     "speaker": "쇼노트",
+     "point": "공식 소개는 AI 딥페이크 규제와 표현의 자유 사이의 법적 복잡성을 다룬다.",
+     "evidence": "AI deepfakes"
+    },
+    {
+     "t": "5",
+     "speaker": "쇼노트",
+     "point": "AI 생성 음악을 감지·표시하는 방식과 대형 플랫폼의 참여가 논의 주제로 제시된다.",
+     "evidence": "Spotify and YouTube"
+    }
+   ],
+   "terms": [],
+   "bias": "출연자·진행자가 각자 소속/역할에 따른 관점을 제시할 수 있음.",
+   "transcript_url": "https://www.theverge.com/podcast/1029684/riaa-mitch-glazier-napster-ai-labels-music",
+   "published_kst": "2026-11-10 00:30"
+  },
+  {
+   "id": "1ad036fc393e",
+   "podcast": "Invest Like the Best",
+   "title": "Martin Casado가 AI 인프라 경제성과 네오클라우드의 자본 구조를 논의한다",
+   "date": "11/04",
+   "pub": "2026-11-04",
+   "url": "https://colossus.com/episode/the-productive-investor/",
+   "guests": "Martin Casado",
+   "relevant": true,
+   "basis": "쇼노트",
+   "importance": 4,
+   "famous": false,
+   "notes": [
+    {
+     "t": "1",
+     "speaker": "쇼노트",
+     "point": "공식 에피소드 소개는 피치덱에서 과용되는 용어와 성장 시장에서 경쟁우위가 작동하는 방식을 다룬다고 적었다.",
+     "evidence": "pitch decks"
+    },
+    {
+     "t": "2",
+     "speaker": "쇼노트",
+     "point": "대담은 빠르게 커지는 시장에서는 전통적 해자 논리가 제한될 수 있다는 관점을 다룬다.",
+     "evidence": "Why Moats Rarely Matter"
+    },
+    {
+     "t": "3",
+     "speaker": "쇼노트",
+     "point": "에피소드 목차는 AI 인프라와 frontier 모델 경제성을 별도 주제로 배치했다.",
+     "evidence": "AI Infrastructure"
+    },
+    {
+     "t": "4",
+     "speaker": "쇼노트",
+     "point": "목차는 AI 보안, 자본을 통한 엔지니어링 가속, 네오클라우드·네오랩·우주 데이터센터를 다룬다.",
+     "evidence": "Data Centers in Space"
+    },
+    {
+     "t": "5",
+     "speaker": "수집 상태",
+     "point": "원문 미확보: 시도한 곳 Colossus 공식 전사 페이지를 열었으나 전문 열람은 로그인 또는 등록을 요구합니다. 공개 쇼노트만 확인했고 우회하지 않았습니다.",
+     "evidence": "Access the full transcript"
+    }
+   ],
+   "terms": [],
+   "bias": "출연자·진행자가 각자 소속/역할에 따른 관점을 제시할 수 있음.",
+   "transcript_url": "https://colossus.com/episode/the-productive-investor/"
   }
  ],
  "lens": {
@@ -1972,8 +2321,9 @@
   "tracker_news": []
  },
  "mem_spot": {
-  "source_url": "https://www.dramexchange.com/",
-  "last_update": "2026-11-10 14:40 GMT+8",
+  "source_url": "https://dramexchange.com/",
+  "last_update": "DRAM Spot Price Last Update: Nov.10 2026 18:10 (GMT+8)",
+  "checked_kst": "2026-11-11 09:16",
   "series": [
    {
     "key": "dram-ddr5-16gb-spot",
@@ -1986,7 +2336,8 @@
     "value": 45.0
    }
   ],
-  "status": "ok"
+  "status": "ok",
+  "note": "11월 11일 재확인한 DRAM 표입니다. 웨이퍼 표는 11월 2일 갱신에 머물러 숫자 배열에서 제외했습니다."
  },
  "packs": [
   {
@@ -2026,25 +2377,18 @@
    "url": "https://investors.coreweave.com/news/news-details/2026/CoreWeave-Announces-Date-of-Third-Quarter-2026-Financial-Results-and-Conference-Call/default.aspx"
   },
   {
-   "date": "2026-11-12",
-   "company": "Nebius",
-   "what": "실적 발표·실적 콜",
-   "confirmed": true,
-   "url": "https://nebius.com/investor-events"
-  },
-  {
-   "date": "2026-11-17",
-   "company": "NVIDIA",
-   "what": "실적 콜",
-   "confirmed": true,
-   "url": "https://investor.nvidia.com/news/news-details/2026/NVIDIA-Sets-Conference-Call-for-Third-Quarter-Financial-Results/default.aspx"
-  },
-  {
    "date": "2026-11-10",
    "company": "Rackspace Technology",
    "what": "실적 콜",
    "confirmed": true,
    "url": "https://ir.rackspace.com/news-releases/news-release-details/rackspace-technology-reports-third-quarter-2026-results"
+  },
+  {
+   "date": "2026-11-12",
+   "company": "Applied Materials",
+   "what": "실적 발표",
+   "confirmed": true,
+   "url": "https://ir.appliedmaterials.com/"
   },
   {
    "date": "2026-11-12",
@@ -2055,10 +2399,31 @@
   },
   {
    "date": "2026-11-12",
-   "company": "Applied Materials",
-   "what": "실적 발표",
+   "company": "Nebius",
+   "what": "실적 발표·실적 콜",
    "confirmed": true,
-   "url": "https://ir.appliedmaterials.com/"
+   "url": "https://nebius.com/investor-events"
+  },
+  {
+   "date": "2026-11-15",
+   "company": "SC26",
+   "what": "슈퍼컴퓨팅·HPC 행사 (11/15–11/20)",
+   "confirmed": true,
+   "url": "https://sc26.supercomputing.org/all-dates-deadlines/"
+  },
+  {
+   "date": "2026-11-17",
+   "company": "Microsoft",
+   "what": "Microsoft Ignite 2026 시작 (11/17~11/20, San Francisco)",
+   "confirmed": true,
+   "url": "https://ignite.microsoft.com/en-US/home"
+  },
+  {
+   "date": "2026-11-17",
+   "company": "NVIDIA",
+   "what": "실적 콜",
+   "confirmed": true,
+   "url": "https://investor.nvidia.com/news/news-details/2026/NVIDIA-Sets-Conference-Call-for-Third-Quarter-Financial-Results/default.aspx"
   },
   {
    "date": "2026-11-24",
@@ -2068,6 +2433,27 @@
    "url": "https://investors.delltechnologies.com/news-events/events",
    "time_local": "15:30 CST",
    "time_kst": "2026-11-25 06:30"
+  },
+  {
+   "date": "2026-11-30",
+   "company": "AWS",
+   "what": "AWS re:Invent 2026 시작 (11/30~12/04, Las Vegas)",
+   "confirmed": true,
+   "url": "https://aws.amazon.com/events/reinvent/"
+  },
+  {
+   "date": "2026-11-30",
+   "company": "NVIDIA",
+   "what": "NVIDIA GTC Washington, D.C. 2026 시작 (11/30~12/03)",
+   "confirmed": true,
+   "url": "https://www.nvidia.com/gtc/events/"
+  },
+  {
+   "date": "2026-12-01",
+   "company": "AMD",
+   "what": "UBS Global Technology and AI Conference",
+   "confirmed": true,
+   "url": "https://ir.amd.com/news-events/ir-calendar"
   }
  ],
  "checks": {
@@ -2077,7 +2463,8 @@
    "TSMC 월매출 날짜·행·단위 대조 및 Quanta 시작 경계 보류",
    "Quanta 연구 회고의 연속 근거 구절과 실험 성공 조건 정정",
    "실적 팩 파일 연결 및 원문별 합산 인용 검사",
-   "접근 상태 설명을 관측 사실과 오류 코드를 보존해 한국어로 정리"
+   "접근 상태 설명을 관측 사실과 오류 코드를 보존해 한국어로 정리",
+   "2026-11-11 누락 원문·가격·공식 일정 보완; 수집 기간 보존 및 재관측 시각 분리"
   ],
   "dropped": [
    {
@@ -2090,5 +2477,5 @@
    }
   ]
  },
- "revised_kst": "2026-11-11 01:17"
+ "revised_kst": "2026-11-11 09:39"
 }
