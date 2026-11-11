@@ -12,6 +12,15 @@
     generation = 0,
     selectedCompany = 'sem';
 
+  function beginRender() {
+    const token = ++generation;
+    $('#content').setAttribute?.('aria-busy', 'true');
+    return token;
+  }
+  function finishRender(token) {
+    if (token === generation) $('#content').setAttribute?.('aria-busy', 'false');
+  }
+
   const earningsIds = new Set(),
     reportTab = (r) => (window.Collector?.isEarnings(r) ? 'earnings' : 'reports');
   const href = (tab, id, extra = {}) =>
@@ -293,6 +302,8 @@
       head = content.querySelector('.page-title,.desk-header,.investor-heading');
     if (head) head.insertAdjacentHTML('afterend', marked);
     else content.insertAdjacentHTML('afterbegin', marked);
+    const current=content.querySelector('[data-current-tab]');
+    if(current){window.Collector.mount(current,new URLSearchParams());const stamp=content.querySelector('.page-title .stamp');if(stamp&&!stamp.textContent.includes('기존 편집'))stamp.insertAdjacentHTML('afterbegin','<span>기존 편집 자료 기준</span>');}
   }
   async function collectedBriefing(tab, params, token) {
     if (!window.Collector || params.get('id')) return;
@@ -309,7 +320,8 @@
     }
   }
   async function show() {
-    const token = ++generation,
+    if (!config || !status) return;
+    const token = beginRender(),
       { tab: requestedTab, params } = route();
     const tab = requestedTab === 'deep-reports' ? 'reports' : requestedTab;
     if (requestedTab === 'deep-reports') params.set('section', 'deep');
@@ -492,6 +504,8 @@
         $('#content').innerHTML =
           `<div class="empty error" role="alert"><h1>${isInvestor ? '검증 자료를 불러오지 못했습니다' : '자료를 불러오지 못했습니다'}</h1><p>자료 다시 읽기로 재시도해 주세요. 다른 자료 화면은 계속 이용하실 수 있습니다.</p></div><button data-retry type="button">다시 불러오기</button>`;
       }
+    } finally {
+      finishRender(token);
     }
   }
   function redraw() {
@@ -586,7 +600,8 @@
   });
   window.addEventListener('popstate', show);
   $('#refresh').addEventListener('click', async () => {
-    const token = ++generation;
+    if (!config || !status) return;
+    const token = beginRender();
     window.InvestorDesk?.reset();
     window.DCFApp?.reset();
     window.Collector?.reset();
@@ -606,11 +621,16 @@
         '자료를 불러오지 못했습니다',
         '이전 값을 현재 자료로 표시하지 않습니다.'
       );
+    } finally {
+      finishRender(token);
     }
   });
   (async () => {
+    const token = beginRender();
     try {
-      [config, status] = await Promise.all([json('config'), json('status')]);
+      const [nextConfig, nextStatus] = await Promise.all([json('config'), json('status')]);
+      if (token !== generation) return;
+      [config, status] = [nextConfig, nextStatus];
       initializeViews();
       $('#today').textContent =
         new Intl.DateTimeFormat('ko-KR', { timeZone: 'Asia/Seoul', dateStyle: 'medium' }).format(
@@ -619,10 +639,13 @@
       globalWarning();
       await show();
     } catch {
+      if (token !== generation) return;
       $('#content').innerHTML = empty(
         '브리핑을 불러오지 못했습니다',
         '설정과 데이터가 함께 게시됐는지 확인해 주세요.'
       );
+    } finally {
+      finishRender(token);
     }
   })();
 })();

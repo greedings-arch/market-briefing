@@ -125,7 +125,28 @@
   container.querySelector('[data-cl-print]')?.addEventListener('click',()=>window.print());
   const item=params.get('item'),section=params.get('section'),fragment=typeof location!=='undefined'&&/^#(?:cl-(?:numbers|prepared|qa|section-[A-Z0-9]+)|call-[a-zA-Z0-9_.:-]+)$/.test(location.hash)?location.hash.slice(1):'';if(item||section||fragment){const target=document.getElementById(item?'cl-item-'+item:section?'cl-section-'+section:fragment);if(target){target.tabIndex=-1;target.classList.add('cl-highlight');target.focus({preventScroll:true});target.scrollIntoView({block:'start'});}}
  }
+ async function integrated(tab){
+  const dailyTypes={news:'news',interviews:'podcast','ai-state':'lens'};
+  const weekTypes={gpu:'G',memory:'M',events:'CAL',indicators:'LAB'};
+  if(!dailyTypes[tab]&&!weekTypes[tab]&&!['sources','archive','temperature'].includes(tab))return '';
+  const index=await load('feed/index.json');let body='',date=index.daily.latest,status=index.daily.status;
+  if(dailyTypes[tab]){
+   const type=dailyTypes[tab],seen=new Set(),rows=[];
+   for(const file of dated(index,'daily')){const d=await bundle(file,index);const items=type==='news'?d.items:type==='podcast'?d.podcasts:d.lens?.items;for(const x of list(items)){const key=x.url||x.id;if(seen.has(key))continue;seen.add(key);rows.push(x);}}
+   rows.sort((a,b)=>String(b.pub||'').localeCompare(String(a.pub||''))||String(a.id).localeCompare(String(b.id)));
+   body=`<div data-cl-scope>${controls({category:rows.map(x=>x.cat||x.kind||type),placeholder:'최신 자료 제목·본문·출처 검색'})}${rows.map(x=>card(x,type,true)).join('')||blank()}</div>`;
+  }else if(weekTypes[tab]){
+   const w=await bundle(index.weekly.url,index);date=w.revised_kst||w.snapshot_observed_kst||w.made_kst;status=w.sections?.[weekTypes[tab]]?.status||w.status;
+   body=tab==='gpu'?gpu(w.gpu):tab==='memory'?memory(w.memory):tab==='events'?calendar(list(w.calendar)):
+    table('AI 랩 공개 관측',['지표','관측일','값','출처'],list(w.labs).map(x=>[esc(x.key),esc(x.date),`${number(x.value)} ${esc(x.unit)}${x.estimate?' (추정)':''}`,external(x.url,x.source)+evidence(x.evidence)]))+`<p>${esc(w.sections?.LAB?.note||'최신 적격 관측을 확보하지 못했습니다.')}</p>`;
+  }else if(tab==='sources'){
+   const [d,w,h]=await Promise.all([bundle(index.daily.url,index),bundle(index.weekly.url,index),load('feed/health.json')]);body=statusPage(index,d,w,h);
+  }else if(tab==='archive')body='<ul>'+['daily','weekly'].flatMap(kind=>dated(index,kind).map(file=>{const id=file.split('/').pop().replace('.json','');return `<li><a href="${link(kind+'-'+id)}">${esc(id)} · ${kind==='daily'?'일간':'주간'} 수집 회차</a></li>`;})).join('')+'</ul>';
+  else body='<p>최신 시장 온도 지수는 산출되지 않았습니다. 아래 원문 관측을 지수나 매매 신호로 환산하지 않습니다.</p>'+(await bundle(index.daily.url,index)).items.filter(x=>['N1','N4'].includes(x.lane)).map(x=>card(x,'news',true)).join('');
+  return `<section class="collector-host cl-integrated" data-current-tab="${esc(tab)}"><h2>최신 자료</h2><p class="cl-muted">수집 회차 ${esc(date)} · ${tag(status)} · 각 항목의 원문일·관측일을 확인하세요.</p>${body}</section>`;
+ }
  async function related(tab){
+  try{const current=await integrated(tab);if(current)return current;}catch{return '<section class="cl-integrated" role="status">최신 자료를 불러오지 못했습니다. 기존 자료의 날짜를 확인해 주세요.</section>';}
   const mapping={desk:['최신 수집 자료',''],summary:['함께 읽을 최신 수집 자료',''],news:['원문에서 확인한 새 소식','news'],interviews:['새 팟캐스트·인터뷰','podcast'],'ai-state':['새 AI 현주소 관측','lens'],finance:['새 금융권 자료','finance'],gpu:['사업자별 GPU 요금 관측','G'],memory:['메모리·부품 가격 관측','M'],weekly:['함께 볼 주간 관측 데이터','weekly'],events:['공식 실적·행사 일정','CAL'],sources:['Collector 수집 상태','status']};
   if(!mapping[tab])return '';
   try{const index=await load('feed/index.json'),[label,type]=mapping[tab];let cards=[],target='daily-'+index.daily.latest,extra={},count='';
@@ -136,5 +157,5 @@
    return `<aside class="cl-related" data-collector-related="${esc(tab)}"><div class="cl-related-head"><div><p class="cl-kicker">COLLECTOR · ${esc(target.startsWith('weekly-')?index.weekly.latest:index.daily.latest)}</p><h2>${esc(label)}</h2><p>${esc(count)} · ${esc(states[target.startsWith('weekly-')?index.weekly.status:index.daily.status]||'')}</p></div><a href="${link(target,extra)}">수집 자료에서 읽기 →</a></div>${cards.length?`<div class="cl-related-grid">${cards.map(x=>`<a href="${x.url?.startsWith('feed/src/')?packLink(x):link(target,{...extra,item:x.id||''})}"><strong>${esc(x.title)}</strong><small>${esc(x.company||x.source||x.pub||'')} →</small></a>`).join('')}</div>`:''}</aside>`;
   }catch{return `<aside class="cl-related"><p>수집 자료의 최신 상태를 확인하지 못했습니다. <a href="collector.html">수집 자료 다시 열기 →</a></p></aside>`;}
  }
- return {page,earnings,inlineReading,earningsSector,sectorLabels,emphasize,isEarnings,isCallPack,packLink,mount,related,setTransport:fn=>{transport=fn;cache.clear();},reset:()=>cache.clear(),card,pack,daily,weekly,gpu,models,capacity,filePath,mergeParts,link,esc};
+ return {page,earnings,integrated,inlineReading,earningsSector,sectorLabels,emphasize,isEarnings,isCallPack,packLink,mount,related,setTransport:fn=>{transport=fn;cache.clear();},reset:()=>cache.clear(),card,pack,daily,weekly,gpu,models,capacity,filePath,mergeParts,link,esc};
 });
