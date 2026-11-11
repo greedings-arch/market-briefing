@@ -169,7 +169,7 @@
         )}</div><section class="finance-next"><h4>다음 점검 · ${esc(s.next_check.date)}</h4><p class="note">${s.next_check.date_basis === 'scheduled' ? '공식 일정 기준' : '편집 검토 예정일 · 회사 발표일이 아닙니다'}</p><p>${esc(s.next_check.trigger)}</p><p><b>확인 후 조치</b> · ${esc(s.next_check.action)}</p><p><b>판단을 바꿀 조건</b> · ${esc(s.counterpoint)}</p></section><details class="finance-bibliography"><summary>전체 근거와 자료 범위 (${s.references.length})</summary><ol>${s.references.map((r) => `<li>${url(r.url, r.title)}<small>${esc(r.published_on)} · ${esc(r.kind === 'primary' ? '1차 자료' : r.kind === 'market' ? '시장 자료' : '방법·제도')} · ${esc(r.note)}</small></li>`).join('')}</ol></details></details><p class="self-interest">이해관계: ${esc(x.self_interest)}</p>${source(x)}<a class="source" href="${esc(href('finance', x.id))}">이 사례 주소 →</a></article>`;
     }
     function viewCard(x) {
-      return `<article class="view-card" tabindex="-1" data-item="${esc(x.id)}"><div class="meta"><strong>${esc(x.institution)}</strong><span>${esc(investorGroupLabel(x.investor_group))}</span><span>${esc(x.source_date)}</span>${badge(x.stance)}${!x.verified ? badge('확인 필요') : ''}</div><h3>${url(x.source_url, x.title)}</h3><p>${esc(x.claim)}</p><p class="note">${esc(x.speaker)} · ${esc(x.affiliation)}</p>${financeInsight(x)}${x.analysis ? `<p><b>핵심 논리</b> · ${esc(x.analysis.rationale)}</p>` : ''}${x.investment_impact ? `<p><b>투자에 주는 의미</b> · ${esc(x.investment_impact)}</p>` : ''}${x.analysis ? `<p><b>다음 확인 변수</b> · ${esc(x.analysis.watch)}</p><p><b>반대 조건</b> · ${esc(x.analysis.counterpoint)}</p><p class="note">메시지 검토 ${esc(x.analysis.reviewed_on)}</p>` : ''}<p class="self-interest">이해관계: ${esc(x.self_interest)}</p>${source(x)}${x.legacy ? '<span class="note">기존 회차 · 추가 확인 항목은 미확인으로 남겼습니다.</span>' : ''}<a class="source" href="${esc(href('finance', x.id))}">이 자료 주소 →</a></article>`;
+      return `<article class="view-card" tabindex="-1" data-item="${esc(x.id)}"><div class="meta"><strong>${esc(x.institution)}</strong><span>${esc(investorGroupLabel(x.investor_group))}</span><span>${esc(x.source_date)}</span>${badge(x.stance)}${x.insight ? badge('기관 리서치·인사이트') : ''}${!x.verified ? badge('확인 필요') : ''}</div><h3>${url(x.source_url, x.title)}</h3><p>${esc(x.claim)}</p><p class="note">${esc(x.speaker)} · ${esc(x.affiliation)}</p>${financeInsight(x)}${x.analysis ? `<p><b>핵심 논리</b> · ${esc(x.analysis.rationale)}</p>` : ''}${x.investment_impact ? `<p><b>투자에 주는 의미</b> · ${esc(x.investment_impact)}</p>` : ''}${x.analysis ? `<p><b>다음 확인 변수</b> · ${esc(x.analysis.watch)}</p><p><b>반대 조건</b> · ${esc(x.analysis.counterpoint)}</p><p class="note">메시지 검토 ${esc(x.analysis.reviewed_on)}</p>` : ''}<p class="self-interest">이해관계: ${esc(x.self_interest)}</p>${source(x)}${x.legacy ? '<span class="note">기존 회차 · 추가 확인 항목은 미확인으로 남겼습니다.</span>' : ''}<a class="source" href="${esc(href('finance', x.id))}">이 자료 주소 →</a></article>`;
     }
     function renderFinance(data, params) {
       const f = (filters.finance ||= {});
@@ -194,20 +194,7 @@
             (!f.group || f.group === '전체' || investorGroupLabel(x.investor_group) === f.group) &&
             (!f.kind || f.kind === '전체' || kind(x) === f.kind)
         )
-        .sort((a, b) => b.source_date.localeCompare(a.source_date));
-      const cases = items
-          .filter((x) => x.case_study)
-          .sort(
-            (a, b) =>
-              b.case_study.reviewed_on.localeCompare(a.case_study.reviewed_on) ||
-              a.id.localeCompare(b.id)
-          ),
-        insights = items.filter((x) => x.insight && !x.case_study),
-        specialIDs = new Set([...cases, ...insights].map((x) => x.id));
-      const featured = items
-          .filter((x) => !specialIDs.has(x.id) && list(data.featured_ids).includes(x.id))
-          .sort((a, b) => data.featured_ids.indexOf(a.id) - data.featured_ids.indexOf(b.id)),
-        featuredIDs = new Set([...featured, ...cases, ...insights].map((x) => x.id));
+        .sort((a, b) => b.source_date.localeCompare(a.source_date) || a.id.localeCompare(b.id));
       const weeklies = data.weeklies
         .filter((w) => w.threads.length)
         .sort((a, b) => b.id.localeCompare(a.id))
@@ -218,36 +205,10 @@
         '기관의 발언·리서치를 공개 투자 행동과 수급, 기업 실적·가격에 연결해 검토합니다.'
       );
       html += `<div class="filters">${select('kind', '자료 종류', ['전체', '투자 연결 사례', '기관 리서치', '발언·메시지'], f.kind)}${select('group', '투자자 유형', ['전체', ...config.finance.coverage_groups.map((g) => g.label), '명단 밖·기타'], f.group)}${select('stance', '입장', ['전체', '낙관', '경계', '중립'], f.stance)}${select('topic', '쟁점', ['전체', ...config.finance.topics], f.topic)}${select('institution', '기관', ['전체', ...new Set(data.items.map((x) => x.institution))], f.institution)}${select('week', '주차', ['전체', ...weeks], f.week)}</div><div class="grid"><div>`;
-      if (cases.length)
-        html += `<section class="finance-pilot"><p class="eyebrow">THESIS IN PRACTICE</p><h2>투자 연결 사례</h2><p class="note">각 단계의 관측일과 공개일을 구분한 검토 기록입니다. 시장 전체 수급을 특정 기관의 매매로 보지 않으며, 회사 실적 개선만으로 현재 가격의 매력을 확정하지 않습니다.</p>${cases.map((x) => financeCaseCard(x, data, params.get('id'))).join('')}</section>`;
-      if (insights.length)
-        html += `<section class="finance-research"><p class="eyebrow">INSTITUTIONAL RESEARCH</p><h2>기관 리서치·인사이트</h2><p class="note">메모·차트·시장지도·기술 분석의 주장과 방법, 이해관계를 함께 읽습니다. 기관이 제시한 전망과 편집 해석을 구분합니다.</p>${insights.map(viewCard).join('')}</section>`;
+      html += `<section class="finance-timeline"><h2>금융권 시각 · 최신순</h2><p class="note">원문 날짜가 최근인 자료부터 표시합니다. 사례 검토일은 정렬에 사용하지 않습니다.${items.length ? ` 현재 목록의 최신 원문: ${esc(items[0].source_date)}.` : ''}</p>${items.map((x) => x.case_study ? financeCaseCard(x, data, params.get('id')) : viewCard(x)).join('')}</section>`;
+      if (!items.length) html += empty('선택한 조건의 의견이 없습니다');
       if (weeklies.length)
         html += `<section class="panel"><p class="eyebrow">LATEST WEEKLY</p><h3>${anchor('weekly', weeklies[0].id, '최신 주간 금융권 흐름')}</h3>${weeklies[0].threads.map((x) => `<p>${esc(x.summary)}</p>`).join('')}</section>`;
-      if (featured.length)
-        html += `<section class="panel"><p class="eyebrow">INVESTOR MESSAGES</p><h2>주요 투자자 메시지</h2><p class="note">최근 ${config.finance.featured_max_age_days}일 원문에서 서로 다른 기관과 투자 관점을 우선해 보여 드립니다.</p>${featured.map(viewCard).join('')}</section>`;
-      if (!items.length) html += empty('선택한 조건의 의견이 없습니다');
-      for (const topic of config.finance.topics) {
-        const opinions = items.filter((x) => x.topic === topic && !featuredIDs.has(x.id));
-        if (!opinions.length) continue;
-        html += `<section class="finance-topic"><h2>${esc(topic)}</h2><div class="two-cols">${[
-          '낙관',
-          '경계',
-        ]
-          .map(
-            (stance) =>
-              `<div><p class="stance-title ${stance === '경계' ? 'negative' : ''}"><span class="dot"></span>${stance} 쪽</p>${
-                opinions
-                  .filter((x) => x.stance === stance)
-                  .map(viewCard)
-                  .join('') || '<p class="quiet">확인된 의견이 없습니다.</p>'
-              }</div>`
-          )
-          .join('')}</div>${opinions
-          .filter((x) => x.stance === '중립')
-          .map(viewCard)
-          .join('')}</section>`;
-      }
       html +=
         '</div><aside><section class="panel"><h3>주요 취재 대상</h3><p class="note">아래는 취재 범위입니다. 확인한 메시지만 본문에 실으며, 자료가 없는 투자자의 발언을 채워 넣지 않습니다.</p>' +
         config.finance.coverage_groups
