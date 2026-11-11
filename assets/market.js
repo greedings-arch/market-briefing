@@ -1,647 +1,601 @@
 'use strict';
 (() => {
-  const $=s=>document.querySelector(s),esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const list=x=>Array.isArray(x)?x:[],fmt=(x,d=2)=>Number.isFinite(x)?x.toLocaleString('ko-KR',{maximumFractionDigits:d}):'—';
-  const cache=new Map(),filters={},palette=['#224d72','#b38346','#528874','#b46e59','#89749c','#597f8a'];
-  let config,status,active='summary',generation=0,selectedCompany='sem';
-  function url(value,label='원문 ↗') {try{const u=new URL(value);if(!['http:','https:'].includes(u.protocol))return esc(label);return `<a href="${esc(u.href)}" target="_blank" rel="noopener noreferrer">${esc(label)}</a>`;}catch{return esc(label);}}
-  const earningsIds=new Set(),reportTab=r=>window.Collector?.isEarnings(r)?'earnings':'reports';
-  const href=(tab,id,extra={})=>'#'+(tab==='reports'&&id&&earningsIds.has(id)?'earnings':tab)+(id||Object.keys(extra).length?'?'+new URLSearchParams({...extra,...(id?{id}:{})}).toString():'');
-  const anchor=(tab,id,label)=>`<a href="${esc(href(tab,id))}">${esc(label)}</a>`;
-  const badge=x=>`<span class="tag ${x==='낙관'?'positive':x==='경계'?'negative':x==='확인 필요'?'pending':''}">${esc(x)}</span>`;
-  const source=x=>`<p class="source">${esc(x.source_name||x.company||x.institution||'원문')} · ${esc(x.source_date||'원문 날짜 미확인')} · ${url(x.source_url)}</p>`;
-  const empty=(title='아직 수집된 자료가 없습니다',body='원문을 확인한 자료가 반영되면 이곳에 표시됩니다.')=>`<div class="empty"><div class="empty-mark">—</div><strong>${esc(title)}</strong><p>${esc(body)}</p><a href="#sources">수집 범위와 운영 상태 확인 →</a></div>`;
-  function select(key,label,values,value='전체') {return `<label>${esc(label)} <select data-filter="${key}" aria-label="${esc(label)}">${values.map(v=>`<option value="${esc(v)}" ${v===value?'selected':''}>${esc(v)}</option>`).join('')}</select></label>`;}
-  function route() {const raw=location.hash.slice(1),fallback=raw.split('?'),{name,q=''}=window.PublicRoutes?.route()||{name:fallback[0],q:fallback[1]},investor=window.InvestorDesk;return {tab:config?.tabs.some(t=>t.id===name)||investor?.views.includes(name)||(name==='dcf'&&window.DCFApp)?name:investor?(config?.workspace?.home||'desk'):'summary',params:new URLSearchParams(q)};}
-  function clearItemRoute(tab){const {params}=route();if(params.has('id')){params.delete('id');params.delete('section');history.replaceState(null,'','#'+tab+(params.size?'?'+params.toString():''));}}
-  async function json(name) {if(!cache.has(name)){const request=fetch('data/'+name+'.json',{cache:'no-store'}).then(r=>{if(!r.ok)throw Error('자료 응답 오류');return r.json();}).then(data=>{if(name==='reports')for(const r of data.items||[])if(window.Collector?.isEarnings(r))earningsIds.add(r.id);return data;}).then(data=>name==='telegram'&&window.ResearchSignals?window.ResearchSignals.prepareTelegram(data):name==='finance'&&window.ResearchSignals?window.ResearchSignals.prepareFinance(data):data).catch(e=>{if(cache.get(name)===request)cache.delete(name);throw e;});cache.set(name,request);}return cache.get(name);}
-  function title(tab,data,description='') {const t=config.tabs.find(x=>x.id===tab),meta=data.meta||status.tabs[tab];return `<header class="page-title"><div><p class="eyebrow">AI & CLOUD / ${esc(tab.replace(/-/g,' '))}</p><h1>${esc(t.label)}</h1>${description?`<p class="subtitle">${esc(description)}</p>`:''}</div><div class="stamp"><span>기준일 ${esc(meta?.as_of||'수집 전')}</span><span>${fmt(meta?.count||0,0)}건</span><span>생성 ${esc(meta?.generated_at||'아직 없음')}</span></div></header>`;}
+  const { esc, list, fmt, url, empty } = window.MarketUI;
+  let views;
+  const $ = (s) => document.querySelector(s);
+
+  const cache = new Map(),
+    filters = {};
+  let config,
+    status,
+    active = 'summary',
+    generation = 0,
+    selectedCompany = 'sem';
+
+  const earningsIds = new Set(),
+    reportTab = (r) => (window.Collector?.isEarnings(r) ? 'earnings' : 'reports');
+  const href = (tab, id, extra = {}) =>
+    '#' +
+    (tab === 'reports' && id && earningsIds.has(id) ? 'earnings' : tab) +
+    (id || Object.keys(extra).length
+      ? '?' + new URLSearchParams({ ...extra, ...(id ? { id } : {}) }).toString()
+      : '');
+  const anchor = (tab, id, label) => `<a href="${esc(href(tab, id))}">${esc(label)}</a>`;
+
+  function route() {
+    const raw = location.hash.slice(1),
+      fallback = raw.split('?'),
+      { name, q = '' } = window.PublicRoutes?.route() || { name: fallback[0], q: fallback[1] },
+      investor = window.InvestorDesk;
+    return {
+      tab:
+        config?.tabs.some((t) => t.id === name) ||
+        investor?.views.includes(name) ||
+        (name === 'dcf' && window.DCFApp)
+          ? name
+          : investor
+            ? config?.workspace?.home || 'desk'
+            : 'summary',
+      params: new URLSearchParams(q),
+    };
+  }
+  function clearItemRoute(tab) {
+    const { params } = route();
+    if (params.has('id')) {
+      params.delete('id');
+      params.delete('section');
+      history.replaceState(null, '', '#' + tab + (params.size ? '?' + params.toString() : ''));
+    }
+  }
+  async function json(name) {
+    if (!cache.has(name)) {
+      const request = fetch('data/' + name + '.json', { cache: 'no-store' })
+        .then((r) => {
+          if (!r.ok) throw Error('자료 응답 오류');
+          return r.json();
+        })
+        .then((data) => {
+          if (name === 'reports')
+            for (const r of data.items || [])
+              if (window.Collector?.isEarnings(r)) earningsIds.add(r.id);
+          return data;
+        })
+        .then((data) =>
+          name === 'telegram' && window.ResearchSignals
+            ? window.ResearchSignals.prepareTelegram(data)
+            : name === 'finance' && window.ResearchSignals
+              ? window.ResearchSignals.prepareFinance(data)
+              : data
+        )
+        .catch((e) => {
+          if (cache.get(name) === request) cache.delete(name);
+          throw e;
+        });
+      cache.set(name, request);
+    }
+    return cache.get(name);
+  }
+  function title(tab, data, description = '') {
+    const t = config.tabs.find((x) => x.id === tab),
+      meta = data.meta || status.tabs[tab];
+    return `<header class="page-title"><div><p class="eyebrow">AI & CLOUD / ${esc(tab.replace(/-/g, ' '))}</p><h1>${esc(t.label)}</h1>${description ? `<p class="subtitle">${esc(description)}</p>` : ''}</div><div class="stamp"><span>기준일 ${esc(meta?.as_of || '수집 전')}</span><span>${fmt(meta?.count || 0, 0)}건</span><span>생성 ${esc(meta?.generated_at || '아직 없음')}</span></div></header>`;
+  }
   function globalWarning() {
-    const messages=[];
-    if(status.automation_enabled&&(!status.latest_daily||status.latest_daily<status.expected_daily))messages.push(`최신 일간 회차 ${status.latest_daily||'없음'} · 예정 기준 ${status.expected_daily}. 갱신이 늦었습니다.`);
-    if(status.last_run&&status.last_run.status!=='success')messages.push(`마지막 실행에 문제가 있습니다 (${status.last_run.status==='failed'?'실패':status.last_run.status==='partial'?'일부 미완료':'보류'}).`);
-    if(!status.automation_enabled)messages.push(`편집 브리핑 자동 갱신 중지 · 마지막 편집 회차 ${status.latest_daily||'없음'}. 자료마다 표시된 기준일을 확인해 주세요.`);
-    $('#global-warning').hidden=!messages.length;$('#global-warning').innerHTML=messages.map(esc).join(' ')+' <a href="#sources">실행 기록 보기 →</a>';
+    const messages = [];
+    if (
+      status.automation_enabled &&
+      (!status.latest_daily || status.latest_daily < status.expected_daily)
+    )
+      messages.push(
+        `최신 일간 회차 ${status.latest_daily || '없음'} · 예정 기준 ${status.expected_daily}. 갱신이 늦었습니다.`
+      );
+    if (status.last_run && status.last_run.status !== 'success')
+      messages.push(
+        `마지막 실행에 문제가 있습니다 (${status.last_run.status === 'failed' ? '실패' : status.last_run.status === 'partial' ? '일부 미완료' : '보류'}).`
+      );
+    if (!status.automation_enabled)
+      messages.push(
+        `편집 브리핑 자동 갱신 중지 · 마지막 편집 회차 ${status.latest_daily || '없음'}. 자료마다 표시된 기준일을 확인해 주세요.`
+      );
+    $('#global-warning').hidden = !messages.length;
+    $('#global-warning').innerHTML =
+      messages.map(esc).join(' ') + ' <a href="#sources">실행 기록 보기 →</a>';
   }
   function navigation() {
-    if(!window.InvestorDesk||!config.workspace){$('#tabs').innerHTML=config.tabs.map(t=>`<a href="#${esc(t.id)}" ${t.id===active?'class="active" aria-current="page"':''}>${esc(t.label)}</a>`).join('');return;}
-    const ws=config.workspace,label=id=>ws.labels.find(x=>x.id===id)?.label||config.tabs.find(t=>t.id===id)?.label||id;
-    const merged=['company','valuation','evidence'].includes(active)?'desk':active;
-    const menu=[...new Set(['desk',...ws.resources,'dcf'])];
-    $('#tabs').innerHTML=menu.map(id=>`<a ${ws.resources.includes(id)?'data-library-tab':'data-nav'}="${esc(id)}" href="${id==='dcf'?href('dcf',['samsung','hynix','sem'].includes(selectedCompany)?selectedCompany:'samsung'):'#'+esc(id)}" ${id===merged?'class="active" aria-current="page"':''}>${esc(label(id))}</a>`).join('')+'<a href="#archive?section=legacy-tools">이전 브리핑</a>';
-    $('#subtabs').innerHTML='';
-    $('#subtabs').hidden=true;
+    if (!window.InvestorDesk || !config.workspace) {
+      $('#tabs').innerHTML = config.tabs
+        .map(
+          (t) =>
+            `<a href="#${esc(t.id)}" ${t.id === active ? 'class="active" aria-current="page"' : ''}>${esc(t.label)}</a>`
+        )
+        .join('');
+      return;
+    }
+    const ws = config.workspace,
+      label = (id) =>
+        ws.labels.find((x) => x.id === id)?.label ||
+        config.tabs.find((t) => t.id === id)?.label ||
+        id;
+    const merged = ['company', 'valuation', 'evidence'].includes(active) ? 'desk' : active;
+    const menu = [...new Set(['desk', ...ws.resources, 'dcf'])];
+    $('#tabs').innerHTML =
+      menu
+        .map(
+          (id) =>
+            `<a ${ws.resources.includes(id) ? 'data-library-tab' : 'data-nav'}="${esc(id)}" href="${id === 'dcf' ? href('dcf', ['samsung', 'hynix', 'sem'].includes(selectedCompany) ? selectedCompany : 'samsung') : '#' + esc(id)}" ${id === merged ? 'class="active" aria-current="page"' : ''}>${esc(label(id))}</a>`
+        )
+        .join('') + '<a href="#archive?section=legacy-tools">이전 브리핑</a>';
+    $('#subtabs').innerHTML = '';
+    $('#subtabs').hidden = true;
   }
-  function contextStrip(tab,params) {
-    if(!window.InvestorDesk)return '';
-    const companies=config.workspace.companies,c=companies.find(c=>c.id===params.get('company'));
-    if(c)return `<aside class="context-strip"><div><small>기업 검증</small><p>${esc(c.name)}의 가설과 연결해 읽는 자료입니다. 자료의 기준일과 현재 검토일을 구분해 주세요.</p></div><nav>${anchor('company',c.id,'기업 가설로 돌아가기 →')}${anchor('valuation',c.id,'가격 검토 →')}</nav></aside>`;
-    const contexts={memory:['메모리 가격·제품 구성·점유율이 이익에 어떻게 전달되는지 검증합니다.',['hynix','samsung']],gpu:['임대 요금의 변화와 AI 인프라 투자 회수를 연결해 검토합니다.',['nvda','msft','amzn']],reports:['실적과 현금흐름을 기업 가설·가격 가정과 대조합니다.',[]],finance:['낙관과 경계의 논거를 함께 읽고 가설을 바꿀 조건을 찾습니다.',[]],'ai-state':['기술의 진전과 제약이 실제 수요·수익화로 이어지는지 검토합니다.',[]]};
-    const item=contexts[tab];if(!item)return '';
-    return `<aside class="context-strip"><div><small>투자 판단을 위한 근거</small><p>${esc(item[0])}</p></div><nav>${item[1].map(id=>anchor('company',id,companies.find(c=>c.id===id).name+' →')).join('')}${anchor('desk',null,'투자 판단 →')}</nav></aside>`;
+  function contextStrip(tab, params) {
+    if (!window.InvestorDesk) return '';
+    const companies = config.workspace.companies,
+      c = companies.find((c) => c.id === params.get('company'));
+    if (c)
+      return `<aside class="context-strip"><div><small>기업 검증</small><p>${esc(c.name)}의 가설과 연결해 읽는 자료입니다. 자료의 기준일과 현재 검토일을 구분해 주세요.</p></div><nav>${anchor('company', c.id, '기업 가설로 돌아가기 →')}${anchor('valuation', c.id, '가격 검토 →')}</nav></aside>`;
+    const contexts = {
+      memory: [
+        '메모리 가격·제품 구성·점유율이 이익에 어떻게 전달되는지 검증합니다.',
+        ['hynix', 'samsung'],
+      ],
+      gpu: [
+        '임대 요금의 변화와 AI 인프라 투자 회수를 연결해 검토합니다.',
+        ['nvda', 'msft', 'amzn'],
+      ],
+      reports: ['실적과 현금흐름을 기업 가설·가격 가정과 대조합니다.', []],
+      finance: ['낙관과 경계의 논거를 함께 읽고 가설을 바꿀 조건을 찾습니다.', []],
+      'ai-state': ['기술의 진전과 제약이 실제 수요·수익화로 이어지는지 검토합니다.', []],
+    };
+    const item = contexts[tab];
+    if (!item) return '';
+    return `<aside class="context-strip"><div><small>투자 판단을 위한 근거</small><p>${esc(item[0])}</p></div><nav>${item[1].map((id) => anchor('company', id, companies.find((c) => c.id === id).name + ' →')).join('')}${anchor('desk', null, '투자 판단 →')}</nav></aside>`;
   }
-  function researchContext(tab,data,params,html){
-    if(tab==='telegram')return html;
-    const signal=window.ResearchSignals?.tabHTML(tab,data,params.get('company'))||'';
-    if(tab==='gpu'&&html.includes('data-gpu-briefing'))return html.replace('<nav class="gpu-jump"',contextStrip(tab,params)+signal+'<nav class="gpu-jump"');
-    return contextStrip(tab,params)+(signal?html.replace(/(<header class="page-title[^]*?<\/header>)/,match=>match+signal):html);
-  }
-  function article(r) {return `<article class="story" tabindex="-1" data-item="${esc(r.id)}"><div class="meta">${badge(r.category)}<span>중요도 ${esc(r.importance)}/5</span><span>원문 ${esc(r.source_date)}</span>${r.date&&r.date!==r.source_date?`<span>회차 ${esc(r.date)}</span>`:""}${r.followup?badge('후속'):''}${r.paywall?badge('유료'):''}${!r.verified?badge('확인 필요'):''}${r.legacy?badge('기존 회차'):''}</div><h2>${url(r.source_url,r.title)}</h2>${list(r.summary).map(x=>`<p>${esc(x)}</p>`).join('')}<div class="impact"><strong>${r.legacy?'당시 사업 시사점':'업계 의미'}</strong>${esc(r.impact)}</div>${r.investment_impact?`<div class="impact investment"><strong>투자에 주는 의미 · 편집 해석</strong>${esc(r.investment_impact)}</div>`:r.legacy?'<p class="note">기존 사업 브리핑입니다. 투자 관점으로 재검토한 원고는 아닙니다.</p>':''}${source(r)}${r.verification_basis?`<p class="note">${esc(r.verification_basis)}</p>`:''}<a class="source" href="${esc(href('news',r.id))}">이 기사 주소</a></article>`;}
-  function renderNews(data,params) {
-    const f=filters.news||={},target=data.items.find(x=>x.id===params.get('id'));
-    if(target){f.category='전체';f.date=target.date||'전체';}
-    const categories=['전체',...new Set(data.items.map(x=>x.category))],dates=['전체',...new Set(data.items.map(x=>x.date||x.source_date).sort().reverse())];
-    const items=data.items.filter(x=>(!f.category||f.category==='전체'||x.category===f.category)&&(!f.date||f.date==='전체'||(x.date||x.source_date)===f.date)).sort((a,b)=>(b.date||b.source_date).localeCompare(a.date||a.source_date)||(b.importance||0)-(a.importance||0));
-    return title('news',data,'결론과 사실, 업계 의미와 투자 해석을 나누어 읽습니다.')+`<div class="filters">${select('category','분류',categories,f.category)}${select('date','회차',dates,f.date)}</div>`+(items.length?items.map(article).join(''):empty('선택한 조건의 기사가 없습니다'));
-  }
-  function telegramOriginalText(text) {
-    // Preserve the original text while giving explicit breaks their own spacing.
-    return esc(text).replace(/(?:\r\n|\r|\n)(?:[ \t]*(?:\r\n|\r|\n))*/g,breaks=>`<span class="telegram-paragraph-break">${breaks}</span>`);
-  }
-  function renderTelegram(data,params) {
-    const f=filters.telegram||={},target=list(data.items).find(x=>x.id===params.get('id'));
-    if(target){f.channel='전체';f.kind='전체';f.date='전체';f.search='';f.page=1;}
-    const channels=['전체',...new Set(list(data.items).map(x=>x.channel))];
-    const key=r=>r.collected_at?`${r.collection_basis}|${r.collected_at}`:'unknown';
-    const kinds={'외사 리포트':'broker_report','어닝콜':'earnings_call','반도체 수급':'semiconductor_supply','시황 판단':'market_comment','시장전략':'strategy_comment'};
-    const dates=['전체',...new Set(list(data.items).map(x=>x.source_date).sort().reverse())];
-    const terms=(f.search||'').normalize('NFKC').trim().toLowerCase().split(/\s+/).filter(Boolean);
-    const sorted=list(data.items).filter(x=>{
-      const haystack=[x.title,x.channel,...list(x.duplicate_channels),x.original_text,x.source_date,x.source_url,...Object.entries(kinds).filter(([,id])=>list(x.signal_types).includes(id)).map(([label])=>label)].filter(Boolean).join(' ').normalize('NFKC').toLowerCase();
-      return (!f.channel||f.channel==='전체'||x.channel===f.channel)&&(!f.kind||f.kind==='전체'||list(x.signal_types).includes(kinds[f.kind]))&&(!f.date||f.date==='전체'||x.source_date===f.date)&&terms.every(term=>haystack.includes(term));
-    }).sort((a,b)=>(b.collected_at||'').localeCompare(a.collected_at||'')||(b.collection_basis||'').localeCompare(a.collection_basis||'')||(b.rule_score||0)-(a.rule_score||0)||b.published_at.localeCompare(a.published_at)||a.id.localeCompare(b.id));
-    const groups=[];
-    for(const r of sorted){let group=groups.at(-1);if(!group||group.key!==key(r)){group={key:key(r),at:r.collected_at,basis:r.collection_basis,items:[]};groups.push(group);}group.items.push(r);}
-    // Keep collection sections whole; a large historic batch can exceed 25 items.
-    const pages=[[]];let pageSize=0;
-    for(const group of groups){if(pageSize&&pageSize+group.items.length>25){pages.push([]);pageSize=0;}pages.at(-1).push(group);pageSize+=group.items.length;}
-    const page=Math.min(pages.length,Math.max(1,Number(f.page)||1));
-    const visible=target?[{key:key(target),at:target.collected_at,basis:target.collection_basis,items:[target]}]:pages[page-1];
-    let day='';
-    const sections=visible.map(group=>{
-      const date=group.at?new Date(Date.parse(group.at)+9*3600000).toISOString().slice(0,10):'수집 날짜 미확인';
-      const dateHeader=date!==day?`<h2 class="telegram-day">${esc(date)} <small>수집일 · 한국시간</small></h2>`:'';day=date;
-      const time=group.at?new Date(group.at).toLocaleTimeString('ko-KR',{timeZone:'Asia/Seoul',hour:'2-digit',minute:'2-digit',hour12:false}):'';
-      const label=group.basis==='run_start'?`${time} 수집 회차`:group.basis==='first_seen'?`${time} 최초 저장 · 회차 기록 없음`:'수집 회차 미확인';
-      return dateHeader+`<section class="telegram-batch" data-collection="${esc(group.key)}"><header class="telegram-batch-heading"><h3>${esc(label)}</h3><span>${group.items.length}건 · 규칙 점수순</span></header>`+group.items.map(r=>`<article class="story telegram-note telegram-original" data-item="${esc(r.id)}" data-rule-score="${Number(r.rule_score)||0}" tabindex="-1"><div class="meta"><span>${esc(r.channel)}</span>${list(r.duplicate_channels).length?`<span>같은 글 채널: ${list(r.duplicate_channels).map(esc).join(' · ')}</span>`:''}<time datetime="${esc(r.published_at)}">게시 ${esc(new Date(r.published_at).toLocaleString('ko-KR',{timeZone:'Asia/Seoul'}))}</time>${Number.isInteger(r.rule_score)?`<span>규칙 ${r.rule_score}점</span>`:''}</div><h2>${url(r.source_url,r.title)}</h2><details class="telegram-post" data-post="${esc(new URL(r.source_url).pathname.slice(1))}" ${target?'open':''}><summary>원문 보기</summary>${r.original_text?`<div class="telegram-original-text">${telegramOriginalText(r.original_text)}</div><p class="note">이미지·영상·첨부자료는 원문 링크에서 확인하실 수 있습니다.</p>`:'<div class="telegram-widget"></div>'}<p>${url(r.source_url,'텔레그램에서 원문 열기 ↗')}</p></details><a class="source" href="${esc(href('telegram',r.id))}">이 게시물 주소 →</a></article>`).join('')+'</section>';
-    }).join('');
-    return title('telegram',data,'AI·반도체·전력에 가산점을 주고, 시황 판단·글로벌 증권사 의견·시장전략을 우선 선별합니다. 수집 날짜·회차 최신순, 같은 회차 안에서는 규칙 점수순입니다.')+`<div class="filters telegram-filters">${select('channel','채널',channels,f.channel)}${select('kind','유형',['전체',...Object.keys(kinds)],f.kind)}${select('date','게시일',dates,f.date)}<label class="telegram-search">원문 검색 <input type="search" data-search="telegram" aria-label="텔레그램 원문 검색" value="${esc(f.search||'')}" placeholder="제목·본문·채널 검색 (예: DRAM 공급)"></label><button type="button" data-telegram-reset>조건 초기화</button></div><p class="note">공백으로 나눈 단어가 모두 포함된 원문을 찾습니다.</p><p class="note">검색 결과 ${sorted.length} / ${list(data.items).length}건 · 최근 ${data.window_days||14}일 게시물 · 회차는 최초 수집 기준</p>`+(sections||empty('규칙을 통과한 게시물이 없습니다','채널과 검색 조건을 확인해 주세요.'))+(!target&&pages.length>1?`<nav class="telegram-pages"><button data-telegram-page="${page-1}" ${page<=1?'disabled':''}>이전</button><span>${page} / ${pages.length}</span><button data-telegram-page="${page+1}" ${page>=pages.length?'disabled':''}>다음</button></nav>`:'');
+  function researchContext(tab, data, params, html) {
+    if (tab === 'telegram') return html;
+    const signal = window.ResearchSignals?.tabHTML(tab, data, params.get('company')) || '';
+    if (tab === 'gpu' && html.includes('data-gpu-briefing'))
+      return html.replace(
+        '<nav class="gpu-jump"',
+        contextStrip(tab, params) + signal + '<nav class="gpu-jump"'
+      );
+    return (
+      contextStrip(tab, params) +
+      (signal
+        ? html.replace(/(<header class="page-title[^]*?<\/header>)/, (match) => match + signal)
+        : html)
+    );
   }
 
-  function mountTelegramPost(details){
-    if(!details.open||details.dataset.loaded||!details.querySelector('.telegram-widget'))return;
-    const post=details.dataset.post;
-    if(!/^[A-Za-z][A-Za-z0-9_]{3,31}\/[1-9]\d*$/.test(post||''))return;
-    details.dataset.loaded='true';
-    const iframe=document.createElement('iframe');iframe.src='https://t.me/'+post+'?embed=1';iframe.title='텔레그램 원문';iframe.loading='lazy';iframe.style.cssText='width:100%;height:480px;border:0';iframe.setAttribute('sandbox','allow-scripts allow-same-origin allow-popups');
+  function mountTelegramPost(details) {
+    if (!details.open || details.dataset.loaded || !details.querySelector('.telegram-widget'))
+      return;
+    const post = details.dataset.post;
+    if (!/^[A-Za-z][A-Za-z0-9_]{3,31}\/[1-9]\d*$/.test(post || '')) return;
+    details.dataset.loaded = 'true';
+    const iframe = document.createElement('iframe');
+    iframe.src = 'https://t.me/' + post + '?embed=1';
+    iframe.title = '텔레그램 원문';
+    iframe.loading = 'lazy';
+    iframe.style.cssText = 'width:100%;height:480px;border:0';
+    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-popups');
     details.querySelector('.telegram-widget').appendChild(iframe);
   }
-  document.addEventListener('toggle',event=>{if(event.target.matches?.('.telegram-post'))mountTelegramPost(event.target);},true);
-  window.addEventListener('message',event=>{
-    if(event.origin!=='https://t.me')return;
-    const iframe=[...document.querySelectorAll('.telegram-widget iframe')].find(f=>f.contentWindow===event.source);if(!iframe)return;
-    let message;try{message=typeof event.data==='string'?JSON.parse(event.data):event.data;}catch{return;}
-    if(message?.event==='resize'&&Number.isFinite(Number(message.height))&&Number(message.height)>=80&&Number(message.height)<=30000)iframe.style.height=Number(message.height)+'px';
-    if(message?.event==='ready')iframe.contentWindow.postMessage(JSON.stringify({event:'visible',frame:iframe.id}),'https://t.me');
+  document.addEventListener(
+    'toggle',
+    (event) => {
+      if (event.target.matches?.('.telegram-post')) mountTelegramPost(event.target);
+    },
+    true
+  );
+  window.addEventListener('message', (event) => {
+    if (event.origin !== 'https://t.me') return;
+    const iframe = [...document.querySelectorAll('.telegram-widget iframe')].find(
+      (f) => f.contentWindow === event.source
+    );
+    if (!iframe) return;
+    let message;
+    try {
+      message = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+    } catch {
+      return;
+    }
+    if (
+      message?.event === 'resize' &&
+      Number.isFinite(Number(message.height)) &&
+      Number(message.height) >= 80 &&
+      Number(message.height) <= 30000
+    )
+      iframe.style.height = Number(message.height) + 'px';
+    if (message?.event === 'ready')
+      iframe.contentWindow.postMessage(
+        JSON.stringify({ event: 'visible', frame: iframe.id }),
+        'https://t.me'
+      );
   });
-  document.addEventListener('click',event=>{if(event.target.closest?.('[data-telegram-reset]')){clearTimeout(searchTimer);filters.telegram={};clearItemRoute('telegram');redraw();return;}const button=event.target.closest?.('[data-telegram-page]');if(button&&!button.disabled){filters.telegram||={};filters.telegram.page=Number(button.dataset.telegramPage);redraw();}});
-  function renderSummary(data) {
-    let main=title('summary',data,'오늘 바뀐 것부터, 영향이 큰 순서로 읽습니다.');
-    if(data.cards.length)main+=`<div class="stats">${data.cards.map(x=>`<a class="stat-card" href="${esc(href(x.tab,x.id))}"><span>${esc(x.label)}</span><b>${fmt(x.value)}</b><small>${esc(x.unit)} · ${esc(x.date)}${Number.isFinite(x.change)?` · 직전 관측 대비 ${fmt(x.change)}%`:''}</small></a>`).join('')}</div>`;
-    main+='<div class="grid"><div>';
-    main+=data.oneliner?`<section class="lead"><p class="eyebrow">TODAY'S TAKEAWAY</p><h2>${esc(data.oneliner)}</h2>${list(data.messages).length?`<ol>${data.messages.map((x,i)=>`<li>${data.message_sources?.[i]?anchor("news",data.message_sources[i],x):esc(x)}</li>`).join("")}</ol>`:""}${data.coverage_note?`<p class="note">${esc(data.coverage_note)}</p>`:""}</section>`:empty('오늘 회차를 기다리고 있습니다',`예정 기준일 ${status.expected_daily}. 마지막으로 발행한 일간 회차는 ${status.latest_daily||'아직 없습니다'}. 새로운 자료를 확인하기 전에는 오늘 소식으로 표시하지 않습니다.`);
-    main+=`<section class="panel" style="margin-top:18px"><div class="panel-head"><h2>이번 수집의 주요 소식</h2><span class="note">최대 8건</span></div>${data.highlights.length?`<ol class="ranked">${data.highlights.map((x,i)=>`<li><span class="rank">${String(i+1).padStart(2,'0')}</span><div><div class="meta">${esc(config.tabs.find(t=>t.id===x.tab)?.label)} · 새 반영 ${esc(x.date)}${x.source_date&&x.source_date!==x.date?` · 원문 ${esc(x.source_date)}`:""}</div>${anchor(x.tab,x.id,x.title)}</div></li>`).join('')}</ol>`:'<p class="note">아직 오늘 확인한 주요 소식이 없습니다.</p>'}</section></div><aside>`;
-    if(data.week)main+=`<section class="panel"><p class="eyebrow">WEEKLY VIEW</p><h3>최신 주간 한 줄</h3><p>${anchor('weekly',data.week.id,data.week.title)}</p><span class="note">${esc(data.week.date)}</span></section>`;
-    if(data.latest_report)main+=`<section class="panel"><p class="eyebrow">DEEP READ</p><h3>${anchor('reports',data.latest_report.id,data.latest_report.title)}</h3></section>`;
-    if(data.finance.length)main+=`<section class="panel"><h3>이번 주 금융권</h3>${data.finance.slice(0,2).map(x=>`<p>${badge(x.stance)} ${anchor('finance',x.id,x.title)}</p>`).join('')}</section>`;
-    if(data.interview)main+=`<section class="panel"><p class="eyebrow">LEADERS</p><h3>${anchor('interviews',data.interview.id,data.interview.headline||data.interview.title)}</h3><p class="note">${esc(data.interview.source_date)}</p></section>`;
-    for(const [key,tab,label]of [['temperature','temperature','시장 온도'],['ai_state','ai-state','AI 현주소']])if(data[key])main+=`<section class="panel"><h3>${esc(label)}</h3>${anchor(tab,data[key].id,data[key].title)}</section>`;
-    if(data.watch.length)main+=`<section class="panel"><h3>최근 주간 관전 포인트</h3>${data.watch.map(x=>`<p class="note">${esc(x.date)} · ${esc(x.text)}</p>`).join('')}</section>`;
-    return main+'</aside></div>';
-  }
-  function weekID(date) {const d=new Date(date+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));const y=d.getUTCFullYear();return y+'-W'+String(Math.ceil((((d-new Date(Date.UTC(y,0,1)))/86400000)+1)/7)).padStart(2,'0');}
-  const investorGroupLabel=id=>config.finance.coverage_groups.find(g=>g.id===id)?.label||'명단 밖·기타';
-  const financeStageLabels={claim:'발언·연구 주장',position:'공개 포지션·투자 행동',flow:'시장 수급',earnings:'기업 실적',price:'가격·기대'};
-  const financeStatusLabels={verified:'확인',partial:'부분 확인',missing:'미확인'};
-  const financeFormatLabels={memo:'투자 메모',report:'리서치 보고서',chartbook:'차트북·시장지도',essay:'분석 글',interview:'대담·팟캐스트',fund_letter:'펀드·주주서한'};
-  function financeReferences(study,ids) {return `<div class="finance-ref-links">${list(ids).map(id=>study.references.find(r=>r.id===id)).filter(Boolean).map(r=>url(r.url,r.title+' · '+r.published_on)).join('')}</div>`;}
-  function financeInsight(x) {
-    const i=x.insight;if(!i)return '';
-    return `<div class="finance-insight"><div class="meta">${badge(financeFormatLabels[i.format]||i.format)}<span>발행 ${esc(i.publisher)} · 검토 ${esc(i.reviewed_on)}</span></div><p><b>이 자료가 답하려는 질문</b> · ${esc(i.question)}</p><ul>${list(i.findings).map(f=>`<li>${esc(f)}</li>`).join('')}</ul><p class="note"><b>자료의 방법·범위</b> · ${esc(i.method)}</p><p class="research-limit"><b>한계</b> · ${esc(i.limitations)}</p></div>`;
-  }
-  function financeCompanySnapshot(company) {
-    if(!company)return '<p class="note">기업 가격·실적 스냅샷 미확인 · 기업 검증 화면에서 확인해 주세요.</p>';
-    const findSource=id=>list(company.sources).find(s=>s.id===id),q=company.quote,qs=findSource(q?.source);
-    const priceOK=q&&Number.isFinite(q.value)&&qs,age=priceOK?(Date.now()-Date.parse(q.date+'T00:00:00Z'))/86400000:Infinity;
-    let html=`<div class="finance-company-snapshot"><p class="note">기존 가격·실적 스냅샷 · ${esc(company.snapshot_as_of)} · 사례 검토 이후의 갱신이 결론에 자동 반영되지는 않습니다.</p>`;
-    html+=priceOK?`<p><b>${fmt(q.value,company.currency==='KRW'?0:2)} ${esc(company.currency)}</b> <span class="note">${esc(q.date)} ${esc(q.time)} · ${esc(q.session)}</span>${age>7?badge('가격 갱신 필요'):''}</p><p class="note">${url(qs.url,'가격 원문 ↗')} · 보존된 관측값이며 실시간 가격이 아닙니다.</p>`:'<p class="note">가격·가격 출처 미확인</p>';
-    html+=`<ul class="finance-metrics">${list(company.metrics).map(m=>{const s=findSource(m.source);return `<li><span>${esc(m.label)} <b>${fmt(m.value,4)} ${esc(m.unit)}</b></span><small>${esc(m.period)} · ${s?url(s.url,'실적 원문 ↗'):'출처 미확인'}</small></li>`;}).join('')||'<li>실적 스냅샷 미확인</li>'}</ul></div>`;
-    return html;
-  }
-  function financeCaseCard(x,data,target) {
-    const s=x.case_study,stages=Object.keys(financeStageLabels).map(k=>s.stages.find(t=>t.kind===k)).filter(Boolean),name=id=>config.workspace.companies.find(c=>c.id===id)?.name||id;
-    return `<article class="finance-case view-card" tabindex="-1" data-item="${esc(x.id)}"><div class="meta"><strong>${esc(x.institution)}</strong>${badge('투자 연결 사례')}${!x.verified?badge('확인 필요'):''}<span>원문 ${esc(x.source_date)} · 사례 검토 ${esc(s.reviewed_on)}</span></div><h3>${esc(x.title)}</h3><p class="note finance-speaker">${esc(x.speaker)} · ${esc(x.affiliation)}</p><p class="finance-case-question">${esc(s.question)}</p><p class="finance-case-verdict">${esc(s.verdict)}</p><div class="finance-thesis-status"><p><b>사업 가설</b> ${esc(s.thesis_status)}</p><p><b>주식·가격 판단</b> ${esc(s.security_status)}</p></div><p class="note">${esc(s.period_label)}</p><ol class="finance-stage-strip">${stages.map(t=>`<li class="${esc(t.status)}"><b>${esc(financeStageLabels[t.kind])}</b><span>${esc(financeStatusLabels[t.status])}</span><small>${esc(t.as_of)}</small></li>`).join('')}</ol><details class="finance-case-detail" ${target===x.id?'open':''}><summary>5단계 증거와 기업별 영향 펼치기</summary>${financeInsight(x)}<div class="finance-stages">${stages.map((t,n)=>`<section class="finance-stage"><div class="meta"><span class="finance-step">${String(n+1).padStart(2,'0')}</span><h4>${esc(financeStageLabels[t.kind])}</h4>${badge(financeStatusLabels[t.status])}</div><p class="note">관측 기준 ${esc(t.as_of)} · ${esc(t.period_label)}</p>${t.facts.length?`<ul>${t.facts.map(f=>`<li>${esc(f)}</li>`).join('')}</ul>`:'<p class="note">이 단계의 사실 자료는 아직 확보하지 못했습니다.</p>'}<p><b>투자 해석</b> · ${esc(t.interpretation)}</p><p class="research-limit"><b>확인 범위·공백</b> · ${esc(t.limitations)}</p>${financeReferences(s,t.reference_ids)}</section>`).join('')}</div><h4 class="finance-impact-title">관심 기업에 어떻게 연결되는가</h4><div class="finance-company-grid">${list(s.company_impacts).map(t=>`<section class="finance-company-impact"><h4>${esc(name(t.company_id))}</h4><p><b>이익 연결</b> · ${esc(t.mechanism)}</p><p><b>확보한 근거</b> · ${esc(t.support)}</p><p><b>다음 확인</b> · ${esc(t.next_check)}</p><p><b>가격 질문</b> · ${esc(t.price_question)}</p>${financeReferences(s,t.reference_ids)}${financeCompanySnapshot(list(data.company_contexts).find(c=>c.id===t.company_id))}<nav>${anchor('company',t.company_id,'기업 가설 →')}${anchor('valuation',t.company_id,'가격 검토 →')}</nav></section>`).join('')}</div><section class="finance-next"><h4>다음 점검 · ${esc(s.next_check.date)}</h4><p class="note">${s.next_check.date_basis==='scheduled'?'공식 일정 기준':'편집 검토 예정일 · 회사 발표일이 아닙니다'}</p><p>${esc(s.next_check.trigger)}</p><p><b>확인 후 조치</b> · ${esc(s.next_check.action)}</p><p><b>판단을 바꿀 조건</b> · ${esc(s.counterpoint)}</p></section><details class="finance-bibliography"><summary>전체 근거와 자료 범위 (${s.references.length})</summary><ol>${s.references.map(r=>`<li>${url(r.url,r.title)}<small>${esc(r.published_on)} · ${esc(r.kind==='primary'?'1차 자료':r.kind==='market'?'시장 자료':'방법·제도')} · ${esc(r.note)}</small></li>`).join('')}</ol></details></details><p class="self-interest">이해관계: ${esc(x.self_interest)}</p>${source(x)}<a class="source" href="${esc(href('finance',x.id))}">이 사례 주소 →</a></article>`;
-  }
-  function viewCard(x) {return `<article class="view-card" tabindex="-1" data-item="${esc(x.id)}"><div class="meta"><strong>${esc(x.institution)}</strong><span>${esc(investorGroupLabel(x.investor_group))}</span><span>${esc(x.source_date)}</span>${badge(x.stance)}${!x.verified?badge('확인 필요'):''}</div><h3>${url(x.source_url,x.title)}</h3><p>${esc(x.claim)}</p><p class="note">${esc(x.speaker)} · ${esc(x.affiliation)}</p>${financeInsight(x)}${x.analysis?`<p><b>핵심 논리</b> · ${esc(x.analysis.rationale)}</p>`:''}${x.investment_impact?`<p><b>투자에 주는 의미</b> · ${esc(x.investment_impact)}</p>`:''}${x.analysis?`<p><b>다음 확인 변수</b> · ${esc(x.analysis.watch)}</p><p><b>반대 조건</b> · ${esc(x.analysis.counterpoint)}</p><p class="note">메시지 검토 ${esc(x.analysis.reviewed_on)}</p>`:''}<p class="self-interest">이해관계: ${esc(x.self_interest)}</p>${source(x)}${x.legacy?'<span class="note">기존 회차 · 추가 확인 항목은 미확인으로 남겼습니다.</span>':''}<a class="source" href="${esc(href('finance',x.id))}">이 자료 주소 →</a></article>`;}
-  function renderFinance(data,params) {
-    const f=filters.finance||={};if(params.get('id')){f.stance='전체';f.topic='전체';f.institution='전체';f.week='전체';f.group='전체';f.kind='전체';}
-    const kind=x=>x.case_study?'투자 연결 사례':x.insight?'기관 리서치':'발언·메시지';
-    const weeks=[...new Set(data.items.map(x=>weekID(x.source_date)))].sort().reverse();
-    const items=data.items.filter(x=>(!f.stance||f.stance==='전체'||x.stance===f.stance)&&(!f.topic||f.topic==='전체'||x.topic===f.topic)&&(!f.institution||f.institution==='전체'||x.institution===f.institution)&&(!f.week||f.week==='전체'||weekID(x.source_date)===f.week)&&(!f.group||f.group==='전체'||investorGroupLabel(x.investor_group)===f.group)&&(!f.kind||f.kind==='전체'||kind(x)===f.kind)).sort((a,b)=>b.source_date.localeCompare(a.source_date));
-    const cases=items.filter(x=>x.case_study).sort((a,b)=>b.case_study.reviewed_on.localeCompare(a.case_study.reviewed_on)||a.id.localeCompare(b.id)),insights=items.filter(x=>x.insight&&!x.case_study),specialIDs=new Set([...cases,...insights].map(x=>x.id));
-    const featured=items.filter(x=>!specialIDs.has(x.id)&&list(data.featured_ids).includes(x.id)).sort((a,b)=>data.featured_ids.indexOf(a.id)-data.featured_ids.indexOf(b.id)),featuredIDs=new Set([...featured,...cases,...insights].map(x=>x.id));
-    const weeklies=data.weeklies.filter(w=>w.threads.length).sort((a,b)=>b.id.localeCompare(a.id)).slice(0,1);
-    let html=title('finance',data,'기관의 발언·리서치를 공개 투자 행동과 수급, 기업 실적·가격에 연결해 검토합니다.');
-    html+=`<div class="filters">${select('kind','자료 종류',['전체','투자 연결 사례','기관 리서치','발언·메시지'],f.kind)}${select('group','투자자 유형',['전체',...config.finance.coverage_groups.map(g=>g.label),'명단 밖·기타'],f.group)}${select('stance','입장',['전체','낙관','경계','중립'],f.stance)}${select('topic','쟁점',['전체',...config.finance.topics],f.topic)}${select('institution','기관',['전체',...new Set(data.items.map(x=>x.institution))],f.institution)}${select('week','주차',['전체',...weeks],f.week)}</div><div class="grid"><div>`;
-    if(cases.length)html+=`<section class="finance-pilot"><p class="eyebrow">THESIS IN PRACTICE</p><h2>투자 연결 사례</h2><p class="note">각 단계의 관측일과 공개일을 구분한 검토 기록입니다. 시장 전체 수급을 특정 기관의 매매로 보지 않으며, 회사 실적 개선만으로 현재 가격의 매력을 확정하지 않습니다.</p>${cases.map(x=>financeCaseCard(x,data,params.get('id'))).join('')}</section>`;
-    if(insights.length)html+=`<section class="finance-research"><p class="eyebrow">INSTITUTIONAL RESEARCH</p><h2>기관 리서치·인사이트</h2><p class="note">메모·차트·시장지도·기술 분석의 주장과 방법, 이해관계를 함께 읽습니다. 기관이 제시한 전망과 편집 해석을 구분합니다.</p>${insights.map(viewCard).join('')}</section>`;
-    if(weeklies.length)html+=`<section class="panel"><p class="eyebrow">LATEST WEEKLY</p><h3>${anchor('weekly',weeklies[0].id,'최신 주간 금융권 흐름')}</h3>${weeklies[0].threads.map(x=>`<p>${esc(x.summary)}</p>`).join('')}</section>`;
-    if(featured.length)html+=`<section class="panel"><p class="eyebrow">INVESTOR MESSAGES</p><h2>주요 투자자 메시지</h2><p class="note">최근 ${config.finance.featured_max_age_days}일 원문에서 서로 다른 기관과 투자 관점을 우선해 보여 드립니다.</p>${featured.map(viewCard).join('')}</section>`;
-    if(!items.length)html+=empty('선택한 조건의 의견이 없습니다');
-    for(const topic of config.finance.topics){const opinions=items.filter(x=>x.topic===topic&&!featuredIDs.has(x.id));if(!opinions.length)continue;html+=`<section class="finance-topic"><h2>${esc(topic)}</h2><div class="two-cols">${['낙관','경계'].map(stance=>`<div><p class="stance-title ${stance==='경계'?'negative':''}"><span class="dot"></span>${stance} 쪽</p>${opinions.filter(x=>x.stance===stance).map(viewCard).join('')||'<p class="quiet">확인된 의견이 없습니다.</p>'}</div>`).join('')}</div>${opinions.filter(x=>x.stance==='중립').map(viewCard).join('')}</section>`;}
-    html+='</div><aside><section class="panel"><h3>주요 취재 대상</h3><p class="note">아래는 취재 범위입니다. 확인한 메시지만 본문에 실으며, 자료가 없는 투자자의 발언을 채워 넣지 않습니다.</p>'+config.finance.coverage_groups.map(g=>`<details><summary>${esc(g.label)} · 반영 ${data.items.filter(x=>x.investor_group===g.id).length}건</summary><p class="note">${esc(g.focus)}</p><p class="note">${esc(g.institutions.join(' · '))}</p><p class="note">${esc(g.people.join(' · '))}</p></details>`).join('')+'</section><section class="panel"><h3>주별 낙관·경계 비율</h3>';
-    for(const week of weeks){const xs=items.filter(x=>weekID(x.source_date)===week),a=xs.filter(x=>x.stance==='낙관').length,b=xs.filter(x=>x.stance==='경계').length;if(!xs.length)continue;html+=`<p class="ratio-label">${esc(week)}</p><div class="ratio" aria-label="낙관 ${a}건, 경계 ${b}건"><i class="optimistic" style="width:${a+b?a/(a+b)*100:0}%"></i><i class="cautious" style="width:${a+b?b/(a+b)*100:0}%"></i></div><p class="ratio-label">낙관 ${a} · 경계 ${b} · 중립 ${xs.length-a-b}</p>`;}
-    const institutions={};items.forEach(x=>institutions[x.institution]=(institutions[x.institution]||0)+1);
-    return html+'</section><section class="panel"><h3>자주 나온 기관</h3>'+Object.entries(institutions).sort((a,b)=>b[1]-a[1]).slice(0,8).map(([name,n])=>`<p class="note">${esc(name)} <strong>${n}건</strong></p>`).join('')+'</section></aside></div>';
-  }
-  const reportCoverage=r=>r.format==='리서치 해설'?esc(r.basis):r.format==='실적 종합'?'자료별 근거 범위 · '+esc(r.basis):'원문 근거 '+fmt(r.coverage*100,0)+'% · '+esc(r.basis);
-  function renderReports(data) {
-    const allItems=data.items.filter(x=>!window.Collector?.isEarnings(x)),f=filters.reports||={},items=allItems.filter(x=>(!f.sector||f.sector==='전체'||x.sector===f.sector)&&(!f.company||f.company==='전체'||x.company===f.company)&&(!f.format||f.format==='전체'||x.format===f.format)).sort((a,b)=>b.source_date.localeCompare(a.source_date));
-    let html=(window.BrokerResearch?.tabs('deep')||'')+title('reports',{...data,meta:{...data.meta,count:allItems.length,as_of:allItems.map(x=>x.source_date).filter(Boolean).sort().at(-1)||null}},'증권사·구독 리서치와 산업 심층 해설의 근거와 가정을 검토합니다. 실적 콜은 별도 메뉴에서 읽습니다.');
-    html+='<p class="note"><a href="earnings.html">기업별 실적 콜·질의응답 읽기 →</a></p>';
-    html+=`<div class="filters">${select('sector','섹터',['전체',...config.reports.sectors],f.sector)}${select('company','기업',['전체',...new Set(allItems.map(x=>x.company))],f.company)}${select('format','형식',['전체',...config.reports.formats.filter(format=>!window.Collector?.isEarnings({format}))],f.format)}</div><div class="grid"><div>`;
-    if(!items.length)html+=empty('아직 작성된 심층 리포트가 없습니다','검증된 산업·기업 리서치가 반영되면 표시합니다. 실적 콜은 별도 메뉴에서 확인할 수 있습니다.');
-    let month='';for(const r of items){if(month!==r.source_date.slice(0,7)){month=r.source_date.slice(0,7);html+=`<h2 class="month-title">${esc(month.replace('-','년 '))}월</h2>`;}html+=`<article class="report-card" data-item="${esc(r.id)}"><div class="meta">${badge(r.format)}<span>${esc(r.company)} · ${esc(r.sector)}</span><span>${esc(r.source_date)}</span></div><h2>${anchor('reports',r.id,r.title)}</h2><p>${esc(r.overview)}</p><p class="note">${reportCoverage(r)}</p>${source(r)}<a class="source" href="${esc(href(reportTab(r),r.id))}">본문 열기 →</a></article>`;}
-    const counts={};for(const r of allItems)counts[r.company]=(counts[r.company]||0)+1;
-    return html+'</div><aside><section class="panel"><h3>기업별 리포트</h3>'+Object.entries(counts).map(([key,n])=>`<p class="note">${esc(key)} <b>${n}편</b></p>`).join('')+(data.items.length?'':'<p class="note">첫 리포트 작성 후 표시됩니다.</p>')+'</section><section class="panel"><h3>리포트 구성</h3><p class="note"><b>리서치 해설</b> · 핵심 설명과 분석 → 비판적 재독과 판단 → 원문 독서 우선순위</p><p class="note"><b>인터뷰형</b> · 배경·용어 → 주제별 질문·답변 요지 → 계산·해석 → 한계 → 투자의 생각</p><p class="note">(계산)은 숫자의 검산, (해석)은 편집자의 판단입니다. 전망과 회사 가이던스를 구분합니다. 기존 리포트는 작성 당시 구성을 유지합니다.</p></section></aside></div>';
-  }
-  function chart(series,{unit='',height=220,gapDays=4}={}) {
-    const all=series.flatMap(x=>x.points).filter(x=>Number.isFinite(x.value));if(!all.length)return '<p class="note">표시할 수 있는 숫자 데이터가 없습니다.</p>';
-    const w=850,h=height,left=62,right=18,top=17,bottom=36,numeric=all.every(x=>/^\d{4}-\d{2}-\d{2}$/.test(x.label));
-    const labels=[...new Set(all.map(p=>p.label))];if(numeric)labels.sort();
-    const xvalue=p=>numeric?Date.parse(p.label):labels.indexOf(p.label),xs=all.map(xvalue),minX=Math.min(...xs),maxX=Math.max(...xs),ys=all.map(x=>x.value),minY=Math.min(...ys),maxY=Math.max(...ys),pad=(maxY-minY)*.12||Math.abs(maxY)*.1||1;
-    const x=p=>left+(xvalue(p)-minX)/(maxX-minX||1)*(w-left-right),y=v=>h-bottom-(v-minY+pad)/(maxY-minY+pad*2)*(h-top-bottom);
-    let svg=`<svg class="chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(unit)} 추이"><title>${esc(series.map(s=>s.label).join(', '))}</title>`;
-    for(let i=0;i<4;i++){const v=minY-pad+(maxY-minY+pad*2)*i/3;svg+=`<line class="gridline" x1="${left}" x2="${w-right}" y1="${y(v)}" y2="${y(v)}"/><text x="${left-9}" y="${y(v)+4}" text-anchor="end">${fmt(v)}</text>`;}
-    for(let i=0;i<series.length;i++){const s=series[i],points=s.points.filter(p=>Number.isFinite(p.value));let path='',prev=null;for(const p of s.points){if(!Number.isFinite(p.value)){prev=null;continue;}const gap=numeric&&prev&&Date.parse(p.label)-Date.parse(prev.label)>gapDays*86400000;path+=(prev&&!gap?'L':'M')+x(p).toFixed(2)+','+y(p.value).toFixed(2);prev=p;}svg+=`<path class="line" stroke="${palette[i%palette.length]}" d="${path}"/>`;for(const p of points)svg+=`<circle cx="${x(p)}" cy="${y(p.value)}" r="2.5" fill="${palette[i%palette.length]}"><title>${esc(s.label)} ${esc(p.label)}: ${fmt(p.value)} ${esc(unit)}</title></circle>`;}
-    svg+=`<text x="${left}" y="${h-9}">${esc(labels[0])}</text><text x="${w-right}" y="${h-9}" text-anchor="end">${esc(labels.at(-1))}</text></svg>`;
-    return `<div class="chart-wrap">${svg}<div class="legend">${series.map((s,i)=>`<span><i style="background:${palette[i%palette.length]}"></i>${esc(s.label)}</span>`).join('')}<span>${esc(unit)}</span></div></div>`;
-  }
-  function reportComment(x,presentation) {
-    return `<aside class="comment ${esc(x.kind)}"><b>${presentation==='commentary'?'*코멘트 →':x.kind==='calculation'?'(계산)':'(해석)'}</b><p>${esc(x.text)}</p>${x.kind==='calculation'&&presentation!=='commentary'?`<p class="note">입력 ${x.inputs.map((v,i)=>`${x.input_labels?.[i]?esc(x.input_labels[i])+': ':''}${fmt(v,6)}`).join(' · ')} → 계산값 ${fmt(x.result,4)} ${esc(x.unit||(['percentage','growth'].includes(x.operation)?'%':''))}</p>`:''}${x.assumptions?`<p class="note">가정·한계: ${esc(x.assumptions)}</p>`:''}</aside>`;
-  }
-  function reportNumberTag(label) {return String(label).match(/\[(?:원문 사실|원문 추정|공개 자료|내 계산)\]/)?.[0]||'';}
-  function reportBars(b,presentation) {
-    let running=0;
-    const bridge=b.kind==='bridge',bars=b.points.map((p,i)=>{
-      const total=!bridge||i===0||i===b.points.length-1;
-      const start=total?0:running,end=total?p.value:running+p.value;
-      running=end;return {...p,start,end,total};
+  document.addEventListener('click', (event) => {
+    if (event.target.closest?.('[data-telegram-reset]')) {
+      clearTimeout(searchTimer);
+      filters.telegram = {};
+      clearItemRoute('telegram');
+      redraw();
+      return;
+    }
+    const button = event.target.closest?.('[data-telegram-page]');
+    if (button && !button.disabled) {
+      filters.telegram ||= {};
+      filters.telegram.page = Number(button.dataset.telegramPage);
+      redraw();
+    }
+  });
+
+  const renderers = {};
+  function initializeViews() {
+    const common = { config, filters, title, href, anchor };
+    views = {
+      library: window.MarketLibrary.create({ ...common, getStatus: () => status }),
+      reports: window.MarketReports.create({
+        ...common,
+        reportTab,
+        emphasize: (value, marks) =>
+          window.Collector?.emphasize ? window.Collector.emphasize(value, marks) : esc(value),
+        earningsSector: (...args) => window.Collector?.earningsSector(...args),
+        isEarnings: (r) => !!window.Collector?.isEarnings(r),
+        reportTabs: (kind) => window.BrokerResearch?.tabs(kind) || '',
+      }),
+      memory: window.MarketMemory.create({
+        ...common,
+        viewportWidth: () => document.documentElement?.clientWidth,
+      }),
+      gpu: window.MarketGPU.create({
+        ...common,
+        getItemID: () => route().params.get('id'),
+        gpuBriefing: (data) => window.ResearchSignals?.gpuBriefing?.(data) || '',
+      }),
+      telegram: window.MarketTelegram.create(common),
+    };
+    Object.assign(renderers, views.library.renderers, {
+      reports: views.reports.render,
+      memory: views.memory.render,
+      gpu: views.gpu.render,
+      telegram: views.telegram.render,
     });
-    const low=Math.min(0,...bars.flatMap(p=>[p.start,p.end])),high=Math.max(0,...bars.flatMap(p=>[p.start,p.end])),span=high-low||1;
-    const position=v=>(v-low)/span*100,zero=position(0);
-    return `<div class="report-bars" role="img" aria-label="${esc(b.title)}. ${bars.map(p=>esc(p.label)+': '+fmt(p.value)+' '+esc(b.unit)).join('; ')}"><p class="report-chart-unit">${esc(b.unit)}${bridge?' · 시작값에서 항목별 증감을 거쳐 끝값으로 연결':''}</p>${bars.map(p=>`<div class="report-bar-row"><span class="report-bar-label">${esc(p.label)}</span><div class="report-bar-track"><i class="report-bar-zero" style="left:${zero}%"></i><span class="report-bar ${p.total?'total':p.value<0?'negative':'positive'}" style="left:${Math.min(position(p.start),position(p.end))}%;width:${Math.abs(p.end-p.start)/span*100}%"></span></div><b>${bridge&&!p.total&&p.value>0?'+':''}${fmt(p.value,3)}${presentation==='commentary'&&reportNumberTag(p.label)?`<small class="report-value-tag">${esc(reportNumberTag(p.label))}</small>`:''}</b></div>`).join('')}</div>`;
   }
-  function reportDate(date) {
-    const parts=String(date).match(/^(\d{4})-(\d{2})(?:-(\d{2}))?$/);
-    return parts?`${parts[1]}년 ${Number(parts[2])}월${parts[3]?' '+Number(parts[3])+'일':''}`:String(date);
+  function renderTab(tab, data, params) {
+    return renderers[tab] ? renderers[tab](data, params) : views.library.generic(tab, data);
   }
-  function reportSourceDate(date,sourceURL,originalSourceURL) {
-    const normalized=value=>String(value||'').split(/[?#]/)[0].replace(/\/$/,'');
-    const tag=normalized(sourceURL)===normalized(originalSourceURL)?'[원문 사실]':'[공개 자료]';
-    return reportDate(date)+' '+tag;
-  }
-  function reportCitation(b,presentation,originalSourceURL) {
-    if(!b.source_url)return '';
-    let name='출처';try{name=new URL(b.source_url).hostname.replace(/^www\./,'');}catch{}
-    return `<p class="source report-citation">${url(b.source_url,name+' ↗')}<span> · ${esc(presentation==='commentary'?reportSourceDate(b.source_date,b.source_url,originalSourceURL):b.source_date)}${b.locator?' · '+esc(b.locator):''}</span></p>`;
-  }
-  function reportBlock(b,presentation,originalSourceURL) {
-    const citation=reportCitation(b,presentation,originalSourceURL);
-    const marked=value=>window.Collector?.emphasize?window.Collector.emphasize(value,b.highlights):esc(value);
-    let html='';
-    if(b.type==='paragraph')html=`<p>${marked(b.text)}</p>`;
-    if(b.type==='subheading')html=`<h3>${esc(b.text)}</h3>`;
-    if(b.type==='bullets')html=`<ul class="report-bullets">${b.items.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`;
-    if(b.type==='dialogue')html=`<div class="report-dialogue ${esc(b.role)}"><p class="dialogue-speaker"><b>${esc(b.speaker)}</b><span>${b.role==='question'?'질문 요지':'답변 요지'}</span></p>${b.paragraphs.map(p=>`<p>${marked(p)}</p>`).join('')}</div>`;
-    if(b.type==='comment')html=reportComment(b,presentation);
-    if(b.type==='table')html=`<figure class="report-figure"><figcaption>${esc(b.title)}</figcaption>${table(b.columns,b.rows)}</figure>`;
-    if(b.type==='chart')html=`<figure class="report-figure report-chart"><figcaption>${esc(b.title)}</figcaption>${b.kind?reportBars(b,presentation):chart([{label:b.title,points:b.points}],{unit:b.unit})}${b.caption?`<p class="report-figure-caption">${esc(b.caption)}</p>`:''}<details class="report-chart-data"><summary>숫자 표 보기</summary>${table(['기간·구분',b.unit],b.points.map(p=>[p.label,presentation==='commentary'?fmt(p.value,3)+(reportNumberTag(p.label)?' '+reportNumberTag(p.label):''):p.value]))}</details></figure>`;
-    if(b.type==='diagram')html=`<figure class="report-figure report-diagram ${b.layout==='parallel'?'report-parallel':'report-sequence'}"><figcaption>${esc(b.title)}</figcaption><${b.layout==='parallel'?'ul':'ol'}>${b.steps.map((step,i)=>`<li>${b.layout==='parallel'?'':`<span class="report-step-number">${String(i+1).padStart(2,'0')}</span>`}<div><strong>${esc(step.title)}</strong><p>${esc(step.text)}</p></div></li>`).join('')}</${b.layout==='parallel'?'ul':'ol'}><p class="report-figure-caption">${esc(b.caption)}</p></figure>`;
-    return `<div class="report-block">${html}${citation}</div>`;
-  }
-  function reportCommentary(r,context) {
-    const e=r.editorial,link=s=>href(reportTab(r),r.id,{...context,section:s.id});
-    const sourceNotice=()=>`<aside class="report-original-source" aria-label="원문 안내"><p class="report-original-label">이 글이 읽은 원문 · ${e.source_access==='paid'?'유료 자료':''}</p><p class="report-original-title">${url(r.source_url,e.source_title+' ↗')}</p><p>발행 ${esc(reportDate(r.source_date))} [원문 사실] · ${esc(r.source_name||'SemiAnalysis')}</p></aside>`;
-    const toc=`<nav class="toc report-essay-toc report-commentary-toc" aria-label="리포트 목차"><p class="eyebrow">목차</p><div>${r.sections.map(s=>`<a href="${esc(link(s))}">${esc(s.title)} : ${esc(s.subtitle)}</a>`).join('')}</div></nav>`;
-    const related=list(e.related_reports).map(x=>`<a href="${esc(href('reports',x.id,context))}">${esc(x.title)} <span aria-hidden="true">↗</span></a>`).join('');
-    return `<div class="report-reader-tools"><a href="${esc(href(reportTab(r),null,reportTab(r)==='earnings'?context:{...context,section:'deep'}))}">← ${reportTab(r)==='earnings'?'실적 콜':'심층 리포트'}</a><button type="button" data-report-print>인쇄 / PDF 저장</button></div><article class="report-body report-essay report-commentary" tabindex="-1" data-item="${esc(r.id)}"><header class="report-opening"><p class="eyebrow">MARKET BRIEFING · 심층 해설</p><h1>${esc(r.title)}</h1><p class="report-deck">${esc(r.overview)}</p><div class="report-dateline"><span>첨부 원문과 공개 자료를 대조해 전면 개정</span></div></header>${sourceNotice()}<div class="report-intro">${e.introduction.map(p=>`<p>${esc(p)}</p>`).join('')}</div>${toc}${r.sections.map(s=>`<section id="section-${esc(s.id)}" class="report-section report-${esc(s.role)}"><div class="report-chapter"><h2>${esc(s.title)}</h2><p class="report-chapter-subtitle">${esc(s.subtitle)}</p></div>${s.blocks.map(b=>reportBlock(b,'commentary',r.source_url)).join('')}</section>`).join('')}<section class="report-methodology"><h2>근거 자료</h2><p>${reportCoverage(r)}</p><details class="report-source-ledger"><summary>자료별 링크와 발행일</summary><div class="report-references">${list(r.references).map(ref=>`<p>${url(ref.url,ref.label)} <span>· ${esc(reportSourceDate(ref.date,ref.url,r.source_url))}</span></p>`).join('')}</div></details></section>${related?`<section class="report-related report-essay-related"><h2>함께 읽을 분석</h2>${related}</section>`:''}${sourceNotice()}</article>`;
-  }
-  function reportEssay(r,context) {
-    const e=r.editorial,link=s=>href(reportTab(r),r.id,{...context,section:s.id});
-    const toc=`<nav class="toc report-essay-toc" aria-label="리포트 목차"><p class="eyebrow">CONTENTS</p><ol>${r.sections.map((s,i)=>`${s.part_title?`<li class="report-toc-part">${esc(s.part_title)}</li>`:''}<li><a href="${esc(link(s))}"><span>${String(i+1).padStart(2,'0')}</span>${esc(s.title)}</a></li>`).join('')}</ol></nav>`;
-    const related=list(e.related_reports).map(x=>`<a href="${esc(href('reports',x.id,context))}">${esc(x.title)} <span aria-hidden="true">↗</span></a>`).join('');
-    return `<div class="report-reader-tools"><a href="${esc(href(reportTab(r),null,reportTab(r)==='earnings'?context:{...context,section:'deep'}))}">← ${reportTab(r)==='earnings'?'실적 콜':'심층 리포트'}</a><button type="button" data-report-print>인쇄 / PDF 저장</button></div><article class="report-body report-essay" tabindex="-1" data-item="${esc(r.id)}"><header class="report-opening"><p class="eyebrow">MARKET BRIEFING · ${r.format==='리서치 해설'?'RESEARCH REVIEW':r.format==='실적 종합'?'AI INFRASTRUCTURE':e.template==='interview'?'LONGFORM INTERVIEW':'EARNINGS REVIEW'}</p><h1>${esc(r.title)}</h1><p class="report-deck">${esc(r.overview)}</p><div class="report-dateline"><span>${esc(r.period)}</span><span>${r.call_date?'콜 '+esc(r.call_date)+' · ':''}원문 ${esc(r.source_date)}</span><span>개정 ${esc(r.updated_on||r.written_on||r.source_date)}</span></div></header><div class="report-intro">${e.introduction.map(p=>`<p>${esc(p)}</p>`).join('')}</div><aside class="report-reading-thesis"><strong>이 글에서 짚을 변화</strong><ul>${e.key_takeaways.map(p=>`<li>${esc(p)}</li>`).join('')}</ul></aside>${toc}${r.sections.map((s,i)=>`<section id="section-${esc(s.id)}" class="report-section report-${esc(s.role)}">${s.part_title?`<p class="report-part-title">${esc(s.part_title)}</p>`:''}<div class="report-chapter"><span>${String(i+1).padStart(2,'0')}</span><h2>${esc(s.title)}</h2></div>${s.blocks.map(reportBlock).join('')}</section>`).join('')}<section class="report-watch"><p class="eyebrow">NEXT CHECK</p><h2>${r.format==='리서치 해설'?'다음에 확인할 질문':'다음 실적에서 이어서 볼 질문'}</h2>${e.watchpoints.map((x,i)=>`<div class="report-watchpoint"><span>${String(i+1).padStart(2,'0')}</span><div><h3>${esc(x.metric)}</h3><p>${esc(x.condition)}</p><small>${esc(x.timing)}</small></div></div>`).join('')}</section><section class="report-methodology"><h2>자료와 읽은 범위</h2><p>${reportCoverage(r)}</p>${r.comparison?`<p><b>직전 자료와의 연결</b> ${esc(r.comparison.guidance_change)}</p>${r.comparison.previous_report_id?`<p><a href="${esc(href('reports',r.comparison.previous_report_id,context))}">이전 리포트 →</a></p>`:''}`:''}${list(e.glossary).length?`<details class="report-glossary"><summary>용어 풀이</summary><dl>${e.glossary.map(x=>`<dt>${esc(x.term)}</dt><dd>${esc(x.definition)}</dd>`).join('')}</dl></details>`:''}<details class="report-source-ledger"><summary>근거 자료 ${list(r.references).length}건</summary><ol class="report-references">${list(r.references).map(ref=>`<li>${url(ref.url,ref.label)} <span>· ${esc(ref.date)}</span></li>`).join('')}</ol></details></section>${related?`<section class="report-related report-essay-related"><h2>함께 읽을 분석</h2>${related}</section>`:''}</article>`;
-  }
-  function reportCall(r,context) {
-    const e=r.editorial,sector=window.Collector?.earningsSector(r,config.reports?.coverage_groups),back='earnings.html'+(sector?'?sector='+sector:'');
-    return `<div class="report-reader-tools"><a href="${esc(back)}">← 업종별 실적 콜</a><button type="button" data-report-print>인쇄</button></div><article class="report-body report-essay report-call" tabindex="-1" data-item="${esc(r.id)}"><header class="report-opening"><p class="eyebrow">실적 콜 · 발언과 질의응답</p><h1>${esc(r.title)}</h1><p class="report-deck">${esc(r.overview)}</p><div class="report-dateline"><span>${esc(r.period)}</span><span>${r.call_date?'콜 '+esc(r.call_date)+' · ':''}원문 ${esc(r.source_date)}</span><span>개정 ${esc(r.updated_on||r.source_date)}</span></div></header><aside class="report-reading-thesis"><strong>핵심 메시지</strong><ul>${e.key_takeaways.map(p=>`<li>${esc(p)}</li>`).join('')}</ul></aside><p class="report-call-scope">${esc(r.basis)} · 아래 발언은 한국어 요지입니다. 주요 구간을 원문 순서로 읽으며, 생략한 구간은 원문에서 확인하실 수 있습니다.</p><nav class="toc report-essay-toc" aria-label="실적 콜 목차"><ol>${r.sections.map(s=>`<li><a href="${esc(href('earnings',r.id,{...context,section:s.id}))}">${esc(s.title)}</a></li>`).join('')}</ol></nav>${r.sections.map(s=>`<section id="section-${esc(s.id)}" class="report-section"><h2>${esc(s.title)}</h2>${s.blocks.map(b=>reportBlock(b)).join('')}</section>`).join('')}<section class="report-methodology"><h2>원문과 확인 범위</h2><p>${esc(r.basis)}</p><ul class="report-references">${list(r.references).map(ref=>`<li>${url(ref.url,ref.label)} · ${esc(ref.date)}</li>`).join('')}</ul></section></article>`;
-  }
-  function reportBody(r,params=new URLSearchParams()) {
-    const company=config.workspace?.companies.find(c=>c.id===params.get("company")),context=company?{company:company.id}:{};
-    const e=r.editorial;
-    if(e?.presentation==='call')return reportCall(r,context);
-    if(e?.presentation==='commentary')return reportCommentary(r,context);
-    if(e?.layout==='essay')return reportEssay(r,context);
-    const intro=e?`<div class="report-takeaways"><p class="eyebrow">한눈에 보기</p><ul>${e.key_takeaways.map(p=>`<li>${esc(p)}</li>`).join('')}</ul></div><div class="report-intro">${e.introduction.map(p=>`<p>${esc(p)}</p>`).join('')}</div>${list(e.related_reports).length?`<div class="report-related"><b>함께 읽기</b>${e.related_reports.map(x=>anchor('reports',x.id,x.title)).join('')}</div>`:''}`:'';
-    const references=list(r.references).map(ref=>`<li>${url(ref.url,ref.label)} · ${esc(ref.date)}</li>`).join('');
-    return `<a class="back" href="${esc(href(reportTab(r),null,reportTab(r)==='earnings'?context:{...context,section:'deep'}))}">← ${reportTab(r)==='earnings'?'실적 콜':'리포트'} 목록</a><article class="report-body" tabindex="-1" data-item="${esc(r.id)}"><div class="meta">${badge(r.format)}${e?badge(r.format==='리서치 해설'?'리서치 해설':r.format==='실적 종합'?'실적 연결':e.template==='earnings'?'실적 심층':'인터뷰 심층'):''}<span>${esc(r.company)} · ${esc(r.sector)} · ${esc(r.period)}</span></div><h1>${esc(r.title)}</h1><p class="report-deck">${esc(r.overview)}</p>${source(r)}<p class="note">${reportCoverage(r)}${r.written_on?` · 작성 ${esc(r.written_on)}`:''}</p>${intro}<nav class="toc" aria-label="리포트 목차"><strong>목차</strong><ol>${r.sections.map(s=>`<li><a href="${esc(href(reportTab(r),r.id,{...context,section:s.id}))}">${esc(s.title)}</a></li>`).join('')}</ol></nav>${list(e?.glossary).length?`<details class="report-glossary"><summary>먼저 알아둘 용어</summary><dl>${e.glossary.map(x=>`<dt>${esc(x.term)}</dt><dd>${esc(x.definition)}</dd>`).join('')}</dl></details>`:''}${r.sections.map((s,i)=>`<section id="section-${esc(s.id)}" class="report-section ${s.role?'report-'+esc(s.role):''}">${e?`<p class="eyebrow">${String(i+1).padStart(2,'0')}</p>`:''}<h2>${esc(s.title)}</h2>${s.blocks?s.blocks.map(reportBlock).join(''):list(s.paragraphs).map(p=>`<p>${esc(p)}</p>`).join('')+list(s.comments).map(reportComment).join('')}</section>`).join('')}${list(r.charts).map(x=>`<section><h2>${esc(x.title)}</h2>${chart([{label:x.title,points:x.points}],{unit:x.unit})}${source(x)}</section>`).join('')}${list(r.tables).map(x=>`<section><h2>${esc(x.title)}</h2>${table(x.columns,x.rows)}${source(x)}</section>`).join('')}${r.comparison?`<section><h2>이전 자료와 달라진 점</h2><p>${esc(r.comparison.guidance_change)}</p>${r.comparison.previous_report_id?anchor('reports',r.comparison.previous_report_id,'이전 리포트 →'):''}</section>`:''}${r.investment_impact?`<div class="impact investment"><b>투자에 주는 의미 · 편집 해석</b><p>${esc(r.investment_impact)}</p></div>`:''}${e?`<section><h2>다음에 확인할 것</h2>${table(['관측 지표','판단이 달라지는 조건','확인 시점'],e.watchpoints.map(x=>[x.metric,x.condition,x.timing]))}</section>`:''}${references?`<section><h2>근거 자료</h2><ul class="report-references">${references}</ul></section>`:''}</article>`;
-  }
-  function table(columns,rows) {return `<div class="table-scroll"><table><thead><tr>${columns.map(c=>`<th scope="col">${esc(c)}</th>`).join('')}</tr></thead><tbody>${rows.map(r=>`<tr>${r.map(v=>`<td>${esc(v)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;}
-  function priceChange(points,days) {if(points.length<2)return null;const latest=points.at(-1),cutoff=Date.parse(latest.date)-days*86400000,base=points.filter(p=>Date.parse(p.date)<=cutoff&&Date.parse(p.date)>=cutoff-7*86400000).at(-1);return base?(latest.value/base.value-1)*100:null;}
-  function transformPrice(points,mode) {
-    if(mode==='index'){const base=points[0]?.value;return base?points.map(p=>({label:p.date,value:p.value/base*100})):[];}
-    if(mode==='yoy')return points.map(p=>{const target=new Date(p.date);target.setUTCFullYear(target.getUTCFullYear()-1);const time=+target,old=points.filter(x=>Date.parse(x.date)<=time&&Date.parse(x.date)>=time-7*86400000).at(-1);return {label:p.date,value:old?(p.value/old.value-1)*100:null};}).filter(x=>Number.isFinite(x.value));
-    return points.map(p=>({label:p.date,value:p.value}));
-  }
-  const memoryNames={samsung:'Samsung','sk-hynix':'SK hynix','sk-hynix-group':'SK hynix + Solidigm',micron:'Micron',kioxia:'Kioxia',sandisk:'SanDisk / WDC',cxmt:'CXMT',nanya:'Nanya',winbond:'Winbond',psmc:'PSMC',others:'Others'};
-  const memoryColors={samsung:'#244f79','sk-hynix':'#bb813b','sk-hynix-group':'#bb813b',micron:'#378379',kioxia:'#7f9c52',sandisk:'#8874a3',cxmt:'#b56758',nanya:'#7398af',winbond:'#b5aa7e',psmc:'#9ba6b0',others:'#c8d0d7'};
-  const memorySigned=(n,suffix='%')=>Number.isFinite(n)?`${n>0?'+':''}${fmt(n)}${suffix}`:'—';
-  const memoryQuarter=(q,n=1)=>{const v=Number(q.slice(0,4))*4+Number(q.at(-1))-1-n;return Math.floor(v/4)+'-Q'+(v%4+1);};
-  const memoryCompanyBasis=(r,id)=>r.comparison_regime+(r.market==='dram'&&id==='others'?(r.quarter>='2026-Q1'?':cxmt-separated':':cxmt-not-separated'):'');
-  function memoryDelta(records,current,company,n=1){const old=records.find(x=>x.market===current.market&&x.quarter===memoryQuarter(current.quarter,n));if(!old||memoryCompanyBasis(old,company)!==memoryCompanyBasis(current,company))return null;const a=current.companies.find(x=>x.company_id===company)?.share_pct,b=old.companies.find(x=>x.company_id===company)?.share_pct;return Number.isFinite(a)&&Number.isFinite(b)?a-b:null;}
-  function memoryChange(points,days){const last=points.at(-1);if(!last)return null;if(last.date_basis==='reported_month'){const n={30:1,90:3,365:12}[days],v=Number(last.period.slice(0,4))*12+Number(last.period.slice(5))-1-n,target=Math.floor(v/12)+'-'+String(v%12+1).padStart(2,'0'),old=points.find(p=>p.period===target);return old&&old.source_name===last.source_name?(last.value/old.value-1)*100:null;}const target=Date.parse(last.date)-days*86400000,old=points.filter(p=>Date.parse(p.date)<=target&&Date.parse(p.date)>=target-14*86400000).at(-1);return old&&old.source_name===last.source_name?(last.value/old.value-1)*100:null;}
-  function memoryCSV(label,columns,rows,filename){const csv='\ufeff'+[columns,...rows].map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(',')).join('\r\n');return `<a class="memory-download" download="${esc(filename)}" href="data:text/csv;charset=utf-8,${encodeURIComponent(csv)}">${esc(label)} ↓</a>`;}
-  function memoryChart(series,{unit='',quarter=false,fixedMax=null,height=260}={}){
-    const points=series.flatMap(s=>s.points).filter(p=>Number.isFinite(p.value));if(!points.length)return '<p class="quiet">이 조건에 맞는 가격·점유율 자료가 없습니다. 다른 기간이나 시리즈를 선택해 주세요.</p>';
-    const w=Math.min(920,Math.max(320,(document.documentElement?.clientWidth||1016)-96)),h=height,l=66,r=22,t=22,b=39,when=p=>quarter?Number(p.date.slice(0,4))*4+Number(p.date.at(-1)):Date.parse(p.date),xs=points.map(when),a=Math.min(...xs),z=Math.max(...xs),values=points.map(p=>p.value),lo=fixedMax?0:Math.min(...values),hi=fixedMax||Math.max(...values),pad=fixedMax?0:(hi-lo)*.12||Math.abs(hi)*.1||1;
-    const bottom=lo>=0?Math.max(0,lo-pad):lo-pad,top=hi+pad;
-    const x=p=>l+(when(p)-a)/(z-a||1)*(w-l-r),y=v=>h-b-(v-bottom)/(top-bottom||1)*(h-t-b);
-    let svg=`<svg class="chart memory-chart" viewBox="0 0 ${w} ${h}" role="img" aria-label="${esc(unit)} 추이"><title>${esc(series.map(s=>s.label).join(', '))}</title>`;
-    for(let i=0;i<5;i++){const v=bottom+(top-bottom)*i/4;svg+=`<line class="gridline" x1="${l}" x2="${w-r}" y1="${y(v)}" y2="${y(v)}"/><text x="${l-10}" y="${y(v)+4}" text-anchor="end">${fmt(v)}</text>`;}
-    series.forEach((s,i)=>{let d='',prev=null;const color=s.color||palette[i%palette.length];for(const p of s.points.filter(p=>Number.isFinite(p.value))){const gap=prev&&(when(p)-when(prev)>(quarter?1:(s.frequency==='monthly'?35:s.frequency==='weekly'?10:4)*86400000)||p.regime!==prev.regime);d+=(prev&&!gap?'L':'M')+x(p).toFixed(2)+','+y(p.value).toFixed(2);prev=p;}svg+=`<path class="line" stroke="${color}" d="${d}"/>`;for(const p of s.points.filter(p=>Number.isFinite(p.value)))svg+=`<circle cx="${x(p)}" cy="${y(p.value)}" r="3" fill="${color}"><title>${esc(s.label)} · ${esc(p.date_basis==='reported_month'?p.period:p.date)} · ${fmt(p.value,3)} ${esc(unit)}${p.source_date?' · 원문 '+esc(p.source_published_date||p.source_date):''}</title></circle>`;});
-    const dates=[...new Set(points.map(p=>p.date_basis==='reported_month'?p.period:p.date))].sort();svg+=`<text x="${l}" y="${h-10}">${esc(dates[0])}</text><text x="${w-r}" y="${h-10}" text-anchor="end">${esc(dates.at(-1))}</text></svg>`;
-    return `<div class="chart-wrap">${svg}<div class="legend">${series.map((s,i)=>`<span><i style="background:${s.color||palette[i%palette.length]}"></i>${esc(s.label)}</span>`).join('')}<span>${esc(unit)}</span></div></div>`;
-  }
-  function memoryShareBars(rows){return `<div class="memory-bars" aria-label="공표 매출 점유율 구성">${rows.slice(-8).map(q=>{let used=0;return `<div class="memory-bar-row"><span>${esc(q.quarter)}</span><div class="memory-bar">${q.companies.filter(v=>Number.isFinite(v.share_pct)).map(v=>{const width=Math.max(0,Math.min(v.share_pct,100-used));used+=width;return `<i style="width:${width}%;background:${memoryColors[v.company_id]}" title="${esc(memoryNames[v.company_id])} ${fmt(v.share_pct)}%"><span>${v.share_pct>=12?fmt(v.share_pct,1)+'%':''}</span></i>`;}).join('')}${used<99.5?`<i class="memory-uncovered" style="width:${100-used}%" title="공표 업체 외 잔여 ${fmt(100-used)}% · 계산값"></i>`:''}</div></div>`;}).join('')}</div><p class="note">최근 8개 확보 분기 · 점유율을 100%로 재정규화하지 않았습니다. 사선은 100%에서 공표 업체 합계를 뺀 잔여분입니다.</p>`;}
-  function memoryShares(data,market='dram'){
-    const f=filters.memory||{},all=list(data.market_shares).filter(x=>x.market===market).sort((a,b)=>a.quarter.localeCompare(b.quarter));if(!all.length)return '<section class="panel">'+empty('아직 확인한 업체별 점유율이 없습니다','TrendForce 공개 업체표에서 매출과 점유율을 확인한 뒤 반영합니다.')+'</section>';
-    const current=all.find(x=>x.quarter===f.shareQuarter)||all.at(-1),main=market==='dram'?['samsung','sk-hynix','micron']:['samsung','sk-hynix-group','kioxia','micron','sandisk'],scope=f.shareScope||'주요 업체',metric=f.shareMetric||'share',companies=scope==='공표 업체 전체'?[...new Set(all.flatMap(q=>q.companies.map(v=>v.company_id)))]:main,rows=f.sharePeriod==='최근 8분기'?all.slice(-8):all;
-    let html=`<section class="panel memory-share-panel"><div class="panel-head"><div><p class="eyebrow">REVENUE SHARE / ${market.toUpperCase()}</p><h2>${market==='dram'?'DRAM 3사와 추격 업체':'NAND 5개 그룹'}의 매출 점유율</h2></div>${badge('매출 기준')}</div><p class="memory-explainer">${market==='dram'?'DRAM 전체 매출 기준이며 HBM이 포함됩니다. 범용 DRAM 경쟁력과 HBM 제품 구성이 함께 반영됩니다.':'SK hynix와 Solidigm은 하나의 그룹입니다. WDC의 NAND 사업은 2025년 표부터 SanDisk로 표시합니다. 공표 5개 그룹 외의 시장도 남겨 둡니다.'}</p>`;
-    html+=`<div class="filters">${select('shareMetric','비교 지표',['share','revenue'],metric).replace('>share<','>매출 점유율<').replace('>revenue<','>업체 매출<')}${select('sharePeriod','추적 기간',['전체','최근 8분기'],f.sharePeriod||'전체')}${market==='dram'?select('shareScope','업체 범위',['주요 업체','공표 업체 전체'],scope):''}</div>`;
-    html+=memoryChart(companies.map(id=>({label:memoryNames[id],color:memoryColors[id],points:rows.flatMap(q=>{const v=q.companies.find(v=>v.company_id===id),value=metric==='share'?v?.share_pct:v?.revenue_usd_million;return Number.isFinite(value)?[{date:q.quarter,value,regime:memoryCompanyBasis(q,id),source_date:q.source_date}]:[];})})),{quarter:true,unit:metric==='share'?'매출 점유율 %':'USD million'});
-    html+='<p class="note">2023-Q1 달력분기 통일, 2025-Q1 공급업체·사업 범위 변경 경계에서는 선을 끊고 증감 계산을 보류합니다. 2026-Q1 CXMT 분리 전후의 Others도 비교하지 않습니다. 빈 분기도 연결하지 않습니다.</p>'+memoryShareBars(rows);
-    html+=`<div class="panel-head memory-table-head"><h3>선택 분기 상세</h3>${select('shareQuarter','상세 분기',all.map(x=>x.quarter).reverse(),current.quarter)}</div><div class="table-scroll"><table class="memory-numeric"><thead><tr><th>업체</th><th>매출 · USD million</th><th>매출 점유율</th><th>전분기 대비</th><th>전년 대비</th></tr></thead><tbody>${current.companies.slice().sort((a,b)=>(b.share_pct??-1)-(a.share_pct??-1)).map(v=>`<tr><th scope="row"><span class="memory-company-dot" style="background:${memoryColors[v.company_id]}"></span>${esc(v.reported_name||memoryNames[v.company_id])}</th><td>${fmt(v.revenue_usd_million,1)}</td><td><b>${Number.isFinite(v.share_pct)?fmt(v.share_pct)+'%':'—'}</b></td><td>${memorySigned(memoryDelta(all,current,v.company_id),'%p')}</td><td>${memorySigned(memoryDelta(all,current,v.company_id,4),'%p')}</td></tr>`).join('')}</tbody></table></div>`;
-    html+=`<div class="memory-totals"><span>${current.total_scope==='market'?'전체시장 매출':'상위 5개 그룹 매출'} <b>${fmt(current.total_revenue_usd_million,1)}</b> USD million</span><span>${market==='dram'?'주요 3사':'상위 5개 그룹'} 공표 점유율 <b>${fmt(current.top_vendor_share_pct)}%</b></span></div><p class="note">—는 비교 가능한 수치가 없거나 집계 기준이 바뀐 경우입니다. 반올림 때문에 합계에 0.1~0.3%p 차이가 있을 수 있습니다.</p><p class="memory-method-note">${esc(current.coverage_note)}</p>${source(current)}${list(current.references).map(r=>`<p class="source">${esc(r.label)} · ${esc(r.date)} · ${url(r.url)}</p>`).join('')}<p class="source">${url(current.table_url,'TrendForce 원문 업체표 ↗')} · 조회 ${esc(current.observed_at?.slice(0,10))}</p></section>`;
-    return html;
-  }
-  const memoryPriceDate=r=>r?.date_basis==='reported_month'?r.period:r?.date_basis==='publication_snapshot'?r.date+' (발간일; 가격일 미명시)':r?.date||'공백';
-  function memoryPriceSource(r){return '<p class="source">'+esc(r.source_name||(r.source_basis==='public_report'?'공개 보고서':'공식 공개 가격표'))+' · '+(r.source_published_date?'발간 '+esc(r.source_published_date)+(r.source_page?' · p.'+esc(r.source_page):''):'가격 기준 '+esc(r.date))+' · '+url(r.source_url)+'</p>'+(r.source_note?'<p class="note">'+esc(r.source_note)+'</p>':'');}
-  function memoryCorePrices(data){
-    const keys=['ddr5-16gb-spot','server-rdimm32-spot','server-rdimm64-asp'];
-    return '<section class="panel memory-core"><p class="eyebrow">DDR5 / SERVER MEMORY</p><h2>DDR5 칩과 서버 RDIMM 가격</h2><p>현물은 유통시장의 수급을, 월별 계약가는 공급자 매출에 연결되는 가격을 확인하는 자료입니다. 칩과 완제품 모듈의 단위를 구분해 읽습니다.</p><div class="memory-core-grid">'+keys.map(id=>{const spec=config.memory.series.find(s=>s.id===id),rows=list(data.items).filter(r=>r.series_id===id).sort((a,b)=>a.date.localeCompare(b.date)),last=rows.at(-1);return '<article class="memory-core-card" data-item="'+esc(last?.id||id)+'"><span>'+esc(spec.label)+'</span><strong>'+fmt(last?.value,3)+'</strong><small>'+esc(spec.unit)+' · '+esc(memoryPriceDate(last))+'</small>'+(last?'<p class="note">'+(last.price_low!==undefined?'공표 범위 '+fmt(last.price_low,2)+'–'+fmt(last.price_high,2)+' '+esc(last.unit)+'<br>':'')+esc(spec.scope_note||spec.spec)+'</p><details><summary>출처·집계 조건</summary>'+memoryPriceSource(last)+'</details>':'<p class="quiet">정확한 모듈 계약가 원문을 아직 확보하지 못했습니다.</p>')+'</article>';}).join('')+'</div><p class="memory-method-note">32GB RDIMM 현물과 64GB RDIMM ASP 전언은 용량·거래시장·확인 수준이 다릅니다. 두 값을 두 배로 환산해 비교하지 않습니다. 64GB ASP는 증권사 공개 정리값이며 원천 계약가 표는 미열람입니다. 각 가격의 기준일을 함께 표시합니다.</p></section>';
-  }
-  function memoryDdr5Trend(data){
-    const f=filters.memory||{},ids=['ddr5-16gb-contract-monthly','ddr5-16gb-broker-spot','ddr5-16gb-media-spot','ddr5-16gb-spot'],labels=['월별 계약가 · 공표 품목','증권사 기준일 현물 · 4800/5600','언론 재공표 현물 · 4800/5600','직접 관측 현물 · 4800/5600'],all=list(data.items).filter(r=>ids.includes(r.series_id)),latest=all.map(r=>r.date).sort().at(-1),cut=f.ddr5Period==='all'?0:Date.parse(latest)-365*86400000,series=ids.map((id,i)=>{const spec=config.memory.series.find(s=>s.id===id);return {label:labels[i],frequency:spec.frequency,points:all.filter(r=>r.series_id===id&&Date.parse(r.date)>=cut).sort((a,b)=>a.date.localeCompare(b.date)).map(r=>({...r,regime:r.source_name}))};});
-    return '<section class="panel memory-ddr5-trend"><div class="panel-head"><div><p class="eyebrow">DDR5 16Gb / PRICE TREND</p><h2>DDR5 가격은 최근까지 어떻게 움직였나요?</h2></div>'+select('ddr5Period','DDR5 추적 기간',['365','all'],f.ddr5Period||'365').replace('>365<','>최근 1년<').replace('>all<','>전체<')+'</div>'+memoryChart(series,{unit:'USD/chip'})+'<p class="memory-method-note">계약가는 공표 대상 월, 증권사 현물은 보고서에 명시된 가격 기준일, 언론 재공표 현물은 기사에 인용된 호가 기준일, 직접 현물은 가격표 기준일입니다. 서로 다른 주기의 방향을 함께 보되 월별 프리미엄으로 계산하지 않습니다. 월별 계약가는 속도·제조사·월 집계방법이 미명시되어 있습니다.</p><div class="stats">'+series.map(s=>{const last=s.points.at(-1);return '<article class="stat-card"><span>'+esc(s.label)+'</span><b>'+fmt(last?.value,3)+'</b><small>USD/chip · '+esc(memoryPriceDate(last))+'</small>'+(last?'<details><summary>출처와 집계 조건</summary>'+memoryPriceSource(last)+'</details>':'')+'</article>';}).join('')+'</div><p class="note">누락 구간과 발간 출처 전환은 선으로 잇지 않습니다. 월별 현물과 계약가가 모두 확보된 기간은 <a href="#memory?view=compare">현물·계약가 비교</a>에서 확인하실 수 있습니다.</p></section>';
-  }
-  function memoryMonthlyCoverage(data){
-    const rows=list(data.monthly_coverage).filter(x=>x.count),spec=id=>config.memory.series.find(s=>s.id===id);
-    return '<section class="panel memory-continuity"><div class="panel-head"><div><p class="eyebrow">MONTHLY COVERAGE</p><h2>최근까지 얼마나 이어졌나요?</h2></div>'+badge('미확보 월을 채워 넣지 않음')+'</div><p class="note">진행 중인 달은 완결 월에서 제외합니다. 초록은 확인된 월, 빈 칸은 미확보 월이며, 회색 대시는 해당 계열의 추적 범위 밖입니다. 최신 일간 현물 한 건을 월별 과거값으로 바꾸지 않습니다.</p><div class="table-scroll"><table><thead><tr><th>가격 계열</th><th>확보 월</th><th>최신 대상 월</th><th>최근 12개월</th><th>남은 공백</th></tr></thead><tbody>'+rows.map(r=>'<tr><th scope="row">'+esc(spec(r.series_id)?.label)+'</th><td>'+r.count+'개월</td><td>'+esc(r.last)+'</td><td><div class="memory-month-grid" aria-label="'+esc(spec(r.series_id)?.label)+' 월별 확보 현황">'+Array(Math.max(0,12-r.months.length)).fill('<span class="outside" title="추적 범위 밖">—</span>').join('')+r.months.slice(-12).map(x=>'<span class="'+(x.present?'present':'missing')+'" title="'+esc(x.period)+' '+(x.present?'확인':'미확보')+'">'+esc(x.period.slice(5))+'</span>').join('')+'</div></td><td>'+ (r.missing.length?'<details><summary>'+r.missing.length+'개월 · '+esc(r.through)+'까지</summary><p>'+esc(r.missing.join(', '))+'</p></details>':'공백 없음 · '+esc(r.through)+'까지')+'</td></tr>').join('')+'</tbody></table></div></section>';
-  }
-  function memoryMatchedPrices(data){
-    const pairs=list(data.price_comparisons),f=filters.memory||{},pair=pairs.find(x=>x.id===f.pricePair)||pairs[0];
-    if(!pair)return '';
-    const rows=pair.matched,last=rows.at(-1),selected=rows.find(x=>x.period===f.compareMonth)||last;
-    let html='<section class="panel memory-comparison"><div class="panel-head"><div><p class="eyebrow">SPOT / CONTRACT</p><h2>현물·계약가를 같은 조건에서 비교합니다</h2></div>'+badge(pair.status==='exact'?'동일 규격':pair.status==='reported_product'?'공표 품목 참고 비교':'비교 보류')+'</div><div class="filters">'+select('pricePair','비교 품목',pairs.map(x=>x.id),pair.id).replace(/>(ddr5-16gb-monthly|rdimm32|rdimm64)</g,(_,id)=>'>'+esc(pairs.find(x=>x.id===id).label)+'<')+'</div><p class="memory-method-note">'+esc(pair.reason)+'</p>';
-    html+='<p class="note">각 계열의 최신 대상: 현물 '+esc(memoryPriceDate(pair.latest_spot))+' · 계약가 '+esc(memoryPriceDate(pair.latest_contract))+'. 공통 기간이 없는 최신값은 괴리 계산에서 제외합니다.</p>';
-    if(pair.status==='blocked'){
-      html+='<div class="two-cols">'+[['마지막 현물',pair.latest_spot],['마지막 계약가',pair.latest_contract]].map(([label,p])=>'<article class="stat-card"><span>'+label+'</span><b>'+fmt(p?.value,3)+'</b><small>'+esc(p?.unit||pair.unit)+' · '+esc(memoryPriceDate(p))+'</small>'+(p?memoryPriceSource(p):'<p class="note">공개 원문 미확보</p>')+'</article>').join('')+'</div><p class="note">표시된 두 최신값의 차이나 비율은 계산하지 않습니다. 용량 배수로 환산하거나 ASP 전언을 계약가로 대체하지 않습니다.</p>';
-    }else if(!rows.length){html+='<p class="quiet">두 계열에 같은 대상 기간의 실제 가격이 아직 없습니다.</p>';}
-    else {
-      if(selected.source_changed)html+='<p class="unit-warning">선택 월의 현물과 계약가는 발간 출처가 다릅니다. 아래 차이는 공표 품목의 참고값이며 동일한 집계방법의 가격차로 확정할 수 없습니다.</p>';
-      html+='<div class="filters">'+select('compareMonth','비교 대상 월',rows.map(r=>r.period).reverse(),selected.period)+'</div><div class="stats memory-compare-stats">'+[['현물',selected.spot.value,pair.unit],['계약가',selected.contract.value,pair.unit],['현물 − 계약가',selected.spread,pair.unit],['현물 프리미엄',selected.premium_pct,'%']].map(([label,value,unit])=>'<div class="stat-card"><span>'+label+'</span><b>'+fmt(value,2)+'</b><small>'+esc(unit)+' · '+esc(selected.period)+'</small></div>').join('')+'</div>';
-      html+=memoryChart(['spot','contract'].map((kind,i)=>({label:kind==='spot'?'현물':'계약가',frequency:pair.frequency,color:palette[i],points:rows.map(r=>({...r[kind],regime:r[kind].source_name}))})),{unit:pair.unit});
-      html+=memoryChart([{label:'(현물 ÷ 계약가 − 1) × 100',frequency:pair.frequency,points:rows.map(r=>({date:r.date,period:r.period,date_basis:r.date_basis,value:r.premium_pct,regime:r.spot.source_name+' / '+r.contract.source_name}))}],{unit:'현물 프리미엄 %',height:190});
-      html+='<p class="note">공통 대상 기간 '+rows.length+'개 · 최신 공통 월 '+esc(last.period)+'. 프리미엄은 계약가를 분모로 계산합니다. 출처가 바뀌거나 월 자료가 빠지면 선을 끊습니다. 서로 다른 발간 시점의 자료를 현재 재구성한 비교로, 당시 매매 가능 신호나 순수 수급 효과를 뜻하지 않습니다.</p><div class="two-cols">'+memoryPriceSource(selected.spot)+memoryPriceSource(selected.contract)+'</div>';
-      html+=memoryCSV('현물·계약가 비교 CSV',['product','comparison_status','period','spot','contract','spread','premium_pct','unit','spot_source','spot_publication','contract_source','contract_publication','scope','spot_note','contract_note','different_publishers'],rows.map(r=>[pair.label,pair.status,r.period,r.spot.value,r.contract.value,r.spread,r.premium_pct,pair.unit,r.spot.source_url,r.spot.source_published_date||r.spot.source_date,r.contract.source_url,r.contract.source_published_date||r.contract.source_date,pair.reason,r.spot.source_note,r.contract.source_note,r.source_changed]),'memory-spot-contract-comparison.csv');
-      html+='<details class="memory-revisions"><summary>공통 기간의 가격·괴리 전체 표</summary><div class="table-scroll"><table><thead><tr><th>대상 월</th><th>현물</th><th>계약가</th><th>차액</th><th>프리미엄</th><th>출처</th></tr></thead><tbody>'+rows.slice().reverse().map(r=>'<tr><th scope="row">'+esc(r.period)+'</th><td>'+fmt(r.spot.value,3)+'</td><td>'+fmt(r.contract.value,3)+'</td><td>'+fmt(r.spread,3)+'</td><td>'+memorySigned(r.premium_pct)+'</td><td>'+url(r.spot.source_url,'현물')+' · '+url(r.contract.source_url,'계약가')+'</td></tr>').join('')+'</tbody></table></div></details>';
-    }
-    return html+'</section>';
-  }
-  function memoryRdimmTrend(data){
-    const f=filters.memory||{},basis=f.rdimmBasis==='contract'?'contract':'reported_asp',series=config.memory.series.filter(s=>s.id.startsWith('server-rdimm')&&s.market===basis&&s.frequency==='monthly'),rows=list(data.items),selected=series.map(s=>({label:s.label,frequency:'monthly',points:rows.filter(r=>r.series_id===s.id).sort((a,b)=>a.date.localeCompare(b.date)).map(r=>({...r,regime:r.source_name}))}));
-    return '<section class="panel memory-rdimm-trend"><div class="panel-head"><div><p class="eyebrow">SERVER RDIMM / CAPACITY</p><h2>RDIMM 용량별 월별 추이</h2></div>'+select('rdimmBasis','RDIMM 자료 기준',['contract','reported_asp'],basis).replace('>contract<','>공개 보고서 계약가<').replace('>reported_asp<','>증권사 공개 ASP 전언<')+'</div><p class="note">16GB·32GB·64GB 모듈 각각의 가격입니다. '+(basis==='reported_asp'?'SK증권 공개 게시물의 ASP 전언이며 원천 계약가표는 미열람입니다.':'증권사 공개 보고서에 실린 월별 고정가격입니다.')+' 속도와 제조사 범위가 미명시된 값은 32GB 4800/5600 현물과 동일 규격으로 비교하지 않습니다.</p>'+memoryChart(selected,{unit:'USD/module'})+'<p class="note">월별 35일 초과 공백과 발간 출처 전환에서는 선을 끊습니다. 계약가와 ASP 전언은 선택한 자료 기준 안에서만 연결합니다.</p><div class="stats">'+selected.map(s=>{const last=s.points.at(-1);return '<article class="stat-card"><span>'+esc(s.label)+'</span><b>'+fmt(last?.value)+'</b><small>USD/module · '+esc(memoryPriceDate(last))+' · '+s.points.length+'개 월별 표본</small><p class="note">1개월 '+memorySigned(memoryChange(s.points,30))+' · 3개월 '+memorySigned(memoryChange(s.points,90))+'</p>'+(last?memoryPriceSource(last):'')+'</article>';}).join('')+'</div></section>';
-  }
-
-  function memoryPriceHistory(data){
-    const f=filters.memory||{},series=[...config.memory.history_series,...config.memory.series],selected=f.selected||['ddr5-16gb-spot-monthly','ddr5-16gb-contract-monthly','server-rdimm64-contract'],mode=f.mode||'actual',period=f.period||'all',points=[...list(data.history),...list(data.items)],grouped=Object.fromEntries(series.map(s=>[s.id,points.filter(x=>x.series_id===s.id).sort((a,b)=>a.date.localeCompare(b.date))]));
-    let html='<section class="panel memory-prices"><div class="panel-head"><div><p class="eyebrow">PUBLIC HISTORY</p><h2>공개 가격으로 보는 사이클</h2></div>'+badge('월별 계약가 / 주간·일간 현물')+'</div><p class="memory-explainer">월별 값은 보고서의 대상 월이며 월말 일자는 정렬용입니다. 일간 현물과 별도 시리즈로 표시합니다. 주간 이력의 날짜는 코멘터리 발간일입니다. “이번 주”로 명시된 가격 한 개만 복원했습니다. DDR4 2666과 3200은 다른 시리즈이며, NAND TLC 512Gb 웨이퍼 상태 다이는 MLC 64Gb 칩과 다릅니다.</p><div class="series-select">';
-    html+=series.map(s=>`<label><input type="checkbox" data-memory-series="${esc(s.id)}" ${selected.includes(s.id)?'checked':''}>${esc(s.label)}${s.frequency==='weekly'?' · 주간':s.frequency==='monthly'?' · 월별':''}</label>`).join('')+'</div>';
-    html+=`<div class="filters">${select('mode','가격 보기',['actual','index','yoy'],mode).replace('>actual<','>실제가<').replace('>index<','>지수 (공통 기준일=100)<').replace('>yoy<','>전년 대비<')}${select('period','가격 기간',['90','365','all'],period).replace('>90<','>3개월<').replace('>365<','>1년<').replace('>all<','>전체<')}</div>`;
-    const newest=points.map(x=>x.date).sort().at(-1),cut=period==='all'?0:Date.parse(newest)-Number(period)*86400000,chosen=series.filter(s=>selected.includes(s.id)),units=[...new Set(chosen.map(s=>s.unit))];
-    if(units.length>1)html+='<div class="unit-warning" role="status">단위가 다른 시리즈를 선택했습니다. 실제가는 단위별로 표시합니다. USD/chip, USD/512Gb die, USD/module은 서로 바꿔 계산할 수 없습니다.</div>';
-    const nonempty=chosen.filter(s=>grouped[s.id].some(p=>Date.parse(p.date)>=cut)),common=nonempty[0]?grouped[nonempty[0].id].find(p=>Date.parse(p.date)>=cut&&nonempty.every(s=>grouped[s.id].some(q=>q.date===p.date)))?.date:null;
-    if(mode==='index'&&nonempty.length>1&&!common)html+='<div class="unit-warning">선택한 시리즈에 공통 기준일이 없습니다. 규격·기간을 바꿔 주세요. 서로 다른 시작일을 같은 100으로 표시하지 않습니다.</div>';
-    else for(const unit of mode==='actual'?units:['normalized']){
-      const ss=chosen.filter(s=>mode!=='actual'||s.unit===unit).map((s,i)=>{let rows=grouped[s.id].filter(p=>Date.parse(p.date)>=cut),base=mode==='index'?grouped[s.id].find(p=>p.date===(common||rows[0]?.date)):null;
-        const transformed=mode==='index'?rows.filter(p=>p.date>=base?.date&&p.source_name===base?.source_name).map(p=>({...p,value:p.value/base.value*100})):mode==='yoy'?rows.flatMap(p=>{const dt=new Date(p.date);dt.setUTCFullYear(dt.getUTCFullYear()-1);const time=+dt,old=p.date_basis==='reported_month'?grouped[s.id].find(q=>q.period===(Number(p.period.slice(0,4))-1)+p.period.slice(4)):grouped[s.id].filter(q=>Date.parse(q.date)<=time&&Date.parse(q.date)>=time-14*86400000).at(-1);return old&&old.source_name===p.source_name?[{...p,value:(p.value/old.value-1)*100}]:[];}):rows;
-        return {label:s.label,frequency:s.frequency||'daily',color:palette[i%palette.length],points:transformed.map(r=>({...r,regime:r.source_name}))};});
-      html+=memoryChart(ss,{unit:mode==='actual'?unit:mode==='index'?`지수 · ${common||nonempty[0]&&grouped[nonempty[0].id].find(p=>Date.parse(p.date)>=cut)?.date||'자료 없음'} = 100`:'전년 대비 %'});
-    }
-    html+='<p class="note">월별 표본은 35일, 주간 표본은 10일, 일간 관측은 4일을 넘는 공백에서 선을 끊습니다. 출처 전환 전후의 변동률·전년 대비·기준지수는 계산하지 않습니다. 가격 변동률은 확보 표본 기준이며, 월말 종가 수익률이 아닙니다. NAND의 USD/512Gb die는 웨이퍼 한 장의 가격을 뜻하지 않습니다.</p></section>';
-    const historySeries=[...config.memory.series.filter(s=>s.frequency==='monthly'),...config.memory.history_series];
-    html+='<div class="stats memory-price-stats">'+historySeries.map(s=>{const p=grouped[s.id],last=p.at(-1);return `<article class="stat-card" data-item="${esc(last?.id||s.id)}" tabindex="-1"><span>${esc(s.label)}</span><b>${fmt(last?.value,3)}</b><small>${esc(s.unit)} · ${s.frequency==='monthly'?'대상 월':'가격/발간일'} ${esc(memoryPriceDate(last))}</small><p class="note">${[30,90,365].map((n,i)=>`${['1개월','3개월','1년'][i]} ${memorySigned(memoryChange(p,n))}`).join(' · ')}<br>표본 ${p.length}개 · ${esc(p[0]?.date||'—')}부터</p>${last?memoryPriceSource(last):''}</article>`;}).join('')+'</div>';
-    return html;
-  }
-  function memoryContracts(data){
-    const all=list(data.quarters),quarters=[...new Set(all.map(x=>x.quarter))].sort(),products=[...new Set(all.map(x=>x.product))];let html='<section class="panel"><div class="panel-head"><div><p class="eyebrow">CONTRACT PRICE / QoQ</p><h2>분기 계약가의 방향과 전망 수정</h2></div>'+badge('실측·전망 구분')+'</div><p class="memory-explainer">전분기 대비 계약가 변화율입니다. 과거 전망은 대상 분기가 지났어도 전망으로 남깁니다. 같은 품목·분기는 가장 늦게 발간된 수치를 보여 드리고 이전 전망은 수정 이력에 보존합니다. “DRAM 전체”와 “일반 DRAM”도 합치지 않습니다.</p>';
-    if(!all.length)return html+'<p class="quiet">확인된 분기 수치가 없습니다.</p></section>';
-    html+='<div class="table-scroll"><table class="memory-heatmap"><thead><tr><th>품목 · 구분</th>'+quarters.map(q=>`<th>${esc(q)}</th>`).join('')+'</tr></thead><tbody>';
-    for(const p of products)for(const kind of ['actual','forecast']){if(!all.some(x=>x.product===p&&x.kind===kind))continue;html+=`<tr><th scope="row">${esc(p)} · ${kind==='actual'?'실측':'전망'}</th>`+quarters.map(q=>{const records=all.filter(x=>x.product===p&&x.kind===kind&&x.quarter===q).sort((a,b)=>a.source_date.localeCompare(b.source_date)),x=records.at(-1);if(!x)return '<td class="memory-gap">—</td>';return `<td class="${x.low>=0?'memory-heat-up':x.high<=0?'memory-heat-down':'memory-heat-mixed'} ${kind==='forecast'?'memory-forecast':''}"><b>${fmt(x.low)}${x.low===x.high?'':'~'+fmt(x.high)}%</b><span>${url(x.source_url,x.source_date)}</span>${records.length>1?`<small>이전 전망 ${records.length-1}개</small>`:''}</td>`;}).join('')+'</tr>';}
-    html+='</tbody></table></div><details class="memory-revisions"><summary>발간 시점별 전체 수치와 수정 이력 '+all.length+'건</summary><div class="table-scroll"><table><thead><tr><th>대상 분기</th><th>품목</th><th>구분</th><th>QoQ</th><th>원문 발간일</th><th>범위·한계</th></tr></thead><tbody>'+all.slice().sort((a,b)=>b.source_date.localeCompare(a.source_date)).map(x=>`<tr data-item="${esc(x.id)}"><td>${esc(x.quarter)}</td><td>${esc(x.product)}</td><td>${x.kind==='actual'?'실측':'전망'}</td><td>${fmt(x.low)}~${fmt(x.high)}%</td><td>${url(x.source_url,x.source_date)}</td><td>${esc(x.note||'원문 공개 범위')}</td></tr>`).join('')+'</tbody></table></div></details></section>';return html;
-  }
-  function memoryCost(data){const series=config.memory.series,grouped=Object.fromEntries(series.map(s=>[s.id,list(data.items).filter(x=>x.series_id===s.id).sort((a,b)=>a.date.localeCompare(b.date))])),server=grouped['server-rdimm64-contract']?.at(-1);let html='<div class="two-cols"><section class="panel"><h2>서버 1대 메모리 원가</h2>';
-    html+=server?`<p class="memory-cost">$${fmt(server.value*16)}</p><p class="note">64GB RDIMM × 16 = 1,024GB<br>${fmt(server.value)} USD/module × 16 · 대상 ${esc(memoryPriceDate(server))}</p><p class="note">해당 기간 계약가로 계산한 메모리 부품값입니다. 실제 서버 구매견적은 아닙니다.</p>${memoryPriceSource(server)}`:'<p class="quiet">64GB RDIMM 모듈 단가를 직접 확인한 후 계산합니다. 칩 가격으로 대체하지 않습니다.</p>';
-    html+='</section><section class="panel"><h2>현물·계약가 비교</h2><p>같은 제품·기간의 가격과 프리미엄 추이를 확인합니다. 속도·제조사·집계방법이 미명시된 비교는 참고 비교로 구분합니다.</p><a href="#memory?view=compare">가격·괴리 추이와 비교 조건 확인 →</a></section></div>';return html;}
-  function memoryEvidence(data){
-    const history=list(data.history),priceRows=[...list(data.items),...history],priceSeries=[...config.memory.series,...config.memory.history_series],shares=list(data.market_shares),f=filters.memory||{},sid=f.evidenceSeries||'ddr5-16gb-spot',selected=priceRows.filter(x=>x.series_id===sid).sort((a,b)=>b.date.localeCompare(a.date));let html='<section class="panel"><p class="eyebrow">COVERAGE & PROVENANCE</p><h2>백필 범위와 남은 공백</h2><div class="memory-coverage-grid">';
-    html+=list(data.coverage?.shares).map(x=>`<div><b>${x.market.toUpperCase()} ${x.count}개 분기</b><p>${esc(x.first||'—')} ~ ${esc(x.last||'—')}</p><p class="note">${x.gaps.length?'공백: '+esc(x.gaps.join(', ')):'확보한 최신 분기까지 분기 공백 없음'}</p></div>`).join('');
-    html+=priceSeries.map(s=>{const a=priceRows.filter(x=>x.series_id===s.id).sort((a,b)=>a.date.localeCompare(b.date));return `<div><b>${esc(s.label)}</b><p>${a.length}개 ${s.frequency==='monthly'?'월별':s.frequency==='weekly'?'주간':s.frequency==='irregular'?'보고서 시점':'일간'} 표본</p><p class="note">${esc(a[0]?.date||'—')} ~ ${esc(a.at(-1)?.date||'—')}</p></div>`;}).join('')+'</div><p class="memory-method-note">2022년 일간 현물 가격은 미확보입니다. 회원 전용 차트·유료 과거 이력을 우회하지 않았습니다. 공개 주간 코멘터리가 없는 주, 가격이나 규격이 명시되지 않은 글은 빈 구간입니다. 매출이 공개되지 않은 업체 값도 점유율에서 역산하지 않았습니다.</p>';
-    html+='<div class="memory-downloads">'+memoryCSV('주간 가격 CSV',['series_id','publication_date','value','unit','frequency','date_basis','source_url','retrieved_at'],history.map(r=>[r.series_id,r.date,r.value,r.unit,r.frequency,r.date_basis,r.source_url,r.observed_at]),'memory-weekly-prices.csv')+memoryCSV('DDR5·RDIMM 및 직접 가격 CSV',['series_id','sort_date','period','date_basis','value','unit','frequency','source_publication_date','source_page','source_url','source_note'],list(data.items).map(r=>[r.series_id,r.date,r.period,r.date_basis||'source_date',r.value,r.unit,r.frequency||'daily',r.source_published_date||r.source_date,r.source_page,r.source_url,r.source_note]),'memory-ddr5-rdimm-prices.csv')+memoryCSV('업체별 점유율 CSV',['quarter','market','company','revenue_usd_million','share_pct','comparison_regime','publication_date','source_url','table_url','additional_revenue_sources'],shares.flatMap(r=>r.companies.map(v=>[r.quarter,r.market,v.reported_name||memoryNames[v.company_id],v.revenue_usd_million,v.share_pct,r.comparison_regime,r.source_date,r.source_url,r.table_url,list(r.references).map(x=>x.date+' '+x.url).join(' | ')])),'memory-revenue-shares.csv')+'</div></section>';
-    html+=`<section class="panel"><div class="panel-head"><h2>가격 원자료 · 월별·주간·일간</h2>${select('evidenceSeries','원자료 시리즈',priceSeries.map(s=>s.id),sid)}</div><p class="note">시리즈 식별자는 각 규격의 이력을 구분합니다. 주간 이력은 원문 발간일, 직접 관측과 증권사 기준일 가격은 해당 가격일, 기준일 미명시 스냅샷은 보고서 발간일, 월별 보고서 값은 대상 월을 표시합니다.</p><div class="table-scroll"><table><thead><tr><th>가격 기준</th><th>가격</th><th>단위</th><th>원문·발간일</th><th>조회일</th></tr></thead><tbody>${selected.map(r=>`<tr data-item="${esc(r.id)}"><td>${esc(memoryPriceDate(r))}</td><td>${fmt(r.value,3)}</td><td>${esc(r.unit)}</td><td>${url(r.source_url,r.source_name||'공식 원문 ↗')}<small>${esc(r.source_published_date||r.source_date)}${r.source_page?' · p.'+esc(r.source_page):''}</small></td><td>${esc(r.observed_at?.slice(0,10))}</td></tr>`).join('')}</tbody></table></div></section>`;
-    html+='<section class="panel"><h2>분기별 원문 업체표</h2><div class="table-scroll"><table><thead><tr><th>시장</th><th>대상 분기</th><th>원문 발간일</th><th>확인 업체</th><th>원문 표</th><th>남은 공백</th></tr></thead><tbody>'+shares.slice().sort((a,b)=>b.quarter.localeCompare(a.quarter)||a.market.localeCompare(b.market)).map(r=>`<tr data-item="${esc(r.id)}"><td>${r.market.toUpperCase()}</td><td>${esc(r.quarter)}</td><td>${url(r.source_url,r.source_date)}</td><td>${r.companies.length}</td><td>${url(r.table_url,'공개 표 ↗')}</td><td>${r.companies.filter(v=>v.revenue_usd_million===null).map(v=>esc(memoryNames[v.company_id])+' 매출').join(', ')||'—'}</td></tr>`).join('')+'</tbody></table></div></section>';return html;
-  }
-  function renderMemory(data,params=new URLSearchParams()){
-    const view=['overview','dram','nand','prices','compare','evidence'].includes(params.get('view'))?params.get('view'):'overview',shares=list(data.market_shares),dram=shares.filter(x=>x.market==='dram').sort((a,b)=>a.quarter.localeCompare(b.quarter)).at(-1),nand=shares.filter(x=>x.market==='nand').sort((a,b)=>a.quarter.localeCompare(b.quarter)).at(-1),history=list(data.history),last=history.filter(x=>x.series_id==='ddr4-8gb-3200-weekly').sort((a,b)=>a.date.localeCompare(b.date)).at(-1);
-    let html=title('memory',data,'현물 가격, 분기 계약가, 업체별 매출 점유율을 연결해 이익의 방향과 경쟁 구도를 읽습니다.')+'<nav class="memory-nav" aria-label="메모리 분석 보기">'+[['overview','한눈에 보기'],['dram','DRAM 점유율'],['nand','NAND 점유율'],['prices','가격·계약가 추이'],['compare','현물·계약가 비교'],['evidence','원자료·백필 검증']].map(([id,label])=>`<a href="#memory?view=${id}" ${view===id?'aria-current="page" class="active"':''}>${label}</a>`).join('')+'</nav>';
-    if(view==='dram'||view==='nand')return html+memoryShares(data,view);
-    if(view==='compare')return html+memoryMatchedPrices(data)+memoryRdimmTrend(data)+memoryMonthlyCoverage(data);
-    if(view==='prices')return html+memoryCorePrices(data)+memoryDdr5Trend(data)+memoryRdimmTrend(data)+memoryPriceHistory(data)+memoryContracts(data)+memoryCost(data);
-    if(view==='evidence')return html+memoryMonthlyCoverage(data)+memoryEvidence(data);
-    html+=memoryCorePrices(data)+memoryDdr5Trend(data)+memoryRdimmTrend(data);
-    html+='<section class="memory-cover"><div><p class="eyebrow">MEMORY CYCLE / COMPETITIVE POSITION</p><h2>가격이 오를 때,<br>누가 매출을 가져가는지 봅니다.</h2><p>가격 상승률과 업체별 점유율을 함께 보셔야 시장 회복과 경쟁력 변화를 구분할 수 있습니다.</p></div><div class="memory-cover-data"><span>현물·계약가 가격 관측</span><b>'+(history.length+list(data.items).length)+'<small>개 표본</small></b><span>업체별 분기 자료</span><b>'+shares.length+'<small>개 시장·분기</small></b><a href="#memory?view=evidence">백필 범위와 출처 확인 →</a></div></section>';
-    html+='<div class="stats memory-headline-stats">'+(last?`<a class="stat-card" href="#memory?view=prices"><span>DDR4 8Gb 3200 · 주간 현물</span><b>${fmt(last.value,3)}</b><small>USD/chip · 원문 발간 ${esc(last.date)}</small></a>`:'')+(dram?`<a class="stat-card" href="#memory?view=dram"><span>Samsung · DRAM 매출 점유율</span><b>${fmt(dram.companies.find(v=>v.company_id==='samsung')?.share_pct)}<small>%</small></b><small>${esc(dram.quarter)} · 전분기 ${memorySigned(memoryDelta(shares,dram,'samsung'),'%p')}</small></a>`:'')+(nand?`<a class="stat-card" href="#memory?view=nand"><span>NAND 주요 5개 그룹 · 공표 점유율</span><b>${fmt(nand.top_vendor_share_pct)}<small>%</small></b><small>${esc(nand.quarter)} · 전체시장의 100%가 아닙니다</small></a>`:'')+'</div>';
-    html+='<section class="panel"><p class="eyebrow">HOW TO READ THE EVIDENCE</p><h2>투자 판단에서 확인할 세 가지</h2><div class="memory-reading-grid"><article><span>01 / 가격</span><h3>현물의 방향을 계약가로 확인합니다</h3><p>현물은 유통 재고와 단종 품목의 수급에도 흔들립니다. 다음 분기 계약가가 같은 방향으로 움직이는지, 전망이 상향·하향 수정되는지 확인하십시오.</p><a href="#memory?view=prices">가격과 전망 수정 이력 →</a></article><article><span>02 / 경쟁</span><h3>시장 성장과 점유율 상승을 나눕니다</h3><p>시장 매출이 늘어도 업체 점유율은 낮아질 수 있습니다. DRAM은 HBM을 포함하므로 비트 출하량·제품 구성·ASP를 회사 실적에서 추가로 확인해야 합니다.</p><a href="#memory?view=dram">3사와 추격 업체 비교 →</a></article><article><span>03 / 반증</span><h3>상승률 둔화와 점유율 하락을 점검합니다</h3><p>다음 발표에서 계약가 상승률이 낮아지고 업체 점유율도 하락한다면, 매출 증가만으로 경쟁력이 강화됐다고 판단하기 어렵습니다. 주가·밸류에이션은 별도 확인이 필요합니다.</p><a href="#memory?view=nand">NAND 경쟁 구도 확인 →</a></article></div></section>';
-    html+=memoryShares(data,'dram');
-    if(nand)html+='<section class="panel memory-nand-callout"><div><p class="eyebrow">NAND / TOP FIVE</p><h2>5개 그룹의 점유율 밖에도 시장이 있습니다</h2><p>'+esc(nand.quarter)+' 공표 점유율 합계는 '+fmt(nand.top_vendor_share_pct)+'%입니다. 나머지를 5개 그룹에 나눠 넣으면 실제 경쟁 구도를 과장하게 됩니다.</p>'+source(nand)+'</div><a href="#memory?view=nand">NAND 점유율 전체 보기 →</a></section>';
-    html+='<details class="memory-direct panel"><summary>전체 현물·계약가 마지막 관측값</summary><div class="table-scroll"><table><thead><tr><th>품목</th><th>마지막 가격</th><th>단위</th><th>원천 기준일</th><th>원문</th></tr></thead><tbody>'+config.memory.series.map(s=>{const r=list(data.items).filter(x=>x.series_id===s.id).sort((a,b)=>a.date.localeCompare(b.date)).at(-1);return `<tr><th scope="row">${esc(s.label)}</th><td>${fmt(r?.value,3)}</td><td>${esc(s.unit)}</td><td>${esc(memoryPriceDate(r))}</td><td>${r?url(r.source_url):'자료 미확보'}</td></tr>`;}).join('')+'</tbody></table></div></details>';
-    html+=memoryContracts(data)+memoryCost(data);
-    if(list(data.statements).length||list(data.events).length)html+='<section class="panel"><h2>가격 사건과 기업 발언</h2>'+[...list(data.events),...list(data.statements)].map(r=>`<article class="memory-context"><h3>${esc(r.title)}</h3>${r.body?`<p>${esc(r.body)}</p>`:''}${r.investment_impact?`<p>${esc(r.investment_impact)}</p>`:''}${source(r)}</article>`).join('')+'</section>';
-    if(list(data.gaps).length)html+='<details class="queue"><summary>일간 현물 관측 누락 '+data.gaps.length+'건</summary><ul>'+data.gaps.map(g=>`<li>${esc(g.date)} · ${esc(config.memory.series.find(s=>s.id===g.series_id)?.label)} · ${esc(g.reason)}</li>`).join('')+'</ul></details>';
-    return html+'<p class="note">2022년 이후 점유율과 공개 주간 가격을 별도 백필했습니다. 일간 미수집 구간, 모듈 계약가, 미공개 업체 매출은 원자료·백필 검증에서 확인하실 수 있습니다.</p>';
-  }
-
-  function renderSources(data) {
-    const scheduleState=x=>({ACTIVE:'과거 활성 관측',PAUSED:'중지',UNVERIFIED:'설정 미확인'}[x]||'확인 필요');
-    let html=title('sources',data,'무엇을 보고, 어떻게 만들며, 지금 어디까지 갱신됐는지 공개합니다.');
-    html+=`<section class="panel"><h2>운영 방식</h2><div class="two-cols"><div><p>일간: 평일 09:00 KST<br>주간: 월요일 09:40 KST<br>월간: 1일 10:00 KST</p><p class="note">${esc(config.existing_schedules?.policy||'자동 갱신은 중지 상태입니다.')} 마지막 기록(${esc(config.existing_schedules?.checked_on||'기준일 미확인')}): 일간 ${scheduleState(config.existing_schedules?.daily?.status)} · 주간 ${scheduleState(config.existing_schedules?.weekly?.status)}. ${esc(config.existing_schedules?.weekly?.note||'')} 위 시간은 과거 운영 계획이며 현재 실행 예약이 아닙니다.</p></div><div><p>수집 → 편집·작성 → 독립 검증 → 형식 검사 → 게시</p><p class="note">수치·날짜·발언자·고유명사를 원문과 대조합니다. 추정·전망·전언은 구분하고 미확인은 확인 필요로 표시합니다. 정정은 원래 항목 ID와 사유를 보존합니다.</p></div></div></section>`;
-    html+='<section class="panel"><h2>최근 실행 10건</h2>';
-    html+=data.runs.length?`<div class="table-scroll"><table><thead><tr><th>시각</th><th>유형</th><th>상태</th><th>건수</th><th>0건 영역</th><th>메모</th></tr></thead><tbody>${data.runs.map(r=>`<tr class="${r.status==='success'?'':'problem'}"><td>${esc(r.at)}</td><td>${esc(r.type)}</td><td>${r.status==='success'?'정상':r.status==='failed'?'실패':r.status==='partial'?'일부 미완료':'보류'}</td><td>${Object.entries(r.counts).map(([k,n])=>`${esc(k)} ${n}`).join('<br>')||'0'}</td><td>${list(r.zero_areas).map(z=>`${esc(z.area)}<br><small>${esc(z.reason)} · 검색 ${esc(z.queries.join(' / '))}</small>`).join('<br>')||'—'}</td><td>${list(r.notes).map(esc).join('<br>')}</td></tr>`).join('')}</tbody></table></div>`:'<p class="quiet">새 파이프라인의 실행 기록이 없습니다. 기존 회차의 생성 시각은 아래 갱신 현황에 표시합니다.</p>';
-    html+='</section><section class="panel"><h2>탭별 마지막 갱신</h2><div class="table-scroll"><table><thead><tr><th>탭</th><th>주기</th><th>기준일</th><th>상태</th><th>건수</th></tr></thead><tbody>'+config.tabs.map(t=>{const x=data.tabs[t.id];return `<tr class="${x.stale?'problem':''}"><td>${anchor(t.id,null,t.label)}</td><td>${esc({daily:'일간',weekly:'주간',monthly:'월간'}[t.period])}</td><td>${esc(x.as_of||'수집 전')}</td><td>${x.stale?'⚠ 갱신 지연':x.status==='empty'?'초기 수집 대기':'정상'}</td><td>${fmt(x.count,0)}</td></tr>`;}).join('')+'</tbody></table></div></section>';
-    html+='<section class="panel"><h2>모니터링 소스</h2><p class="note">공통 소스 설정을 수집 계획과 이 목록이 함께 읽습니다. 목록에 등록된 사실은 이번 실행에서 접근·본문을 확인했다는 뜻이 아닙니다.</p>';
-    for(const area of new Set(data.sources.map(x=>x.area))){html+=`<h3 style="margin-top:22px">${esc(area)}</h3><div class="source-list">${data.sources.filter(x=>x.area===area).map(x=>`<div class="source-item">${url(x.url,x.name)}<small>${x.access==='mixed'?'일부 유료':'공개 원천'} · ${x.health?.consecutive_failures>=3?'접근 실패 누적 · 수집 제외':x.health?.status==='ok'?'최근 접근 성공':'접근 상태 미확인'}</small></div>`).join('')}</div>`;}
-    html+='</section><section class="panel"><h2>탭별 방법론</h2>'+config.tabs.map(t=>`<div class="method"><strong>${esc(t.label)}</strong><p>${esc(t.method)}<br><span class="note">초기 수집: ${esc(t.initial)}</span></p></div>`).join('')+'</section>';
-    return html;
-  }
-  const gpuBilling={on_demand:'온디맨드',spot:'Spot · 중단 가능',reserved:'기간 약정',capacity_block:'선불 Capacity Blocks'};
-  const gpuScope={instance:'인스턴스 공시',advertised_from:'시작가격 · from',gpu_only:'GPU만 · CPU/RAM 별도',marketplace_floor:'마켓플레이스 최저 호가'};
-  const gpuMarketLabels={on_demand:'일반 임대',community:'분산·Community',spot:'Spot',serverless:'서버리스',shared:'공유 GPU',reserved_1y:'1년 약정',reserved_3y:'3년 약정',reserved:'기간 약정'};
-  const gpuRead={live:'최근 48시간 내 가격 조회',unconfirmed:'재확인 필요',stopped:'수집 중단 · 과거 호가',thin_market:'표본 부족 · 이전 호가 보존'};
-  const gpuAccess={public_pricing:'공개 가격표',public_api:'공개 API·문서',quote_only:'문의 견적',login_required:'로그인 필요',blocked:'접근 실패',discovery_only:'발견 경로',directory_only:'집계 경유 · 미검토'};
-  const gpuChange=v=>Number.isFinite(v)?`${v>0?'+':''}${fmt(v,2)}%`:'—';
-  function gpuSelect(key,name,options,value){return `<label>${esc(name)} <select data-filter="${key}" aria-label="${esc(name)}">${options.map(([id,label])=>`<option value="${esc(id)}" ${id===value?'selected':''}>${esc(label)}</option>`).join('')}</select></label>`;}
-  const gpuClassOptions=[['all','모든 업체군'],['bigtech','빅테크'],['neocloud','네오클라우드·GPU 특화'],['regional','종합·지역 클라우드'],['managed','관리형·서버리스'],['marketplace','마켓플레이스'],['other','기타·분류 확인 중']];
-  function gpuSegments(research){
-    const d=research.segments;if(!d?.as_of)return '';
-    const cell=x=>x.change===null?`<strong>비교 보류</strong><small>${x.providers}개 업체 · 과거 쌍/표본 부족</small>`:`<strong>${gpuChange(x.change)} <span class="note">· 지수 ${fmt(x.index,2)}</span></strong><small>업체 중앙 변동 ${gpuChange(x.median_change)} · ${x.providers}개 업체/${x.quotes}개 항목</small><small>상승 ${x.rising} · 같은 가격 ${x.flat} · 하락 ${x.falling}</small>`;
-    const changed=d.matrix.flatMap(x=>['bigtech','neocloud'].flatMap(group=>x.groups[group].members.filter(m=>Math.abs(m.ratio-1)>1e-8).map(m=>({model:x.label,group:d.groups[group],...m}))));
-    return `<section class="panel gpu-segments" id="section-gpu-segments"><p class="eyebrow">BIG TECH / NEOCLOUD</p><h2>빅테크와 네오클라우드의 가격 흐름을 나눠 봅니다</h2><p>같은 공시항목의 7일 가격비를 비교합니다. 신규 저가 업체의 진입으로 평균이 내려가는 효과를 줄이고, 인상이 몇 개 업체에 퍼졌는지도 함께 봅니다.</p><p class="note">비교 자료 ${esc(d.as_of)} · 기준 조회 ${d.baseline_dates.map(esc).join(' ~ ')} · 7일 전 = 100 · 업체 2곳 미만은 보류</p><div class="table-scroll"><table class="gpu-segment-table"><thead><tr><th>GPU · 규격</th><th>빅테크</th><th>네오클라우드·GPU 특화</th></tr></thead><tbody>${d.matrix.map(x=>`<tr><td><b>${esc(x.label)}</b></td><td>${cell(x.groups.bigtech)}</td><td>${cell(x.groups.neocloud)}</td></tr>`).join('')}</tbody></table></div><details class="gpu-price-events"><summary>가격을 바꾼 업체와 7일 변동률 · ${changed.length}개 업체·GPU 조합</summary><p class="note">외부 집계의 과거·현재 공시항목 쌍에서 계산했습니다. 업체의 공식 가격 변경 발표와는 다릅니다.</p><div class="table-scroll"><table><thead><tr><th>GPU</th><th>업체군·공급자</th><th>업체 내 가격비</th><th>근거</th></tr></thead><tbody>${changed.map(x=>`<tr><td>${esc(x.model)}</td><td>${esc(x.group)} · ${esc(x.name)}</td><td>${gpuChange((x.ratio-1)*100)}<small>${x.quotes}개 동일 공시항목</small></td><td>${url(x.source_url,"현재 공급자 원문 ↗")}</td></tr>`).join('')}</tbody></table></div></details><details class="gpu-method"><summary>구분 기준·같은 공시항목 비교 방법과 제외 항목</summary><p>빅테크는 이 자료의 AWS·Microsoft Azure·Google Cloud·Oracle Cloud입니다. 네오클라우드는 GPU/AI 인프라 중심 사업자로 별도 분류한 업체입니다. 종합·지역 클라우드, 관리형·서버리스, 마켓플레이스는 별도 업체군입니다. 운영사 국적과 한국 리전은 구분합니다.</p><p>${esc(d.method)} 시작가격·GPU만의 요금·Spot·기간 약정·Community·서버리스·미확인 가격은 이 비교에서 제외합니다. VESSL은 상품 범위가 달라진 페이지를 과거 동일 서비스로 검증하지 못해 이 비교에서 제외했습니다.</p><p>외부 집계가 같은 공시항목으로 연결한 조회 쌍입니다. 업체 내 여러 지역·상품의 가격비를 먼저 기하평균하고 업체를 같은 비중으로 계산합니다. 업체별 중앙 변동률과 인상 확산도는 일부 큰 변화가 전체 흐름처럼 보이지 않도록 함께 표시합니다. 실제 GPU 성능·CPU/RAM·재고·체결 단가를 통제한 실험은 아니며, 양쪽 시점에 남은 항목의 생존편향이 있습니다. ${url(d.source_url,'GPU Economy 7일 비교 정의 ↗')}</p></details></section>`;
-  }
-  function gpuPriceReading(research){
-    const r=research.insights;if(!r)return '';
-    return `<section class="panel gpu-price-reading" id="section-gpu-insights"><div class="gpu-reading-heading"><div><p class="eyebrow">WHAT THE PRICE CHANGES MEAN</p><h2>가격 변화에서 읽을 핵심 판단</h2></div><span class="note">검토 ${esc(r.reviewed_on)}</span></div><div class="gpu-insight-grid">${r.insights.map((x,i)=>`<article data-item="${esc(x.id)}" tabindex="-1"><p class="eyebrow">판단 ${String(i+1).padStart(2,'0')}</p><h3>${esc(x.title)}</h3><p class="gpu-insight-fact">${esc(x.finding)}</p><p><b>사업·투자에 주는 의미</b> ${esc(x.meaning)}</p><details><summary>판단을 바꿀 조건과 다음 확인</summary><p><b>반대 조건·한계</b> ${esc(x.countercondition)}</p><p><b>다음 확인</b> ${esc(x.watch)}</p></details><p class="source">${x.sources.map(s=>`${url(s.url,s.label+' ↗')}${s.date?' · '+esc(s.date):' · 원문일 미기재'}`).join('<br>')}</p></article>`).join('')}</div><details class="gpu-price-events"><summary>날짜별 가격 관측과 변경 공지를 대조합니다 · ${r.events.length}건</summary><div class="table-scroll"><table><thead><tr><th>업체·GPU</th><th>공개된 이전 → 이후</th><th>효력·증거</th><th>비교 범위·한계</th></tr></thead><tbody>${r.events.map(x=>`<tr><td>${esc(x.provider)} · ${esc(x.model)}<small>${esc(x.billing)}</small></td><td>${esc(x.currency)} ${fmt(x.before,4)} → ${fmt(x.after,4)} / ${esc(x.unit)}<small>${gpuChange((x.after/x.before-1)*100)}</small></td><td>${badge(x.state==='announced_future'?'효력 전 예고':x.state==='provider_announced'?'공식 발표·적용일 미확인':'날짜별 관측값')}<small>${x.effective_on?(x.state==='observed_pair'?'후기 관측 ':'효력 ')+esc(x.effective_on):'효력일 미기재'}</small>${url(x.source_url,'원문 ↗')}</td><td>${esc(x.scope)}<small>${esc(x.limitations)}</small></td></tr>`).join('')}</tbody></table></div></details></section>`;
-  }
-  function gpuDomestic(research,f){
-    const r=research.domestic;if(!r)return '';
-    const selected=f.domesticProvider||'all',currency=f.domesticCurrency||'all',status=f.domesticStatus||'all';
-    const labels={current_rate:'현재 공개 페이지',dated_reference:'과거 공지·참고자료',quote_only:'견적·정확 요금 미확인',from:'기본료·시작가격',component_only:'구성요소 비용',conflicting:'원문 간 불일치'};
-    const items=r.quotes.filter(x=>(selected==='all'||x.provider_id===selected)&&(currency==='all'||x.currency===currency)&&(status==='all'||x.status===status)),byId=Object.fromEntries(r.providers.map(p=>[p.id,p]));
-    const unit=q=>({ 'GPU-hour':'GPU·시간','instance-hour':'인스턴스·시간','node-month':'8 GPU 노드·월','instance-month':'인스턴스·월','server-day':'서버·일','server-month':'서버·월','IDC-fee-month':'IDC 비용·월','GPU-hour equivalent':'GPU·시간 환산','node-period-quote':'8 GPU 노드·기간 견적','rack-period-quote':'랙·기간 견적'}[q.unit]||q.unit||'견적');
-    return `<section class="panel gpu-domestic" id="section-gpu-domestic"><p class="eyebrow">KOREA / OPERATOR & BILLING TERMS</p><h2>국내·한국계 업체의 공개 요금과 확인 공백</h2><p>${r.providers.length}개 업체·상품 경로를 검토했습니다. 국내 운영사와 해외 운영 기반의 한국계 사업자를 표시하고, 한국 리전 제공 여부는 각 행의 조건을 따릅니다.</p><div class="filters">${gpuSelect('domesticProvider','국내 업체',[['all','모든 국내·한국계 업체'],...r.providers.map(x=>[x.id,x.name])],selected)}${gpuSelect('domesticCurrency','원 통화',[['all','모든 통화'],['KRW','KRW 원화'],['USD','USD 달러']],currency)}${gpuSelect('domesticStatus','요금 근거',[['all','모든 근거'],...Object.entries(labels)],status)}</div><p class="gpu-index-caution">원 통화와 원 청구 단위를 보존합니다. 월·일 요금을 임의로 시간당으로 바꾸지 않습니다. 과거 행사 가격은 현행가나 가격 하락으로 취급하지 않으며, 서버 구매형 IDC 비용·관리형 추론은 GPU 서버 임대와 다릅니다.</p><div class="table-scroll"><table class="gpu-domestic-table"><thead><tr><th>업체·GPU</th><th>원 요금</th><th>상품·기간·세금</th><th>지역·구성·별도 비용</th><th>원문·확인 범위</th></tr></thead><tbody>${items.map(q=>`<tr><td><b>${esc(byId[q.provider_id].name)}</b><small>${byId[q.provider_id].origin==='korean_origin'?'한국계 · 한국 리전 보장 아님':'국내 운영사'}</small><small>${esc(research.segments?.groups[byId[q.provider_id].group]||'분류 확인 중')}</small>${esc(q.model)}<small>${esc(q.sku)}</small></td><td>${q.price===null?'문의·미확인':esc(q.currency)+' '+fmt(q.price,4)}<small>${esc(unit(q))}</small>${badge(labels[q.status])}</td><td>${esc(q.service_type)}<small>${esc(q.billing)}</small><small>VAT ${esc(q.vat)}</small></td><td>${esc(q.region)}<small>${esc(q.configuration)}</small><small>${esc(q.extras)}</small></td><td>${url(q.source_url,'공식 원문 ↗')}<small>원문 ${esc(q.source_date_note)} · 확인 ${esc(q.checked_on)}</small><details><summary>가용성·해석의 한계</summary><p>${esc(q.availability)}</p><p>${esc(q.note)}</p></details></td></tr>`).join('')}${items.length?'':'<tr><td colspan="5">선택 조건에서 확인한 공개 요금 숫자가 없습니다. 아래 업체별 확인 범위와 원문을 참고해 주세요.</td></tr>'}</tbody></table></div><div class="gpu-domestic-coverage">${r.providers.filter(p=>selected==='all'||p.id===selected).map(p=>`<details><summary>${esc(p.name)} · ${r.quotes.filter(q=>q.provider_id===p.id&&q.price!==null).length}개 숫자 확인</summary><p>${esc(p.classification_basis)}</p><p>${esc(p.limitations)}</p>${url(p.source_url,'업체 원문 ↗')}</details>`).join('')}</div><p class="note">NAVER Cloud·NHN Cloud 등 정확한 공개 GPU 요금을 확인하지 못한 곳도 목록에 남겼습니다. 가격 미확인은 서비스 부재나 높은 가격을 뜻하지 않습니다. 국내 전체의 시계열 방향을 판단할 만큼 같은 상품의 과거·현재 관측이 쌓이지 않았습니다. 조사 ${esc(r.reviewed_on)}.</p></section>`;
-  }
-
-  function gpuOverview(research,f){
-    const direct=f.indexBasis==='direct',weeks=f.indexWeeks||'13',overview=direct?research.direct:research.indices?.[weeks];
-    if(!overview?.end)return `<section class="panel gpu-overview"><h2>GPU 임대시장 한눈에</h2><p>추세를 계산할 관측이 아직 없습니다. 가격이 변하지 않았다는 뜻은 아닙니다.</p></section>`;
-    const group=f.indexGroup||'core',groups={core:['nvidia-b300','nvidia-b200','nvidia-h200','nvidia-h100','nvidia-rtx-5090'],blackwell:['nvidia-b300','nvidia-b200','nvidia-gb300','nvidia-gb200'],hopper:['nvidia-h200','nvidia-h100'],rtx:['nvidia-rtx-5090','nvidia-rtx-4090','nvidia-rtx-pro-6000'],amd:['amd-mi300x','amd-mi325x','amd-mi355x']};
-    let models=overview.models.filter(x=>direct||group==='all'||(groups[group]||groups.core).includes(x.id));
-    if(f.indexOrder==='fall')models.sort((a,b)=>(a.change??Infinity)-(b.change??Infinity));
-    const series=models.filter(x=>Number.isFinite(x.index)).slice(0,5).map(x=>({label:x.label,points:x.points}));
-    if(!direct&&group==='core'&&overview.composite)series.unshift({label:'주요 GPU 8종 참고지수',points:overview.composite.points});
-    const valid=models.filter(x=>Number.isFinite(x.index)),rise=valid.filter(x=>x.change>0.01).length,fall=valid.filter(x=>x.change<-.01).length,flat=valid.length-rise-fall;
-    const lead=!direct&&overview.composite?`${fmt(overview.composite.index,2)}<small>${gpuChange(overview.composite.change)} · ${overview.composite.models.length}종 동일가중</small>`:direct?`${valid.length}<small>비교 가능한 GPU · 최소 3개 업체</small>`:'—<small>공통 기준일의 표본 부족</small>';
-    return `<section class="gpu-overview" id="${research.insights?.overview?'section-gpu-index':'section-gpu-overview'}"><div class="gpu-cover"><div><p class="eyebrow">GPU RENTAL MARKET / PRICE MONITOR</p><h2>GPU 임대시장 한눈에</h2><p>어느 GPU의 공시 임대료가 오르고, 내려가고 있나요?</p></div><div class="gpu-index-number"><span>${direct?'공식 직접 관측':'주요 GPU 참고지수'}</span><b>${lead}</b></div></div><div class="gpu-overview-body"><div class="filters">${gpuSelect('indexBasis','추세 근거',[['market','공개시장 주간 집계'],['direct','공식 직접 관측']],direct?'direct':'market')}${!direct?gpuSelect('indexWeeks','비교 기간',[['4','4주'],['13','13주'],['52','52주']],weeks)+gpuSelect('indexGroup','비교 그룹',[['core','주요 GPU'],['blackwell','Blackwell'],['hopper','Hopper'],['rtx','RTX'],['amd','AMD'],['all','모든 GPU']],group)+gpuSelect('indexOrder','정렬',[['rise','임대료 상승순'],['fall','임대료 하락순']],f.indexOrder||'rise'):''}</div><div class="gpu-reading"><div><b>${esc(overview.base)} = 100</b><span>비교 종료 ${esc(overview.end)}${!direct?' · 완결 주 기준':''}</span></div><div><b>${rise} 상승 · ${fall} 하락 · ${flat} 보합</b><span>현재 선택 그룹 · 유효 표본만</span></div><div><b>${direct?'동일 상품 고정 비교':'업체별 중앙값 기준'}</b><span>${direct?'지역·SKU·과금 조건 보존':'업체와 상품 구성은 변할 수 있습니다'}</span></div></div>${chart(series,{unit:'기준일 = 100',height:270,gapDays:direct?3:7})}<p class="gpu-index-caution">${direct?'직접 관측 지수는 시작일과 종료일에 모두 확인한 동일 상품만 사용하고, 업체별로 같은 가중치를 줍니다. 새 업체의 싼 가격은 과거 지수를 낮추지 않습니다. 양 끝에 관측이 남은 상품만 비교하므로 생존편향과 기간별 표본 교체가 있을 수 있습니다.':'공개시장 지수는 GetDeploying의 업체별 공시 중앙값을 기준일 100으로 환산했습니다. GPU 규격·지역·공급자 구성이 변할 수 있어, 같은 상품의 가격 변화만을 나타내지는 않습니다. 주요 참고지수는 표본이 있는 8종 이내 GPU의 지수를 같은 비중으로 기하평균합니다.'} 지수 상승은 임대료 상승, 하락은 임차 비용 완화 방향입니다. 재고·가동률·수익성을 측정한 지표는 아닙니다.</p><details class="gpu-method"><summary>계산식·표본과 해석 범위</summary><p>${direct?'업체별 동일 상품 가격비의 기하평균 → 업체 간 동일가중 기하평균 × 100입니다. 온디맨드만 포함합니다.':'GPU별 지수 = 해당 주의 업체별 공시 중앙값 ÷ 기준 주의 업체별 공시 중앙값 × 100입니다. 온디맨드만 사용하며 양 끝 주에 업체가 각각 3곳 이상 있어야 비교합니다. 1개월·3개월·1년 열은 각각 4주·13주·52주를 뜻합니다. 최신 미완결 주는 제외합니다.'} 관측이 없는 날짜는 채우지 않습니다.</p>${!direct?`<p>참고지수 구성: ${list(overview.composite?.models).map(esc).join(' · ')||'공통 표본 부족'}. 표본 교체와 환율도 집계값을 바꿀 수 있습니다. 공급자 수가 유지되어도 같은 공급자 구성이라는 뜻은 아닙니다. ${url(research.history?.methodology_url,'GetDeploying 방법론·원문 ↗')} · CC BY 4.0</p>`:''}</details><div class="table-scroll"><table class="gpu-index-table"><thead><tr><th>GPU</th><th>가격지수</th><th>기간 변화</th>${direct?'<th>동일 업체</th>':'<th>1주</th><th>4주</th><th>13주</th><th>52주</th><th>업체 수 · 시작 → 종료</th>'}</tr></thead><tbody>${models.map(x=>`<tr><td>${esc(x.label)}</td><td>${fmt(x.index,2)}</td><td class="${x.change>0?'gpu-up':x.change<0?'gpu-down':''}">${gpuChange(x.change)}</td>${direct?`<td>${x.providers}곳 · ${x.series.length}개 조건</td>`:`${['w1','w4','w13','w52'].map(k=>`<td>${gpuChange(x.changes?.[k]?.value)}</td>`).join('')}<td>${x.base_providers} → ${x.providers}${!x.eligible?' · 기준일/표본 부족':''}</td>`}</tr>`).join('')}</tbody></table></div>${!valid.length?'<p class="note">선택한 기간의 공통 기준일 또는 최소 표본을 충족하지 못했습니다. 기간을 줄여 확인해 주세요.</p>':''}</div></section>`;
-  }
-  function gpuCommunity(research,f){
-    const items=list(research.community),reviewed=items.map(x=>x.reviewed_on).sort().at(-1),days=f.communityDays||'90',cutoff=reviewed&&days!=='all'?new Date(Date.parse(reviewed)-Number(days)*86400000).toISOString().slice(0,10):null,filtered=items.filter(x=>!cutoff||x.source_date>=cutoff);
-    const topics={availability:'실제 배정·재고',rent:'임대료',reliability:'운영 안정성',performance:'작업 성능',reservation:'예약·약정',multi_gpu_continuity:'멀티 GPU',price_comparison:'비용 비교'};
-    const themes=[
-      ['가격이 보여도 배정은 별개입니다','일부 사용자는 GPU를 중지한 뒤 다시 확보하지 못하거나, 특정 지역과 GPU 구성에서 선택지가 줄었다고 보고했습니다. 각 글의 시점과 지역을 함께 보셔야 합니다.',['gpu-community-gpucomm-20261001-gpu-recovery','gpu-community-gpucomm-20261001-vultr-gpu-vps','gpu-community-gpucomm-20260911-vast-sold-out']],
-      ['시간당 호가와 작업당 비용이 다릅니다','같은 GPU 이름으로도 작업 시간·전송·저장소·복구 경험이 달랐다는 글이 있습니다. 저렴한 호가를 동일한 성능이나 총비용 절감으로 바로 읽기 어렵습니다.',['gpu-community-gpucomm-20261024-community5090-perf','gpu-community-gpucomm-20261001-rtx5090-tco']],
-      ['예약·Spot·공급자 설명을 구분합니다','용량 확보 경험과 약정 협의, 중단 가능한 Spot의 경험은 서로 다른 조건입니다. 공급자 직원의 공급 설명과 판매자의 임대 제안도 따로 표시합니다.',['gpu-community-gpucomm-20260920-b300-rental-reservation','gpu-community-gpucomm-20260822-hn-gpu-capacity']]
-    ].map(([heading,body,ids])=>{const matched=items.filter(x=>ids.includes(x.id));return matched.length?`<article><h3>${esc(heading)}</h3><p>${esc(body)}</p><p class="source">${matched.slice(0,2).map(x=>`<a href="${esc(href('gpu',x.id))}">${esc(x.community)} · ${esc(x.source_date)}</a>`).join(' · ')}</p></article>`:'';}).join('');
-    return `<section class="panel gpu-community" id="section-gpu-community"><p class="eyebrow">DEVELOPER FIELD NOTES</p><h2>개발자들은 임대료와 재고를 어떻게 말하나요?</h2><p class="subtitle">확인한 게시물의 경험과 논쟁을 기록합니다. 가격표에 없는 배포·복구·성능 비용을 읽는 보조 자료입니다.</p>${themes?`<div class="gpu-community-themes">${themes}</div>`:''}<p class="gpu-index-caution">게시물은 자기보고이며 통계 표본이 아닙니다. ${items.length}건의 반응으로 시장 전체의 재고 부족·가격 급등·고장률을 판단하지 않습니다. 검색어와 커뮤니티 편중, 공급자·판매자의 이해관계가 있습니다. 게시물의 가격을 가격 지수에 넣지 않습니다. 조사 ${esc(reviewed||'미등록')} 기준입니다.</p><div class="filters">${gpuSelect('communityDays','반응 기간',[['30','최근 30일'],['90','최근 90일'],['all','전체 조사 기간']],days)}<span class="note">${filtered.length} / ${items.length}건 · 원문일 최신순</span></div><div class="gpu-community-list">${filtered.map(x=>`<details class="gpu-community-entry" ${route().params.get('id')===x.id?'open':''}><summary><span class="meta">${esc(x.source_date)} · ${esc(x.community)}</span><strong>${esc(x.title)}</strong></summary><article data-item="${esc(x.id)}" tabindex="-1"><p>${esc(x.body)}</p><div class="meta">${x.topics.map(t=>badge(topics[t]||t)).join('')}</div><p class="note"><b>해석의 한계</b> · ${esc(x.limitation)}</p><p class="note"><b>발언자·이해관계</b> · ${esc(x.disclosure)} · ${esc(x.author)}</p><p class="source">${url(x.source_url,'커뮤니티 원문 ↗')} · ${anchor('gpu',x.id,'이 반응 주소 →')}</p></article></details>`).join('')||'<p class="quiet">선택 기간의 원문이 없습니다.</p>'}</div></section>`;
-  }
-  function gpuCatalog(research,f){
-    const catalog=research.catalog;if(!catalog)return '';
-    const model=f.catalogModel||'b300',provider=f.catalogProvider||'all',billing=f.catalogBilling||'on_demand',scope=f.catalogScope||'all',state=f.catalogState||'live',market=f.catalogMarket||'all',vendorClass=f.catalogClass||'all',limit=f.catalogLimit||'50';
-    const gpuOptions=[...new Map(catalog.prices.map(q=>[q.gpu_id,q.gpu])).entries()].sort((a,b)=>a[1].localeCompare(b[1]));
-    const filtered=catalog.prices.filter(q=>(model==='all'||q.gpu_id===model)&&(provider==='all'||q.provider_id===provider)&&(billing==='all'||q.price_type===billing)&&(scope==='all'||q.price_scope===scope)&&(state==='all'||q.status===state)&&(market==='all'||q.market===market)&&(vendorClass==='all'||research.segments?.provider_map[q.provider_id]?.group===vendorClass)).sort((a,b)=>a.usd_per_gpu_hour-b.usd_per_gpu_hour||a.provider.localeCompare(b.provider));
-    const visible=limit==='all'?filtered:filtered.slice(0,Number(limit));
-    return `<section class="panel gpu-catalog" id="section-gpu-catalog"><p class="eyebrow">PUBLIC PRICE CATALOGUE</p><h2>더 넓게 보는 공개 임대가격</h2><p>${catalog.provider_count}개 업체 · ${catalog.model_count}개 GPU · ${fmt(catalog.prices.length,0)}개 공시·호가를 재수록했습니다. GPU Economy의 수집 결과이며, 모든 원문을 이 프로젝트에서 직접 검증한 자료는 아닙니다.</p><div class="filters">${gpuSelect('catalogModel','카탈로그 GPU',[['all','모든 GPU'],...gpuOptions],model)}${gpuSelect('catalogClass','카탈로그 업체군',gpuClassOptions,vendorClass)}${gpuSelect('catalogProvider','카탈로그 업체',[['all','모든 업체'],...[...new Map(catalog.prices.map(q=>[q.provider_id,q.provider])).entries()].sort((a,b)=>a[1].localeCompare(b[1]))],provider)}${gpuSelect('catalogBilling','과금 조건',[['all','모든 과금'],...Object.entries(gpuBilling).filter(([id])=>id!=='capacity_block')],billing)}${gpuSelect('catalogMarket','상품 유형',[['all','모든 상품'],...Object.entries(gpuMarketLabels)],market)}${gpuSelect('catalogScope','가격 범위',[['all','모든 범위'],...Object.entries(gpuScope)],scope)}${gpuSelect('catalogState','가격 조회 상태',[['all','과거·실패 포함'],...Object.entries(gpuRead)],state)}${gpuSelect('catalogLimit','표시 행',[['50','50행'],['200','200행'],['all','전체']],limit)}</div><p class="note">조건에 맞는 ${filtered.length}행 중 ${visible.length}행 표시 · USD/GPU·시간. 재고와 임대 체결 여부는 미검증입니다. 같은 GPU라도 규격·지역·CPU·RAM·망·약정이 다릅니다. 서버리스는 실행시간을 GPU·시간으로 환산한 값이며, GPU 수는 최소 구매 수량을 뜻하지 않습니다.</p><div class="table-scroll"><table class="gpu-price-table"><thead><tr><th>업체·GPU</th><th>USD/GPU·시간</th><th>가격 범위·약정</th><th>지역·구성</th><th>원 요금·단위</th><th>가격 조회·출처</th></tr></thead><tbody>${visible.map(q=>`<tr><td><strong>${esc(q.provider)}</strong><small>${esc(research.segments?.provider_map[q.provider_id]?.label||'분류 확인 중')}</small>${q.provider_id==='vessl'?'<small>상품 범위 미확정 · 국내 통합 요금표 우선</small>':''}<small>${esc(q.gpu)}</small></td><td class="gpu-price">${fmt(q.usd_per_gpu_hour,4)}</td><td>${esc(gpuBilling[q.price_type])} · ${esc(gpuMarketLabels[q.market]||q.market)}<small>${esc(gpuScope[q.price_scope])}${q.min_commitment?' · '+esc(q.min_commitment):''}</small></td><td>${esc(q.region||'공시 지역 미지정')}<small>${esc(q.instance||'SKU 미지정')} · ${q.gpu_count} GPU 환산 단위</small></td><td>${esc(q.listed_currency)} ${fmt(q.listed_price_hour,5)} / ${q.listed_unit==='per_node'?'인스턴스':'GPU'}·시간${q.fx_date?`<small>집계 환율 ${fmt(q.fx_rate,6)} · ${esc(q.fx_date)}</small>`:''}</td><td>${esc(q.last_confirmed_at?.slice(0,10))}<small>${esc(gpuRead[q.status])}</small>${url(q.source_url,'공급자 원문 ↗')}</td></tr>`).join('')}</tbody></table></div><p class="gpu-index-caution">시작가격(from), GPU만의 요금, 최저 마켓플레이스 호가, 기간 약정과 Spot을 구분해 읽어 주세요. live는 가격이 최근 조회됐다는 뜻입니다. stopped·thin_market의 값은 과거 호가일 수 있습니다.</p><p class="source">${url(catalog.source_url,'GPU Economy 원 데이터 ↗')} · ${url('https://gpueconomy.com/data','방법론·CC BY 4.0')} · 자료 갱신 ${esc(catalog.data_updated_at)} · 수동 반영 ${esc(catalog.reviewed_on)}</p></section>`;
-  }
-  function gpuCrosschecks(research,f){
-    const priority=r=>['public_json','discovery_only'].includes(r.access)?0:['public_html','display_only'].includes(r.access)?1:2,feeds=list(research.crosschecks).slice().sort((a,b)=>priority(a)-priority(b)||a.title.localeCompare(b.title));if(!feeds.length)return '';
-    const access={public_json:'공개 JSON 수집',public_html:'공개 원문 검토',display_only:'제한된 표시·인용',discovery_only:'탐색 참고용',auth_required:'키·사용권한 필요',blocked:'접근 실패'},quality={reference:'수집원 참고값',quarantined:'격리 · 재검증 필요',stale:'오래된 관측'},availability={unknown:'재고 미확인',listed_available:'수집원: 가용 표기',listed_unavailable:'수집원: 품절 표기',provider_claim:'공급자 주장'},billing={...gpuBilling,marketplace:'마켓플레이스',serverless:'서버리스',unknown:'과금 미기재'};
-    const selected=feeds.find(r=>r.feed_id===f.crossSource)||feeds.find(r=>r.feed_id==='gpu-rent-watch')||feeds[0];
-    const models=[...new Set([...selected.quotes,...selected.history,...selected.changes].map(q=>q.model))].sort(),model=f.crossModel==='all'||models.includes(f.crossModel)?f.crossModel:models.includes('GB200')?'GB200':'all',state=f.crossQuality||'reference';
-    const match=q=>model==='all'||q.model===model,rows=selected.quotes.filter(q=>match(q)&&(state==='all'||q.quality===state)),visible=rows.slice(0,50),histories=selected.history.filter(match),history=histories.find(h=>h.series_id===f.crossSeries)||histories[0],changes=selected.changes.filter(match);
-    const points=(history?.points||[]).slice().sort((a,b)=>a.date.localeCompare(b.date)),valid=points.filter(p=>p.quality==='reference'),first=valid[0],last=valid.at(-1),delta=first&&last&&first.date!==last.date?(last.value/first.value-1)*100:null;
-    return `<section class="panel gpu-crosschecks" id="section-gpu-crosschecks"><p class="eyebrow">MULTI-SOURCE / CROSS-CHECK</p><h2>수집원을 넓혀 가격과 이력을 교차 확인합니다</h2><p>가격·이력을 실제로 읽은 공개 피드와, 별도 인용·접근 제약이 있는 경로를 함께 보여드립니다. 같은 공급자 요금이 여러 수집원에 나타나도 공급자 수를 늘리거나 지수에 중복 반영하지 않습니다.</p><div class="gpu-feed-grid">${feeds.map(r=>`<article class="gpu-feed-card"><div class="meta">${badge(access[r.access])}</div><h3>${url(r.source_url,r.title+' ↗')}</h3><p><b>${fmt(r.quotes.length,0)}개 가격 · ${fmt(r.history.length,0)}개 이력 계열</b><small>자료 기준 ${esc(r.data_as_of||'개별 자료에서 확인')}<br>수동 조회 ${esc(r.observed_at)}</small></p><details><summary>수집 범위·사용조건·한계</summary><p>${esc(r.collection)}</p><p>${esc(r.upstream)}</p><p>${esc(r.license)}</p>${r.limitations.map(t=>`<p>${esc(t)}</p>`).join('')}<p>${url(r.methodology_url,'방법론·접근 조건 ↗')}</p></details></article>`).join('')}</div><div class="filters">${gpuSelect('crossSource','교차검증 수집원',feeds.map(r=>[r.feed_id,r.title]),selected.feed_id)}${gpuSelect('crossModel','교차검증 GPU',[['all','모든 GPU'],...models.map(m=>[m,m])],model)}${gpuSelect('crossQuality','관측 품질',[['reference','수집원 참고값'],['quarantined','격리 값'],['stale','오래된 관측'],['all','모든 품질']],state)}</div><p class="gpu-index-caution">${esc(selected.title)} · ${esc(access[selected.access])}. 이 표는 별도 참고자료이며 위 가격지수에 들어가지 않습니다. 지역·GPU 수·조건이 미기재인 값과 실제 배정 여부는 확인이 더 필요합니다.${selected.access==='discovery_only'?' 이 수집원은 탐색 후보만 제공하므로 정상 범위의 값도 원문 재검증이 필요합니다.':''}</p><p class="note">조건에 맞는 ${rows.length}행 중 ${visible.length}행 · USD/GPU·시간 · 조회시각 미기재는 파일 생성시각으로 채우지 않았습니다.</p><div class="table-scroll"><table class="gpu-cross-table"><thead><tr><th>공급자·GPU</th><th>USD/GPU·시간</th><th>원 조건·구성</th><th>자료 기준·품질</th><th>확인 범위·근거</th></tr></thead><tbody>${visible.map(q=>`<tr><td><b>${esc(q.provider)}</b><small>${esc(q.model)}</small></td><td class="gpu-price">${fmt(q.value,4)}</td><td>${esc(billing[q.billing])}<small>${esc(q.sku)}</small><small>${q.gpu_count===null?'GPU 수 미기재':q.gpu_count+' GPU · 수집원 표기'} · ${esc(q.region||'지역 미기재')}</small></td><td>${esc(q.as_of||'개별 조회일 미기재')}<small>${esc(quality[q.quality])}</small><small>${esc(availability[q.availability])}</small></td><td>${esc(q.note)}<small>${url(q.source_url,'공급자·관측 근거 ↗')}</small></td></tr>`).join('')||'<tr><td colspan="5">선택 조건의 가격값이 없습니다. 접근 제약과 확인 범위는 위 수집원 카드에 남겼습니다.</td></tr>'}</tbody></table></div>${histories.length?`<div class="gpu-cross-history"><h3>같은 수집원의 날짜별 이력</h3><div class="filters">${gpuSelect('crossSeries','가격 이력 계열',histories.map(h=>[h.series_id,h.provider+' · '+h.model+' · '+h.sku]),history.series_id)}</div><p>${esc(history.provider)} · ${esc(history.model)} · ${esc(billing[history.billing])} · ${first&&last?esc(first.date)+' $'+fmt(first.value,4)+' → '+esc(last.date)+' $'+fmt(last.value,4):'비교할 유효 관측 부족'}${delta===null?'':' · '+gpuChange(delta)}</p>${chart([{label:history.provider+' · '+history.model,points:points.map(p=>({label:p.date,value:p.quality==='reference'?p.value:null}))}],{unit:'USD/GPU·시간',height:220,gapDays:1})}<p class="note">${esc(history.note)} 가격과 상태가 기록된 점만 표시하고 관측 공백·격리 값을 채우지 않습니다. 양 끝 가격이 같아도 중간 기간 내내 같은 가격이었다는 뜻은 아닙니다. ${url(history.source_url,'이력 근거 ↗')}</p><details><summary>관측점 ${points.length}개와 품질 보기</summary><div class="table-scroll"><table><thead><tr><th>날짜</th><th>USD/GPU·시간</th><th>품질</th></tr></thead><tbody>${points.map(p=>`<tr><td>${esc(p.date)}</td><td>${fmt(p.value,4)}</td><td>${esc(quality[p.quality])}</td></tr>`).join('')}</tbody></table></div></details></div>`:''}${changes.length?`<details class="gpu-price-events"><summary>이 수집원의 가격 변동 사례 · ${changes.length}건</summary><div class="table-scroll"><table><thead><tr><th>공급자·GPU</th><th>이전 → 이후 · USD/GPU·시간</th><th>관측 시각</th><th>비교 범위·근거</th></tr></thead><tbody>${changes.map(q=>`<tr><td>${esc(q.provider)} · ${esc(q.model)}<small>${esc(billing[q.billing])} · ${q.gpu_count||'미기재'} GPU · ${esc(q.region||'지역 미기재')}</small></td><td>${fmt(q.before,4)} → ${fmt(q.after,4)}<small>${gpuChange((q.after/q.before-1)*100)}</small></td><td>${esc(q.previous_on||'미기재')} → ${esc(q.current_on||'미기재')}</td><td>${esc({same_sku:'수집원의 같은 공시항목 연결',market_floor:'지역·GPU 수별 마켓 최저 호가',unknown:'집계값·구성 변화 가능'}[q.comparison])}<small>${esc(q.note)}</small>${url(q.source_url,'변동 근거 ↗')}</td></tr>`).join('')}</tbody></table></div></details>`:''}</section>`;
-  }
-  function gpuRegistry(research,f){
-    const registry=research.registry;if(!registry)return '';
-    const query=(f.search||'').trim().toLowerCase(),mode=f.sourceMode||'all',sourceClass=f.sourceClass||'all',states={direct_observed:'공식 직접 관측',official_reviewed:'공식 원문 검토',external_directory:'집계 경유 · 개별 검토 대기'},providers=registry.providers.filter(p=>(mode==='all'||p.review_state===mode)&&(sourceClass==='all'||research.segments?.provider_map[p.id]?.group===sourceClass)&&[p.name,p.type,...p.models].join(' ').toLowerCase().includes(query)),reviews=registry.reviews.filter(p=>[p.provider,p.type,...p.models].join(' ').toLowerCase().includes(query));
-    return `<section class="panel gpu-registry" id="section-gpu-sources"><p class="eyebrow">SOURCE COVERAGE & GAPS</p><h2>가격 수집처와 남아 있는 공백</h2><p>공개 디렉터리의 등록 업체 ${registry.providers.length}곳 전체를 수록하고, 추가로 ${registry.reviews.length}개 조사 경로를 기록했습니다. 국내 클라우드·대형 클라우드·전문 GPU 클라우드·분산 마켓플레이스·서버리스를 포함합니다. 이 목록은 전 세계 사업자를 빠짐없이 확인했다는 뜻은 아닙니다.</p><div class="filters"><label>수집처 검색 <input data-search="gpu" aria-label="수집처 검색" value="${esc(f.search||'')}" placeholder="업체 또는 GPU 이름"></label>${gpuSelect('sourceClass','수집처 업체군',gpuClassOptions,sourceClass)}${gpuSelect('sourceMode','검토 범위',[['all','모든 검토 범위'],...Object.entries(states)],mode)}<span class="note">${providers.length} / ${registry.providers.length}개 등록 업체</span></div><div class="gpu-provider-grid">${providers.map(p=>`<article class="gpu-provider"><div class="meta">${badge(states[p.review_state])}${badge(research.segments?.provider_map[p.id]?.label||'분류 확인 중')}</div><h3>${url(p.pricing_page||p.website,p.name+' ↗')}</h3><p class="note">집계 경로: ${esc(p.source_kind||'미지정')} · 외부 집계 ${p.current_quotes}행 · ${p.models_tracked}개 GPU</p><p>${esc(p.review_note)}</p><details><summary>상품·과금 해석 · 외부 원문 설명</summary><p>${esc(p.commercial_note)}</p></details><small>${esc(gpuAccess[p.access]||p.access)}${p.checked_on?' · 검토 '+esc(p.checked_on):''}</small></article>`).join('')}</div><details class="gpu-source-reviews"><summary>국내·신규 업체와 비교 서비스의 조사 경로 ${reviews.length}건</summary><div class="table-scroll"><table><thead><tr><th>수집 경로</th><th>접근 상태</th><th>GPU·과금·지역</th><th>제한·후속 확인</th></tr></thead><tbody>${reviews.map(p=>`<tr><td>${url(p.url,p.provider)}<small>${esc(p.type)} · 검토 ${esc(p.checked_on)}</small></td><td>${esc(gpuAccess[p.access]||p.access)}<small>${esc(p.read_basis)}</small></td><td>${esc(p.models.join(' · '))}<small>${esc(p.billing)} · ${esc(p.region)}</small></td><td>${esc(p.limitations)}<small>${esc(p.collection_feasibility)}</small></td></tr>`).join('')}</tbody></table></div></details><p class="note">공식 직접 관측은 기존 수집기의 상품 조건에 한정됩니다. 공식 페이지를 검토했다는 표시가 그 업체의 모든 가격이나 API를 수집했다는 뜻은 아닙니다. 차단·로그인·문의 견적·미확인은 빈 가격으로 남깁니다. 자동 예약은 중지 상태입니다.</p><p class="source">${url(registry.source_url,'GPU Economy 업체 디렉터리 ↗')} · CC BY 4.0 · 검토 ${esc(registry.reviewed_on)}</p></section>`;
-  }
-  function renderGPU(data,params) {
-    const g=data.data,research=data.research||{},f=filters.gpu||={};if(!g&&!research.catalog)return title('gpu',data)+empty('아직 GPU 가격 관측이 없습니다');
-    if(params?.get('id')){f.model=g?.series.find(s=>s.id===params.get('id'))?.model||f.model;if(list(research.community).some(x=>x.id===params.get('id')))f.communityDays='all';}
-    const gpuMeta={...data.meta,...(research.catalog?{count:research.catalog.prices.length,as_of:research.catalog.reviewed_on,generated_at:new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(research.catalog.data_updated_at))+' KST'}:{})};
-    let html=title('gpu',{...data,meta:gpuMeta},'가격의 흐름, 실제 과금 조건, 개발자의 사용 경험을 함께 읽습니다.').replace('class="page-title"','class="page-title gpu-page-title"')+(window.ResearchSignals?.gpuBriefing?.(data)||'')+`<nav class="gpu-jump" aria-label="GPU 페이지 안에서 이동"><a href="#gpu?section=gpu-overview">총괄 판단</a><a href="#gpu?section=gpu-index">지수 추이</a><a href="#gpu?section=gpu-insights">가격 변화 판독</a><a href="#gpu?section=gpu-segments">빅테크·네오클라우드</a><a href="#gpu?section=gpu-domestic">국내·한국계 가격</a><a href="#gpu?section=gpu-direct">공식 직접 관측</a><a href="#gpu?section=gpu-catalog">전체 가격 카탈로그</a><a href="#gpu?section=gpu-community">개발자 반응</a><a href="#gpu?section=gpu-crosschecks">수집원별 교차검증</a><a href="#gpu?section=gpu-sources">수집처·공백</a></nav>`+gpuOverview(research,f)+gpuPriceReading(research)+gpuSegments(research);
-    if(g){
-      const model=f.model||'b300-sxm',billing=f.directBilling||'on_demand',items=g.series.filter(s=>s.model===model&&(billing==='all'||s.billing===billing)),latest=s=>g.observations.filter(o=>o.series===s.id).sort((a,b)=>b.date.localeCompare(a.date))[0];
-      html+=`<section class="panel gpu-direct" id="section-gpu-direct"><p class="eyebrow">OFFICIAL DIRECT OBSERVATIONS</p><h2>공식 원문에서 직접 관측한 가격</h2><p>기존 ${new Set(g.series.map(x=>x.provider)).size}개 업체 · ${g.series.length}개 고정 상품 조건을 보존합니다. 신규 집계 카탈로그의 가격은 이 직접 관측 이력에 섞지 않습니다.</p><div class="filters">${gpuSelect('model','직접 관측 GPU',g.models.map(x=>[x.id,x.label]),model)}${gpuSelect('directBilling','직접 관측 과금',[['on_demand','온디맨드'],['capacity_block','선불 Capacity Blocks'],['all','모든 과금 · 별개 계열']],billing)}</div>${chart(items.map(s=>({label:s.provider+' · '+(gpuBilling[s.billing]||s.billing),points:g.observations.filter(o=>o.series===s.id).sort((a,b)=>a.date.localeCompare(b.date)).map(o=>({label:o.date,value:o.status==='ok'?o.price:null}))})),{unit:'USD/GPU·시간',gapDays:3})}<div class="table-scroll"><table><thead><tr><th>공급자</th><th>지역·과금</th><th>최근 시도 가격</th><th>관측일·상태</th><th>구성·근거</th></tr></thead><tbody>${items.map(s=>{const x=latest(s);return `<tr data-item="${esc(s.id)}" tabindex="-1"><td>${esc(s.provider)}</td><td>${esc(s.region)}<small>${esc(gpuBilling[s.billing]||s.billing)}</small></td><td>${x?.status==='ok'?fmt(x.price,4):'—'}</td><td>${esc(x?.date||'관측 없음')}<small>${x?.status==='ok'?'정상 관측':x?'수집 실패 · 가격 미확인':'미관측'}</small></td><td>${esc(s.scope)}<small>${esc(s.note)}</small>${url(s.source)}</td></tr>`;}).join('')}</tbody></table></div><p class="note">GPU 관측 원문 조회일과 원문 게시일은 다를 수 있습니다. 과거 카탈로그 복원은 직접 관측에 이어 붙이지 않습니다. 공시 가격은 즉시 임대할 수 있는 재고를 증명하지 않습니다.</p><a class="source" href="legacy.html#gpu">과거 카탈로그 복원과 기존 상세 화면 ↗</a></section>`;
-    }
-    return html+gpuCrosschecks(research,f)+gpuDomestic(research,f)+gpuCatalog(research,f)+gpuCommunity(research,f)+gpuRegistry(research,f);
-  }
-  const weeklyVerdicts={green:'그린라이트',conflict:'추적 관찰',insufficient:'근거 부족'};
-  const watchStates={monitor:'관찰 중',idea:'아이디어 후보',retired:'폐기'};
-  const watchOutcomes={opened:'신규 등록',strengthened:'가설 강화',weakened:'가설 약화',unchanged:'변화 없음',unresolved:'판단 보류',invalidated:'반증 확인',not_checked:'미점검'};
-  function weeklyNavigation(data,selected) {
-    const items=data.items.slice().sort((a,b)=>b.id.localeCompare(a.id));
-    return `<nav class="weekly-navigation" aria-label="주간 회차 이동"><label for="weekly-edition">지난 회차 <select id="weekly-edition" data-weekly-edition aria-label="주간 회차 선택">${!selected?'<option value="">회차 선택</option>':''}${items.map(w=>`<option value="${esc(w.id)}" ${w.id===selected?'selected':''}>${esc(w.id)} · ${esc(w.source_date)}</option>`).join('')}</select></label>${selected?`<a class="weekly-permalink" href="${esc(href('weekly',selected))}">이 주차 고유 주소 ↗</a>`:''}<span class="note">${items.length}개 회차 · 한 주씩 읽기</span></nav>`;
-  }
-  function renderWeekly(data,params,w) {
-    const header=title('weekly',w?{meta:{as_of:w.source_date,count:1,generated_at:w.generated_at}}:data,'여러 근거를 연결하고, 지난주의 가설을 다시 확인합니다.');
-    if(!data.items.length)return header+empty('아직 주간 시사점이 없습니다');
-    if(!w)return header+weeklyNavigation(data,null)+empty('해당 주간 회차를 찾을 수 없습니다','주소를 확인하거나 회차 선택에서 보관된 주간 시사점을 열어 주세요.');
-    const s=w.synthesis,signals=list(s?.signals),watchlist=list(s?.watchlist);
-    const green=signals.filter(x=>x.verdict==='green').length,conflicts=signals.filter(x=>x.verdict==='conflict').length;
-    const signalHTML=signals.map(x=>`<section class="weekly-signal ${esc(x.verdict)}" id="section-signal-${esc(x.id)}"><div class="meta"><span class="signal-light ${esc(x.verdict)}">${esc(weeklyVerdicts[x.verdict])}</span><span>${x.sources.length}개 근거</span></div><h3>${esc(x.title)}</h3><p class="weekly-hypothesis">${esc(x.hypothesis)}</p><p>${esc(x.reasoning)}</p><div class="weekly-evidence">${x.sources.map(r=>`<div class="weekly-evidence-row"><div class="meta"><span class="tag">${esc(config.tabs.find(t=>t.id===r.tab)?.label||r.tab)}</span><span>${esc({supports:'뒷받침',contradicts:'충돌',context:'참고'}[r.relation])}</span></div><p>${esc(r.claim)}</p><p class="source">${esc(r.source_name)} · ${esc(r.source_date)} · ${url(r.source_url)} · ${anchor(r.tab,['gpu','memory'].includes(r.tab)?null:r.record_id,['gpu','memory'].includes(r.tab)?'탭 전체 보기':'탭에서 확인')}</p></div>`).join('')}</div><div class="impact investment"><strong>아이디어에 주는 의미</strong><p>${esc(x.investment_implication)}</p></div><p class="note">해석의 한계 · ${esc(x.limitations)}</p>${x.independence_note?`<p class="note">근거 독립성 · ${esc(x.independence_note)}</p>`:''}</section>`).join('');
-    const watchHTML=watchlist.map(x=>`<article class="weekly-watch" id="section-watch-${esc(x.id)}"><div class="meta"><span class="tag ${x.status==='retired'?'negative':x.status==='idea'?'positive':'pending'}">${esc(watchStates[x.status])}</span><span>${esc(watchOutcomes[x.outcome])}</span><span>${x.next_review_week?'다음 점검 '+esc(x.next_review_week):'추적 종료'}</span></div><h3>${esc(x.title)}</h3><p>${esc(x.hypothesis)}</p><p class="watch-result">${esc(x.rationale)}</p><dl class="watch-conditions"><div><dt>가설을 지지할 조건</dt><dd>${esc(x.confirm_if)}</dd></div><div><dt>가설을 폐기할 조건</dt><dd>${esc(x.invalidate_if)}</dd></div></dl><p class="source">${x.signal_ids.length?x.signal_ids.map(id=>`<a href="${esc(href('weekly',w.id,{section:'signal-'+id}))}">${esc(signals.find(s=>s.id===id)?.title||id)}</a>`).join(' · '):'새 근거 미확보 · 판단 변경 없음'}</p><details class="watch-history"><summary>주차별 점검 이력 (${list(w.watch_history?.[x.id]).length})</summary><ol>${list(w.watch_history?.[x.id]).map(h=>`<li><a href="${esc(href('weekly',h.week,{section:'watch-'+x.id}))}">${esc(h.week)}</a> · ${esc(watchOutcomes[h.outcome])}<p>${esc(h.rationale)}</p></li>`).join('')}</ol></details></article>`).join('');
-    return header+weeklyNavigation(data,w.id)+`<article class="weekly-edition" data-item="${esc(w.id)}" tabindex="-1"><header class="weekly-cover"><p class="eyebrow">WEEKLY RESEARCH LETTER / ${esc(w.id)}</p><h2>${esc(w.title)}</h2><p class="weekly-deck">${esc(w.body)}</p><p class="note">${s?`관측 기간 ${esc(s.period.start)} ~ ${esc(s.period.end)}`:'기존 사업 브리핑 · 당시 작성 내용 보존'} · 발행 기준 ${esc(w.source_date)}</p>${w.correction_note?`<p class="note">정정 · ${esc(w.correction_note)}</p>`:''}</header><div class="weekly-scoreboard"><div><b>${s?green:'—'}</b><span>그린라이트</span></div><div><b>${s?conflicts:'—'}</b><span>추적 관찰</span></div><div><b>${s?watchlist.filter(x=>x.status!=='retired').length:'—'}</b><span>다음 주 워치</span></div></div><p class="note weekly-disclaimer">그린라이트는 근거가 서로 뒷받침한다는 뜻입니다. 매수 신호나 수익 보장은 아닙니다.</p><section class="weekly-section"><p class="eyebrow">01 / CROSS-SOURCE CHECK</p><h2>근거가 만나는 곳, 엇갈리는 곳</h2>${s?`<p class="note">${esc(s.coverage_note)}</p>`:''}${signalHTML||`<p class="quiet">${s?'이번 주에는 판정할 만큼의 근거가 없습니다.':'이 회차에는 소스 간 교차 검토가 기록되지 않았습니다. 기존 글에 그린라이트를 소급해 붙이지 않습니다.'}</p>`}</section>${list(w.threads).length?`<section class="weekly-section"><h2>${w.legacy?'당시 주간 흐름':'이번 주의 흐름'}</h2>${w.threads.map(t=>`<section class="weekly-thread"><h3>${esc(t.title)}</h3><p>${esc(t.summary)}</p><p class="note">${esc(t.so_what)}</p></section>`).join('')}</section>`:''}<section class="weekly-section"><p class="eyebrow">02 / WATCHLIST</p><h2>다음 주에 다시 확인할 가설</h2><p class="subtitle">같은 항목을 이어서 확인하고, 강화·약화·보류·폐기의 근거를 남깁니다.</p>${watchHTML||'<p class="quiet">주차별로 점검된 투자 가설은 아직 없습니다.</p>'}${list(w.watch).length?`<details class="legacy-watch" ${s?'':'open'}><summary>당시 관전 포인트 (${w.watch.length}) · 점검 이력 미등록</summary>${w.watch.map(x=>`<p><span class="note">${esc(x.date)}</span><br>${esc(x.text)}</p>`).join('')}</details>`:''}</section>${list(w.closed_watchlist).length?`<details class="legacy-watch"><summary>이전에 폐기한 가설 (${w.closed_watchlist.length})</summary>${w.closed_watchlist.map(x=>`<p>${anchor('weekly',x.last_review_week,x.title)} · ${esc(x.rationale)}</p>`).join('')}</details>`:''}</article>`;
-  }
-  const guestLabel=x=>Array.isArray(x.guests)?x.guests.join(' · '):(x.guests||'');
-  function interviewFeature(x,index) {
-    const f=x.feature;
-    return `<article class="interview-feature ${index===0?'feature-lead':''}" data-featured-id="${esc(x.id)}" aria-labelledby="feature-${esc(x.id)}"><div class="feature-kicker"><span>FEATURED ${String(index+1).padStart(2,'0')}</span>${badge(f.person_type)}<span>원문 ${esc(x.source_date)}</span></div><p class="feature-person">${esc(guestLabel(x)||f.person_context)}</p><h2 id="feature-${esc(x.id)}">${esc(f.headline)}</h2><p class="feature-context">${esc(f.person_context)}</p><p class="feature-why"><b>주목한 이유</b> ${esc(f.why_featured)}</p><div class="feature-takeaways">${f.takeaways.map((p,i)=>`<section class="feature-takeaway"><p class="eyebrow">핵심 ${String(i+1).padStart(2,'0')} · 발언 요지</p><h3>${esc(p.claim)}</h3><dl><dt>투자에 주는 의미 · 편집 해석</dt><dd>${esc(p.investment_meaning)}</dd><dt>확인할 변수</dt><dd>${esc(p.watch)}</dd></dl></section>`).join('')}</div><div class="feature-caveat"><strong>반대 조건·이해관계</strong><p>${esc(f.caveat)}</p></div><p class="feature-basis">선정 검토 ${esc(f.reviewed_on)} · ${esc(f.basis)}</p><div class="feature-links">${anchor('interviews',x.id,'전체 해설 읽기 →')}${url(x.source_url,'인터뷰 원문 ↗')}</div></article>`;
-  }
-  function interviewEntry(x,selected) {
-    return `<details class="interview-entry" ${selected?'open':''}><summary><span class="meta">${esc(x.podcast)} · 원문 ${esc(x.source_date)}${x.feature?' · FEATURED':''}</span><span class="interview-entry-title">${esc(x.headline||x.title)}</span><span class="note">${esc(guestLabel(x))}</span></summary><article class="story" data-item="${esc(x.id)}" tabindex="-1"><h3>${esc(x.headline||x.title)}</h3><p>${esc(x.overview||x.summary)}</p>${x.basis?`<p class="note">근거 범위: ${esc(x.basis)}</p>`:''}${list(x.points).map(p=>`<details class="details-text"><summary>${esc(p.heading)}</summary><p>${esc(p.body)}</p>${p.analysis?`<p><b>(해석)</b> ${esc(p.analysis)}</p>`:''}${p.counterpoint?`<p class="note">반대 조건: ${esc(p.counterpoint)}</p>`:''}</details>`).join('')}${source(x)}<p class="note">${esc(Array.isArray(x.caveats)?x.caveats.join(' '):x.caveats)}</p>${anchor('interviews',x.id,'이 인터뷰 주소 →')}</article></details>`;
-  }
-  function renderInterviews(data,params) {
-    let html=title('interviews',data,'경영진부터 투자 구루·테크 전문 투자자까지, 투자 가정을 바꿀 대담을 읽습니다.');
-    if(!data.items.length)return html+empty('아직 리더 인터뷰가 없습니다');
-    const featured=data.items.filter(x=>x.feature).sort((a,b)=>a.feature.rank-b.feature.rank).slice(0,config.interviews.featured_limit);
-    if(featured.length)html+=`<section class="interview-spotlight" aria-labelledby="featured-interviews-title"><header class="interview-section-head"><p class="eyebrow">THE CONVERSATIONS THAT MATTER</p><h2 id="featured-interviews-title">이번에 주목할 대담</h2><p>인물의 주목도와 발언이 바꿀 투자 변수를 함께 봅니다. 원문 발행일과 선정 검토일을 구분합니다.</p></header><div class="interview-feature-grid">${featured.map(interviewFeature).join('')}</div></section>`;
-    else html+='<p class="notice">현재 featured로 선정한 대담은 없습니다. 원문 근거와 투자에 주는 의미를 확인한 인터뷰부터 선정합니다.</p>';
-    const search=filters.interviews?.search||'',target=params.get('id');
-    const items=data.items.filter(x=>target||!search||[x.title,x.headline,guestLabel(x),x.podcast,x.summary,x.overview].filter(Boolean).join(' ').toLowerCase().includes(search.toLowerCase())).sort((a,b)=>b.source_date.localeCompare(a.source_date)||a.id.localeCompare(b.id));
-    html+=`<section class="interview-library" aria-labelledby="interview-library-title"><header class="interview-section-head"><h2 id="interview-library-title">전체 인터뷰</h2><p>선정에서 빠져도 기존 본문과 원문 날짜를 보존합니다. 제목을 눌러 전체 해설을 읽으실 수 있습니다.</p><label class="interview-search">인터뷰 검색 <input type="search" data-search="interviews" value="${esc(search)}" placeholder="인물·방송·주제 검색" aria-label="인터뷰 검색"></label><p class="note">${items.length} / ${data.items.length}편 · 원문 최신순</p></header>${items.length?items.map(x=>interviewEntry(x,x.id===target)).join(''):empty('검색 조건에 맞는 인터뷰가 없습니다')}</section>`;
-    return html;
-  }
-  function legacyTools(){return `<section class="panel" id="section-legacy-tools"><p class="eyebrow">이전 브리핑</p><h2>보존된 상세 화면</h2><p>기존 시사점과 GPU 카탈로그, 편집 비교 기록을 열 수 있습니다.</p><nav class="signal-company-links"><a href="legacy.html#insights">전략 시사점 →</a><a href="legacy.html#gpu">GPU 과거 카탈로그 →</a><a href="legacy.html#compare-edit">편집 비교 기록 →</a></nav></section>`;}
-  function renderArchive(data) {
-    const f=filters.archive||={},q=f.search?.toLowerCase()||'',items=data.items.filter(x=>(!f.kind||f.kind==='전체'||x.collection===f.kind)&&(!q||(x.title||x.oneliner||'').toLowerCase().includes(q)));
-    return title('archive',data,'기존 회차와 새로운 누적 자료, 정정 이력을 함께 찾습니다.')+`<div class="filters">${select('kind','종류',['전체',...new Set(data.items.map(x=>x.collection))],f.kind)}<input type="search" data-search="archive" aria-label="아카이브 검색" placeholder="제목 검색" value="${esc(f.search||'')}"></div><section class="panel"><div class="table-scroll"><table><thead><tr><th>날짜</th><th>종류</th><th>제목</th></tr></thead><tbody>${items.map(x=>`<tr data-item="${esc(x.id)}" tabindex="-1"><td>${esc(x.source_date||x.date)}</td><td>${esc(x.collection)}</td><td>${anchor(({articles:'news',editions:'news',weeklies:'weekly',reports:'reports',corrections:'archive'})[x.collection]||'archive',x.collection==='editions'?x.article_ids?.[0]:x.id,x.title||x.oneliner||x.id)}</td></tr>`).join('')}</tbody></table></div>${items.length?'':'<p class="quiet">조건에 맞는 기록이 없습니다.</p>'}</section>`+legacyTools();
-  }
-  function renderAIState(data,params) {
-    const f=filters['ai-state']||{},target=data.items.find(x=>x.id===params.get('id'));
-    if(target){f.signal='전체';f.domain='전체';}
-    const items=data.items.filter(x=>target||((!f.signal||f.signal==='전체'||x.signal===f.signal)&&(!f.domain||f.domain==='전체'||x.domain===f.domain))).sort((a,b)=>b.event_date.localeCompare(a.event_date));
-    const reviewed=data.items.map(x=>x.reviewed_on).sort().at(-1);
-    let html=title('ai-state',data,'AI가 새로 해낸 일과 아직 넘지 못한 한계를, 같은 질문으로 추적합니다.');
-    html+=`<section class="panel ai-intro"><p class="eyebrow">CAPABILITIES & LIMITS</p><h2>무엇을 해냈고, 어디까지 믿을 수 있나요?</h2><p>수학·과학·게임·실제 업무의 진전, 실패와 반론을 함께 기록합니다. 각 사례에서 성과와 조건을 확인하고, 의미는 편집 해석으로 구분합니다.</p><p class="note">대표 이정표를 골라 구성한 초기 검토입니다. 최신 소식의 전수 목록이 아닙니다. 사건일은 당시 날짜로 보존하며, 원문을 다시 검토한 날짜는 ${esc(reviewed||'아직 없음')}입니다. 예약 수집은 중지 상태입니다.</p></section>`;
-    const featured=data.items.filter(x=>x.featured_rank).sort((a,b)=>a.featured_rank-b.featured_rank);
-    if(featured.length)html+=`<section class="panel ai-reading"><p class="eyebrow">EDITOR'S READING</p><h2>이번 검토에서 읽을 세 가지 변화</h2><div class="ai-reading-grid">${featured.map(x=>`<div><h3>${anchor('ai-state',x.id,x.title)}</h3><p>${esc(x.significance)}</p></div>`).join('')}</div><p class="note">대표 사례를 연결한 편집 해석입니다. AI 전체의 능력을 점수화한 결과는 아닙니다.</p></section>`;
-    html+=`<div class="filters">${select('signal','신호',['전체','진전','한계·위험','재검토'],target?'전체':f.signal)}${select('domain','분야',['전체',...new Set(data.items.map(x=>x.domain))],target?'전체':f.domain)}<span class="note">${items.length} / ${data.items.length}건 · 사건일 최신순</span></div>`;
-    html+=items.length?'<div class="ai-cases">'+items.map(x=>`<article class="story ai-case" tabindex="-1" data-item="${esc(x.id)}"><div class="meta">${badge(x.signal)}${badge(x.domain)}${badge(x.evidence_level)}<span>사건 ${esc(x.event_date)}</span></div><h2>${esc(x.title)}</h2><p>${esc(x.summary)}</p><div class="ai-finding"><strong>확인된 성과·관측</strong><p>${esc(x.achievement)}</p></div><div class="impact"><strong>왜 중요한가 · 편집 해석</strong>${esc(x.significance)}</div><details class="ai-detail"><summary>조건·한계와 다음 확인</summary><dl><dt>실험 조건과 비교 기준</dt><dd>${esc(x.conditions)}</dd><dt>사람의 역할</dt><dd>${esc(x.human_role)}</dd><dt>한계·반론</dt><dd>${esc(x.limitation)}</dd><dt>다음에 확인할 것</dt><dd>${esc(x.next_check)}</dd></dl></details><div class="ai-references">${x.references.map(r=>`<p>${badge(r.role)} ${url(r.url,r.label)} <span class="note">${esc(r.date)}</span></p>`).join('')}</div><p class="note">원문 ${esc(x.source_date)} · 검토 ${esc(x.reviewed_on)}</p>${anchor('ai-state',x.id,'이 사례 주소 →')}</article>`).join('')+'</div>':empty('조건에 맞는 사례가 없습니다');
-    html+=`<details class="panel ai-source-guide"><summary>추적 소스 ${list(data.sources).length}곳 · 선정 이유와 주의점</summary><p>발견 경로 → 연구 원문 → 외부 평가·후속 반론 순서로 확인합니다. 커뮤니티 추천 수와 연구소의 자체 점수를 검증 완료로 취급하지 않습니다.</p><div class="source-list">${list(data.sources).map(x=>`<div class="source-item">${badge(x.source_role)} ${url(x.url,x.name)}<p>${esc(x.rationale)}</p><small>${esc(x.caution)}</small></div>`).join('')}</div></details>`;
-    return html;
-  }
-  function renderGeneric(tab,data) {const t=config.tabs.find(x=>x.id===tab);return title(tab,data,t.method)+(data.items.length?data.items.map(x=>`<article class="story" tabindex="-1" data-item="${esc(x.id)}">${tab==='events'&&x.date?`<p class="meta">예정 ${esc(x.date)}</p>`:''}<h2>${esc(x.title)}</h2><p>${esc(x.body||x.summary)}</p>${source(x)}</article>`).join(''):empty('아직 수집된 자료가 없습니다',t.initial));}
-  const renderers={'ai-state':renderAIState,summary:renderSummary,news:renderNews,finance:renderFinance,reports:renderReports,memory:renderMemory,sources:renderSources,gpu:renderGPU,weekly:renderWeekly,interviews:renderInterviews,archive:renderArchive};
   function highlight(params) {
-    const section=params.get('section'),id=params.get('id');
-    const target=section?document.getElementById('section-'+section):id?[...document.querySelectorAll('[data-item]')].find(x=>x.dataset.item===id):null;
-    if(target){target.classList.add('item-highlight');target.tabIndex=-1;target.focus({preventScroll:true});target.scrollIntoView({block:'start',behavior:'instant'});}
+    const section = params.get('section'),
+      id = params.get('id');
+    const target = section
+      ? document.getElementById('section-' + section)
+      : id
+        ? [...document.querySelectorAll('[data-item]')].find((x) => x.dataset.item === id)
+        : null;
+    if (target) {
+      target.classList.add('item-highlight');
+      target.tabIndex = -1;
+      target.focus({ preventScroll: true });
+      target.scrollIntoView({ block: 'start', behavior: 'instant' });
+    }
   }
-  function viewTop(){ $('#content').focus?.({preventScroll:true});window.scrollTo?.(0,0); }
-  async function collectorRelated(tab,token){
-    if(!window.Collector)return;const html=await window.Collector.related(tab);if(token!==generation||!html)return;
-    const marked='<!--collector-related:start:'+tab+'-->'+html+'<!--collector-related:end-->';
-    const content=$('#content'),head=content.querySelector('.page-title,.desk-header,.investor-heading');if(head)head.insertAdjacentHTML('afterend',marked);else content.insertAdjacentHTML('afterbegin',marked);
+  function viewTop() {
+    $('#content').focus?.({ preventScroll: true });
+    window.scrollTo?.(0, 0);
+  }
+  async function collectorRelated(tab, token) {
+    if (!window.Collector) return;
+    const html = await window.Collector.related(tab);
+    if (token !== generation || !html) return;
+    const marked =
+      '<!--collector-related:start:' + tab + '-->' + html + '<!--collector-related:end-->';
+    const content = $('#content'),
+      head = content.querySelector('.page-title,.desk-header,.investor-heading');
+    if (head) head.insertAdjacentHTML('afterend', marked);
+    else content.insertAdjacentHTML('afterbegin', marked);
   }
   async function show() {
-    const token=++generation,{tab,params}=route();active=tab;
-    let openedReport=null;
-    const investor=window.InvestorDesk,isInvestor=investor?.views.includes(tab),companyID=isInvestor||tab==='dcf'?params.get('id'):params.get('company');
-    if(config.workspace?.companies.some(c=>c.id===companyID))selectedCompany=companyID;
-    investor?.deactivate();navigation();$('#content').className=isInvestor?'investor-view':'';$('#content').innerHTML='<div class="loading">자료를 불러오고 있습니다.</div>';
-    try{
-      if(tab==='dcf'){
-        const dcf=await json('dcf-models');if(token!==generation)return;
-        window.DCFApp.mount(dcf,params.get('id')||(['samsung','hynix','sem'].includes(selectedCompany)?selectedCompany:'samsung'));viewTop();return;
+    const token = ++generation,
+      { tab, params } = route();
+    active = tab;
+    let openedReport = null;
+    const investor = window.InvestorDesk,
+      isInvestor = investor?.views.includes(tab),
+      companyID = isInvestor || tab === 'dcf' ? params.get('id') : params.get('company');
+    if (config.workspace?.companies.some((c) => c.id === companyID)) selectedCompany = companyID;
+    investor?.deactivate();
+    navigation();
+    $('#content').className = isInvestor ? 'investor-view' : '';
+    $('#content').innerHTML = '<div class="loading">자료를 불러오고 있습니다.</div>';
+    try {
+      if (tab === 'dcf') {
+        const dcf = await json('dcf-models');
+        if (token !== generation) return;
+        window.DCFApp.mount(
+          dcf,
+          params.get('id') ||
+            (['samsung', 'hynix', 'sem'].includes(selectedCompany) ? selectedCompany : 'samsung')
+        );
+        viewTop();
+        return;
       }
-      if(isInvestor){
-        const names=['investor-desk','broker-research','gpu','memory','telegram','finance','valuation-models','valuation-audit','valuation-defaults','valuation-broker',...(tab==='desk'||tab==='company'||tab==='valuation'?['reports']:[]),...(tab==='company'||tab==='valuation'?['news']:[])];
-        const results=await Promise.allSettled(names.map(json));if(token!==generation)return;
-        if(results[0].status!=='fulfilled')throw results[0].reason;
-        const related={config,status};names.slice(1).forEach((name,i)=>{related[name]=results[i+1].status==='fulfilled'?results[i+1].value:null;});
-        investor.mount(results[0].value,{view:tab,id:params.get('id')||selectedCompany},related);await collectorRelated(tab,token);if(token!==generation)return;if(params.get('section'))highlight(params);else viewTop();return;
+      if (isInvestor) {
+        const names = [
+          'investor-desk',
+          'broker-research',
+          'gpu',
+          'memory',
+          'telegram',
+          'finance',
+          'valuation-models',
+          'valuation-audit',
+          'valuation-defaults',
+          'valuation-broker',
+          ...(tab === 'desk' || tab === 'company' || tab === 'valuation' ? ['reports'] : []),
+          ...(tab === 'company' || tab === 'valuation' ? ['news'] : []),
+        ];
+        const results = await Promise.allSettled(names.map(json));
+        if (token !== generation) return;
+        if (results[0].status !== 'fulfilled') throw results[0].reason;
+        const related = { config, status };
+        names.slice(1).forEach((name, i) => {
+          related[name] = results[i + 1].status === 'fulfilled' ? results[i + 1].value : null;
+        });
+        investor.mount(
+          results[0].value,
+          { view: tab, id: params.get('id') || selectedCompany },
+          related
+        );
+        await collectorRelated(tab, token);
+        if (token !== generation) return;
+        if (params.get('section')) highlight(params);
+        else viewTop();
+        return;
       }
-      if(tab==='collector'&&window.Collector){const result=await window.Collector.page(params);if(token!==generation)return;if(result.canonical){history.replaceState(null,'',result.canonical+location.search+location.hash);return show();}$('#content').className='collector-host';$('#content').innerHTML=result.html;document.title=result.title+' · Market Briefing';viewTop();window.Collector.mount($('#content'),params);return;}
-      if(tab==='earnings'&&window.Collector){
-        const reports=await json('reports');if(token!==generation)return;
-        const id=params.get('id');
-        if(!id||id.startsWith('iv-')){
-          const result=await window.Collector.earnings(params,reports.items,config.reports);if(token!==generation)return;
-          $('#content').className='collector-host';$('#content').innerHTML=result.html;document.title=result.title+' · Market Briefing';viewTop();window.Collector.mount($('#content'),params);return;
+      if (tab === 'collector' && window.Collector) {
+        const result = await window.Collector.page(params);
+        if (token !== generation) return;
+        if (result.canonical) {
+          history.replaceState(null, '', result.canonical + location.search + location.hash);
+          return show();
         }
-        if(!reports.items.some(r=>r.id===id&&window.Collector.isEarnings(r)))throw Error('목록에 없는 실적 콜');
-        const report=await json('reports/'+encodeURIComponent(id));if(token!==generation)return;
-        $('#content').className=report.editorial?.layout==='essay'?'report-reading-view':'';$('#content').innerHTML=reportBody(report,params);document.title=report.title+' · 실적 콜 · Market Briefing';
-        if(params.get('section'))highlight(params);else viewTop();return;
+        $('#content').className = 'collector-host';
+        $('#content').innerHTML = result.html;
+        document.title = result.title + ' · Market Briefing';
+        viewTop();
+        window.Collector.mount($('#content'), params);
+        return;
       }
-      const data=await json(tab);if(token!==generation)return;
-      if(tab==='reports'&&params.get('id')&&data.items.some(r=>r.id===params.get('id')&&window.Collector?.isEarnings(r))){const extra=Object.fromEntries(params);delete extra.id;history.replaceState(null,'',href('earnings',params.get('id'),extra));return show();}
-      if(tab==='reports'&&window.BrokerResearch&&params.get('section')!=='deep'&&(!params.get('id')||params.get('id').startsWith('naver-'))){
-        const index=await json('broker-research');if(token!==generation)return;
-        const html=await window.BrokerResearch.page(index,params,json);if(token!==generation)return;
-        $('#content').innerHTML=html;document.title='증권사 리포트 · Market Briefing';await collectorRelated(tab,token);if(token!==generation)return;viewTop();window.BrokerResearch.mount();return;
-      }
-      else if(tab==='reports'&&params.get('id')){if(!data.items.some(r=>r.id===params.get('id')))throw Error('목록에 없는 리포트');const report=await json('reports/'+encodeURIComponent(params.get('id')));if(token!==generation)return;openedReport=report;$('#content').className=report.editorial?.layout==='essay'?'report-reading-view':'';$('#content').innerHTML=(report.editorial?.layout==='essay'?'':title('reports',data))+reportBody(report,params);}
-      else if(tab==='weekly'){
-        const selected=params.get('id')||data.items.slice().sort((a,b)=>b.id.localeCompare(a.id))[0]?.id;
-        let week=null;
-        if(selected&&data.items.some(w=>w.id===selected)){
-          week=await json('weekly/'+encodeURIComponent(selected));if(token!==generation)return;
-          if(!params.get('id'))history.replaceState(null,'',href('weekly',selected));
+      if (tab === 'earnings' && window.Collector) {
+        const reports = await json('reports');
+        if (token !== generation) return;
+        const id = params.get('id');
+        if (!id || id.startsWith('iv-')) {
+          const result = await window.Collector.earnings(params, reports.items, config.reports);
+          if (token !== generation) return;
+          $('#content').className = 'collector-host';
+          $('#content').innerHTML = result.html;
+          document.title = result.title + ' · Market Briefing';
+          viewTop();
+          window.Collector.mount($('#content'), params);
+          return;
         }
-        $('#content').innerHTML=contextStrip(tab,params)+renderWeekly(data,params,week);
-        document.title=(week?week.id+' · ':'')+'주간 시사점 · Market Briefing';await collectorRelated(tab,token);if(token!==generation)return;if(params.get('section'))highlight(params);else viewTop();return;
+        if (!reports.items.some((r) => r.id === id && window.Collector.isEarnings(r)))
+          throw Error('목록에 없는 실적 콜');
+        const report = await json('reports/' + encodeURIComponent(id));
+        if (token !== generation) return;
+        $('#content').className = report.editorial?.layout === 'essay' ? 'report-reading-view' : '';
+        $('#content').innerHTML = views.reports.detail(report, params);
+        document.title = report.title + ' · 실적 콜 · Market Briefing';
+        if (params.get('section')) highlight(params);
+        else viewTop();
+        return;
       }
-      else $('#content').innerHTML=tab==='telegram'?renderTelegram(data,params):renderers[tab]?renderers[tab](data,params):renderGeneric(tab,data);
-      $('#content').innerHTML=researchContext(tab,data,params,$('#content').innerHTML);
-      if(!openedReport){await collectorRelated(tab,token);if(token!==generation)return;}
-      document.title=(openedReport?.title||config.workspace?.labels.find(x=>x.id===tab)?.label||config.tabs.find(x=>x.id===tab).label)+' · Market Briefing';
-      if(params.get('section')||(params.get('id')&&tab!=='reports'))highlight(params);else if(openedReport?.editorial?.layout==='essay'){$('.report-essay')?.focus?.({preventScroll:true});$('.report-reader-tools')?.scrollIntoView?.({block:'start',behavior:'instant'});}else viewTop();
-    }catch(e){if(token===generation){if(isInvestor)investor.reset();$('#content').innerHTML=`<div class="empty error" role="alert"><h1>${isInvestor?'검증 자료를 불러오지 못했습니다':'자료를 불러오지 못했습니다'}</h1><p>자료 다시 읽기로 재시도해 주세요. 다른 자료 화면은 계속 이용하실 수 있습니다.</p></div><button data-retry type="button">다시 불러오기</button>`;}}
+      const data = await json(tab);
+      if (token !== generation) return;
+      if (
+        tab === 'reports' &&
+        params.get('id') &&
+        data.items.some((r) => r.id === params.get('id') && window.Collector?.isEarnings(r))
+      ) {
+        const extra = Object.fromEntries(params);
+        delete extra.id;
+        history.replaceState(null, '', href('earnings', params.get('id'), extra));
+        return show();
+      }
+      if (
+        tab === 'reports' &&
+        window.BrokerResearch &&
+        params.get('section') !== 'deep' &&
+        (!params.get('id') || params.get('id').startsWith('naver-'))
+      ) {
+        const index = await json('broker-research');
+        if (token !== generation) return;
+        const html = await window.BrokerResearch.page(index, params, json);
+        if (token !== generation) return;
+        $('#content').innerHTML = html;
+        document.title = '증권사 리포트 · Market Briefing';
+        await collectorRelated(tab, token);
+        if (token !== generation) return;
+        viewTop();
+        window.BrokerResearch.mount();
+        return;
+      } else if (tab === 'reports' && params.get('id')) {
+        if (!data.items.some((r) => r.id === params.get('id'))) throw Error('목록에 없는 리포트');
+        const report = await json('reports/' + encodeURIComponent(params.get('id')));
+        if (token !== generation) return;
+        openedReport = report;
+        $('#content').className = report.editorial?.layout === 'essay' ? 'report-reading-view' : '';
+        $('#content').innerHTML =
+          (report.editorial?.layout === 'essay' ? '' : title('reports', data)) +
+          views.reports.detail(report, params);
+      } else if (tab === 'weekly') {
+        const selected =
+          params.get('id') || data.items.slice().sort((a, b) => b.id.localeCompare(a.id))[0]?.id;
+        let week = null;
+        if (selected && data.items.some((w) => w.id === selected)) {
+          week = await json('weekly/' + encodeURIComponent(selected));
+          if (token !== generation) return;
+          if (!params.get('id')) history.replaceState(null, '', href('weekly', selected));
+        }
+        $('#content').innerHTML =
+          contextStrip(tab, params) + views.library.weekly(data, params, week);
+        document.title = (week ? week.id + ' · ' : '') + '주간 시사점 · Market Briefing';
+        await collectorRelated(tab, token);
+        if (token !== generation) return;
+        if (params.get('section')) highlight(params);
+        else viewTop();
+        return;
+      } else $('#content').innerHTML = renderTab(tab, data, params);
+      $('#content').innerHTML = researchContext(tab, data, params, $('#content').innerHTML);
+      if (!openedReport) {
+        await collectorRelated(tab, token);
+        if (token !== generation) return;
+      }
+      document.title =
+        (openedReport?.title ||
+          config.workspace?.labels.find((x) => x.id === tab)?.label ||
+          config.tabs.find((x) => x.id === tab).label) + ' · Market Briefing';
+      if (params.get('section') || (params.get('id') && tab !== 'reports')) highlight(params);
+      else if (openedReport?.editorial?.layout === 'essay') {
+        $('.report-essay')?.focus?.({ preventScroll: true });
+        $('.report-reader-tools')?.scrollIntoView?.({ block: 'start', behavior: 'instant' });
+      } else viewTop();
+    } catch (e) {
+      if (token === generation) {
+        if (isInvestor) investor.reset();
+        $('#content').innerHTML =
+          `<div class="empty error" role="alert"><h1>${isInvestor ? '검증 자료를 불러오지 못했습니다' : '자료를 불러오지 못했습니다'}</h1><p>자료 다시 읽기로 재시도해 주세요. 다른 자료 화면은 계속 이용하실 수 있습니다.</p></div><button data-retry type="button">다시 불러오기</button>`;
+      }
+    }
   }
-  function redraw(){const {params}=route(),tab=active;return cache.get(tab)?.then(data=>{if(active!==tab)return;$('#content').innerHTML=researchContext(tab,data,params,tab==='telegram'?renderTelegram(data,params):renderers[tab]?renderers[tab](data,params):renderGeneric(tab,data));});}
-  document.addEventListener('change',e=>{
-    if(e.target.dataset.weeklyEdition!==undefined&&e.target.value){location.hash=href('weekly',e.target.value);return;}
-    if(e.target.dataset.filter){filters[active]||={};filters[active][e.target.dataset.filter]=e.target.value;filters[active].page=1;clearItemRoute(active);redraw();}
-    if(e.target.dataset.memorySeries){filters.memory||={};filters.memory.selected=[...document.querySelectorAll('[data-memory-series]:checked')].map(x=>x.dataset.memorySeries);redraw();}
+  function redraw() {
+    const { params } = route(),
+      tab = active;
+    return cache.get(tab)?.then((data) => {
+      if (active !== tab) return;
+      $('#content').innerHTML = researchContext(tab, data, params, renderTab(tab, data, params));
+    });
+  }
+  document.addEventListener('change', (e) => {
+    if (e.target.dataset.weeklyEdition !== undefined && e.target.value) {
+      location.hash = href('weekly', e.target.value);
+      return;
+    }
+    if (e.target.dataset.filter) {
+      filters[active] ||= {};
+      filters[active][e.target.dataset.filter] = e.target.value;
+      filters[active].page = 1;
+      clearItemRoute(active);
+      redraw();
+    }
+    if (e.target.dataset.memorySeries) {
+      filters.memory ||= {};
+      filters.memory.selected = [...document.querySelectorAll('[data-memory-series]:checked')].map(
+        (x) => x.dataset.memorySeries
+      );
+      redraw();
+    }
   });
-  let searchTimer;document.addEventListener('input',e=>{if(e.target.dataset.search){
-    const tab=e.target.dataset.search,value=e.target.value,searchGeneration=generation;clearTimeout(searchTimer);
-    searchTimer=setTimeout(()=>{
-      if(active!==tab||generation!==searchGeneration)return;
-      const keepFocus=document.activeElement===e.target,start=e.target.selectionStart,end=e.target.selectionEnd;
-      filters[tab]||={};filters[tab].search=value;filters[tab].page=1;clearItemRoute(tab);
-      redraw()?.then(()=>{if(keepFocus&&active===tab){const input=$('[data-search="'+tab+'"]');input?.focus();input?.setSelectionRange(start,end);}});
-    },150);
-  }});
-  let reportPrintDetails=[];
-  window.addEventListener('beforeprint',()=>{
-    if(reportPrintDetails.length)return;
-    reportPrintDetails=[...document.querySelectorAll('.report-essay details')].map(node=>({node,open:node.open}));
-    reportPrintDetails.forEach(({node})=>{node.open=true;});
+  let searchTimer;
+  document.addEventListener('input', (e) => {
+    if (e.target.dataset.search) {
+      const tab = e.target.dataset.search,
+        value = e.target.value,
+        searchGeneration = generation;
+      clearTimeout(searchTimer);
+      searchTimer = setTimeout(() => {
+        if (active !== tab || generation !== searchGeneration) return;
+        const keepFocus = document.activeElement === e.target,
+          start = e.target.selectionStart,
+          end = e.target.selectionEnd;
+        filters[tab] ||= {};
+        filters[tab].search = value;
+        filters[tab].page = 1;
+        clearItemRoute(tab);
+        redraw()?.then(() => {
+          if (keepFocus && active === tab) {
+            const input = $('[data-search="' + tab + '"]');
+            input?.focus();
+            input?.setSelectionRange(start, end);
+          }
+        });
+      }, 150);
+    }
   });
-  window.addEventListener('afterprint',()=>{
-    reportPrintDetails.forEach(({node,open})=>{node.open=open;});reportPrintDetails=[];
+  let reportPrintDetails = [];
+  window.addEventListener('beforeprint', () => {
+    if (reportPrintDetails.length) return;
+    reportPrintDetails = [...document.querySelectorAll('.report-essay details')].map((node) => ({
+      node,
+      open: node.open,
+    }));
+    reportPrintDetails.forEach(({ node }) => {
+      node.open = true;
+    });
   });
-  document.addEventListener('click',e=>{
-    if(e.target.closest('[data-report-print]'))window.print?.();
-    if(e.target.closest('[data-retry]'))show();
-    const link=e.target.closest('a[href]');
-    if(['interviews','finance'].includes(active)&&route().params.get('id')&&link?.getAttribute('href')===location.hash){e.preventDefault();show();}
+  window.addEventListener('afterprint', () => {
+    reportPrintDetails.forEach(({ node, open }) => {
+      node.open = open;
+    });
+    reportPrintDetails = [];
   });
-  window.addEventListener('hashchange',()=>{if(['collector','earnings'].includes(active)&&/^#cl-/.test(location.hash))return;show();});
-  window.addEventListener('popstate',show);
-  $('#refresh').addEventListener('click',async()=>{const token=++generation;window.InvestorDesk?.reset();window.DCFApp?.reset();window.Collector?.reset();cache.clear();try{const nextStatus=await json('status');if(token!==generation)return;status=nextStatus;globalWarning();await show();}catch{if(token!==generation)return;$('#global-warning').hidden=false;$('#global-warning').textContent='갱신 상태를 확인하지 못했습니다. 자료 다시 읽기로 재시도해 주세요.';$('#content').innerHTML=empty('자료를 불러오지 못했습니다','이전 값을 현재 자료로 표시하지 않습니다.');}});
-  (async()=>{try{[config,status]=await Promise.all([json('config'),json('status')]);$('#today').textContent=new Intl.DateTimeFormat('ko-KR',{timeZone:'Asia/Seoul',dateStyle:'medium'}).format(new Date())+' KST';globalWarning();await show();}catch{$('#content').innerHTML=empty('브리핑을 불러오지 못했습니다','설정과 데이터가 함께 게시됐는지 확인해 주세요.');}})();
+  document.addEventListener('click', (e) => {
+    if (e.target.closest('[data-report-print]')) window.print?.();
+    if (e.target.closest('[data-retry]')) show();
+    const link = e.target.closest('a[href]');
+    if (
+      ['interviews', 'finance'].includes(active) &&
+      route().params.get('id') &&
+      link?.getAttribute('href') === location.hash
+    ) {
+      e.preventDefault();
+      show();
+    }
+  });
+  window.addEventListener('hashchange', () => {
+    if (['collector', 'earnings'].includes(active) && /^#cl-/.test(location.hash)) return;
+    show();
+  });
+  window.addEventListener('popstate', show);
+  $('#refresh').addEventListener('click', async () => {
+    const token = ++generation;
+    window.InvestorDesk?.reset();
+    window.DCFApp?.reset();
+    window.Collector?.reset();
+    cache.clear();
+    try {
+      const nextStatus = await json('status');
+      if (token !== generation) return;
+      status = nextStatus;
+      globalWarning();
+      await show();
+    } catch {
+      if (token !== generation) return;
+      $('#global-warning').hidden = false;
+      $('#global-warning').textContent =
+        '갱신 상태를 확인하지 못했습니다. 자료 다시 읽기로 재시도해 주세요.';
+      $('#content').innerHTML = empty(
+        '자료를 불러오지 못했습니다',
+        '이전 값을 현재 자료로 표시하지 않습니다.'
+      );
+    }
+  });
+  (async () => {
+    try {
+      [config, status] = await Promise.all([json('config'), json('status')]);
+      initializeViews();
+      $('#today').textContent =
+        new Intl.DateTimeFormat('ko-KR', { timeZone: 'Asia/Seoul', dateStyle: 'medium' }).format(
+          new Date()
+        ) + ' KST';
+      globalWarning();
+      await show();
+    } catch {
+      $('#content').innerHTML = empty(
+        '브리핑을 불러오지 못했습니다',
+        '설정과 데이터가 함께 게시됐는지 확인해 주세요.'
+      );
+    }
+  })();
 })();
