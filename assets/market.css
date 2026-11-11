@@ -229,3 +229,7 @@
 @media print{.report-commentary .report-original-source{break-inside:avoid}.report-commentary .comment p{font-size:10.5pt}.report-commentary .report-commentary-toc a{font-size:10pt}}
 
 .report-call .report-dialogue{margin:16px 0;padding:0 0 0 16px;border-left:2px solid #d9e2eb;background:transparent}.report-call .report-dialogue.question{margin-top:26px;border-left-color:#809ab1}.report-call .report-block strong{font-weight:750;color:#173c60}.report-call .report-citation{font-size:10px;margin-top:5px}.report-call .report-call-scope{font-size:12px;color:var(--muted);line-height:1.8}.report-call .report-section{margin-top:32px}.report-call .dialogue-speaker{font-size:12px}.report-call .report-methodology{margin-top:40px}
+
+/* One navigation level across investment tools and source pages. */
+.unified-tabs{display:flex;flex-wrap:wrap;gap:6px;padding:16px 0}.unified-tabs a{border:1px solid var(--line,#d5deea);border-radius:3px;padding:10px 12px;font-size:13px}.review-history>summary{cursor:pointer;font-size:20px;font-weight:700;padding:16px 0}.merged-valuation{border-top:2px solid #c8d5e4;padding-top:32px}
+@media(max-width:600px){.unified-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}.unified-tabs a{text-align:center;margin:0;padding:10px 4px;font-size:11px}}

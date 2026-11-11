@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#162e30">
   <title>지표 · Market Briefing</title>
   <meta name="description" content="AI 투자 사이클, 기업 이익, 주가의 기대를 기존 실적 리포트·메모리·GPU·뉴스 근거와 연결해 검증합니다.">
-  <link rel="stylesheet" href="assets/market.css?v=7ab796fa0c2e6fbac031">
+  <link rel="stylesheet" href="assets/market.css?v=2cc1f9db342889b2b1e3">
   <link rel="stylesheet" href="assets/investor.css?v=cfbfd1d3944857453f5a">
   <link rel="stylesheet" href="assets/dcf.css?v=39b19e0b24635b59b746">
   <link rel="stylesheet" href="assets/static.css?v=abd6a5d354a4c8d6d949">
@@ -23,9 +23,9 @@
   <script src="assets/forward-valuation-app.js?v=ed80bb66f886c4155171" defer></script>
   <script src="assets/valuation-app.js?v=c5bcc82b61918d21f391" defer></script>
   <script src="assets/broker-research.js?v=962a928e84a73717eb77" defer></script>
-  <script src="assets/investor-app.js?v=a649496470ec1d461c9a" defer></script>
+  <script src="assets/investor-app.js?v=056d91dac27c1f3af32f" defer></script>
   <script src="assets/collector.js?v=7f961a08f91d2cf66c08" defer></script>
-  <script src="assets/market.js?v=fa2fb174726bd5a29f96" defer></script>
+  <script src="assets/market.js?v=73a80360afac504c47f4" defer></script>
 <link rel="canonical" href="https://greedings-arch.github.io/market-briefing/indicators.html"><link rel="alternate" type="application/json" href="data/indicators.json"></head>
 <body>
   <a class="skip" href="#content">본문으로 건너뛰기</a>
@@ -35,9 +35,8 @@
   </header>
   <div class="app-wrap">
     <aside id="global-warning" class="warning" role="status" aria-live="polite" hidden></aside>
-    <nav id="tabs" class="tabs" aria-label="주요 투자 검토 화면"><a data-nav="desk" href="desk.html">투자 판단</a><a data-nav="company" href="company--sem.html">기업 검증</a><a data-nav="valuation" href="valuation--sem.html">가격 검토</a><a data-nav="dcf" href="dcf--sem.html">DCF 시나리오</a><a data-nav="evidence" href="evidence.html">근거·검토 이력</a></nav>
-    <p class="library-label">자료 탭 <span>가격·원문·리서치를 함께 확인합니다</span></p>
-    <nav id="subtabs"><a data-library-tab="collector" href="collector.html">수집 자료</a><a data-library-tab="telegram" href="telegram.html">텔레그램 원문</a><a data-library-tab="gpu" href="gpu.html">GPU 가격</a><a data-library-tab="memory" href="memory.html">메모리 가격</a><a data-library-tab="reports" href="reports.html">증권사·심층 리포트</a><a data-library-tab="earnings" href="earnings.html">실적 콜</a><a data-library-tab="news" href="news.html">뉴스</a><a data-library-tab="finance" href="finance.html">금융권 시각</a><a data-library-tab="indicators" href="indicators.html" class="active" aria-current="page">지표</a><a data-library-tab="ai-state" href="ai-state.html">AI 현주소</a><a data-library-tab="interviews" href="interviews.html">리더 인터뷰</a><a data-library-tab="weekly" href="weekly.html">주간 시사점</a><a data-library-tab="summary" href="summary.html">일간 브리핑</a><a data-library-tab="temperature" href="temperature.html">시장 온도</a><a data-library-tab="events" href="events.html">행사</a><a data-library-tab="archive" href="archive.html">아카이브</a><a data-library-tab="sources" href="sources.html">소스·방법론</a><a href="archive.html?section=legacy-tools">이전 브리핑</a></nav>
+    <nav id="tabs" class="tabs unified-tabs" aria-label="전체 메뉴"><a data-nav="desk" href="desk.html">투자 검토</a><a data-library-tab="collector" href="collector.html">수집 자료</a><a data-library-tab="telegram" href="telegram.html">텔레그램 원문</a><a data-library-tab="gpu" href="gpu.html">GPU 가격</a><a data-library-tab="memory" href="memory.html">메모리 가격</a><a data-library-tab="reports" href="reports.html">증권사·심층 리포트</a><a data-library-tab="earnings" href="earnings.html">실적 콜</a><a data-library-tab="news" href="news.html">뉴스</a><a data-library-tab="finance" href="finance.html">금융권 시각</a><a data-library-tab="indicators" href="indicators.html" class="active" aria-current="page">지표</a><a data-library-tab="ai-state" href="ai-state.html">AI 현주소</a><a data-library-tab="interviews" href="interviews.html">리더 인터뷰</a><a data-library-tab="weekly" href="weekly.html">주간 시사점</a><a data-library-tab="summary" href="summary.html">일간 브리핑</a><a data-library-tab="temperature" href="temperature.html">시장 온도</a><a data-library-tab="events" href="events.html">행사</a><a data-library-tab="archive" href="archive.html">아카이브</a><a data-library-tab="sources" href="sources.html">소스·방법론</a><a data-nav="dcf" href="dcf--sem.html">DCF 시나리오</a><a href="archive.html?section=legacy-tools">이전 브리핑</a></nav>
+    <nav id="subtabs" hidden=""></nav>
     <main id="content" tabindex="-1" aria-live="polite" class=""><header class="page-title"><div><p class="eyebrow">AI &amp; CLOUD / indicators</p><h1>지표</h1><p class="subtitle">공식 수치와 회사 가이던스·애널리스트 전망을 구분합니다. 아직 지표 목록이 정의되지 않았습니다.</p></div><div class="stamp"><span>기준일 2026-11-02</span><span>3건</span><span>생성 2026-11-02T04:12:32.219Z</span></div></header><article class="story" tabindex="-1" data-item="capex-msft-fy27q1"><h2>Microsoft FY27 Q1 CapEx</h2><p>분기 실적 452억 달러입니다. 금융리스 74억 달러와 현금 유형자산 지출 394억 달러는 인식 시점과 정의가 달라 단순 차감으로 이어 붙이지 않습니다.</p><p class="source">원문 · 2026-10-28 · <a href="https://www.microsoft.com/en-us/Investor/events/fy-2027/earnings-fy-2027-q1" target="_blank" rel="noopener noreferrer">원문 ↗</a></p></article><article class="story" tabindex="-1" data-item="capex-alphabet-2026q3"><h2>Alphabet 2026 Q3 CapEx</h2><p>분기 유형자산 취득 513.55억 달러이며 콜은 약 514억 달러로 반올림해 설명했습니다. 회사 연간 전망과 구분한 실측입니다.</p><p class="source">원문 · 2026-10-28 · <a href="https://www.sec.gov/Archives/edgar/data/1652044/000165204426000080/googexhibit991q32026.htm" target="_blank" rel="noopener noreferrer">원문 ↗</a></p></article><article class="story" tabindex="-1" data-item="capex-meta-2026q3"><h2>Meta 2026 Q3 CapEx</h2><p>분기 실적 349.1억 달러입니다. 2026년 연간 전망 1,350억~1,450억 달러와 기간이 다릅니다.</p><p class="source">원문 · 2026-10-21 · <a href="https://investor.atmeta.com/investor-news/press-release-details/2026/Meta-Reports-Third-Quarter-2026-Results/default.aspx" target="_blank" rel="noopener noreferrer">원문 ↗</a></p></article></main><section class="static-content"><h2>공개 데이터와 전체 본문</h2><p><a href="data.html">전체 데이터 목록</a> · <a href="data/catalog.json">JSON 카탈로그</a></p><p><a href="https://greedings-arch.github.io/market-briefing/data/indicators.json">indicators.json</a></p></section>
     <footer><a href="data.html">공개 HTML·JSON 데이터</a><strong>원문 근거 · 사실과 해석의 구분 · 기준일 표시</strong><a href="sources.html">소스·방법론과 운영 상태 →</a></footer>
   </div>

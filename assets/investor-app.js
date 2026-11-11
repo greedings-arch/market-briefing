@@ -12,7 +12,7 @@
   let data, sources, library = {}, current = {view:"desk",id:"sem"}, activeFilter = 'all';
   const drafts = new Map();
   const badge = s => `<span class="badge ${escape(s)}">${states[s] || escape(s)}</span>`;
-  const href = (view,id) => `#${view}${id ? '?id='+encodeURIComponent(id) : ''}`;
+  const href = (view,id) => `#${view==='valuation'?'company':view}${id ? '?id='+encodeURIComponent(id) : ''}${view==='valuation'?'&section=price':''}`;
   function refs(ids) {
     return `<span class="citations">${[...new Set(ids)].map(id => {const s=sources.get(id);return `<a href="${escape(s.url)}" target="_blank" rel="noopener noreferrer" title="${escape(s.title)}">${escape(s.title.split(' · ')[0])} ↗ <span>${escape(s.date)}</span></a>`;}).join('')}</span>`;
   }
@@ -66,9 +66,9 @@
     if (!drafts.has(c.id)) drafts.set(c.id,{price:(V?.get(library,c.id)?.quote.value||c.quote.value),multiple:c.multiple,hurdle:10,eps:'',basis:'미입력'});
     return drafts.get(c.id);
   }
-  function valuation(c) {
+  function valuation(c, embedded=false) {
     const d=draft(c),quote=V?.get(library,c.id)?.quote||c.quote;
-    return heading('PRICE → EXPECTATIONS','이 주가를 정당화하려면<br><span>얼마를 벌어야 합니까?</span>','가격을 먼저 놓고 필요한 이익을 역산합니다. 분석 가정은 직접 바꿔보실 수 있습니다.')+companyPicker(c.id,'valuation')+financeCompany(c)+(V?.page(c.id,library)||'')+(R?.companyHTML(c.id,library,{compact:true})||'')+
+    return (embedded?'<h2>가격과 이익 가정 검토</h2>':heading('PRICE → EXPECTATIONS','이 주가를 정당화하려면<br><span>얼마를 벌어야 합니까?</span>','가격을 먼저 놓고 필요한 이익을 역산합니다. 분석 가정은 직접 바꿔보실 수 있습니다.')+companyPicker(c.id,'valuation')+financeCompany(c))+(V?.page(c.id,library)||'')+(embedded?'':(R?.companyHTML(c.id,library,{compact:true})||''))+
       `<div class="section-head"><h2>수동 EPS·가격 역산 계산기</h2><span class="small-note">위 손익 모델과 별도로 자유롭게 비교합니다</span></div><section class="valuation-layout"><div class="assumptions"><div class="section-head"><h2>${escape(c.name)}</h2><button class="plain-button" id="reset-scenario" type="button">초기화 ↺</button></div><p class="small-note">${escape(quote.date)} · ${escape(quote.session)}${quoteRef(c)}</p><form id="scenario-form" novalidate><label for="price">비교할 주가 (${escape(c.currency)})</label><input id="price" name="price" type="number" min="0.01" step="any" value="${escape(d.price)}"><label for="multiple">12개월 후 비교 P/E (배)</label><input id="multiple" name="multiple" type="number" min="0.1" max="1000" step="0.1" value="${escape(d.multiple)}"><p class="field-note">기본 ${c.multiple}배는 계산을 위한 비교 가정입니다. 적정 배수·과거 평균·컨센서스가 아닙니다.</p><label for="hurdle">연간 요구수익률 (%)</label><input id="hurdle" name="hurdle" type="number" min="0" max="100" step="0.5" value="${escape(d.hurdle)}"><p class="field-note">12개월 · 배당·환율·세금·거래비용 제외</p><div class="form-divider"></div><label for="eps">검토할 연간 EPS (${escape(c.currency)}/주)</label><input id="eps" name="eps" type="number" min="0.01" step="any" placeholder="지속 가능하다고 보는 연간 이익" value="${escape(d.eps)}"><p class="field-note">EPS는 주당순이익입니다. 공란이면 적정가나 상승 여력을 계산하지 않습니다.</p>${c.eps?`<button id="load-quarter" class="button light" type="button">분기 EPS ×4로 비교해보기</button><p class="field-note">${escape(c.eps.period)} · 분기 ${money(c.eps.value,c)}<br>${escape(c.eps.basis)}${refs([c.eps.source])}</p>`:''}</form><p class="privacy-note">변경한 가정은 이 페이지에서만 유지됩니다. 원본 데이터는 바뀌지 않습니다.</p></div><div id="valuation-results" aria-live="polite"></div></section><section class="section"><h2>직전 검토에서 남긴 추가 과제</h2><p>${V?.get(library,c.id)?"EPS 시나리오는 위에서 계산할 수 있습니다. 아래는 기존 실적 검토의 미확인 사항으로, 수치 모델의 정밀도를 높이려면 추가 확인이 필요합니다.":escape(c.price_caveat)}</p><div class="gap-list">${c.gaps.map((g,i)=>`<div><span>0${i+1}</span>${escape(g)}</div>`).join('')}</div><a class="text-link" href="${href('company',c.id)}">사업 가설과 반증 조건 다시 보기 ↗</a></section>`;
   }
   function updateValuation(c) {
@@ -81,8 +81,8 @@
     $('#valuation-results').innerHTML=`<article class="reverse-result"><p class="eyebrow">REQUIRED ANNUAL EARNINGS</p><span>12개월 후 ${num(input.multiple,1)}배와 요구수익률 ${num(input.hurdle*100,1)}%를 적용하면</span><strong>${money(r.requiredEPS,c)}<small>/ 주 · 연간 EPS 필요</small></strong><p>현재 입력 가격 ${money(input.price,c)} × (1 + ${num(input.hurdle*100,1)}%) ÷ ${num(input.multiple,1)}배</p><div class="result-note">이익에 대한 <b>조건부 역산</b>입니다. 시장 전체가 이 이익을 예상한다는 뜻은 아닙니다.</div>${observed?`<div class="quarter-context">최근 분기 EPS ×4 = ${money(observed,c)}<br>필요 EPS는 이 기계적 연환산보다 <b>${pct(r.requiredEPS/observed-1)}</b><small>계절성·일회성·사이클을 조정하지 않은 비교입니다. 연간 실적 전망이 아닙니다.</small></div>`:''}</article>
       ${result?`<article class="scenario-output"><p class="eyebrow">YOUR ASSUMPTION / ${escape(d.basis)}</p><h2>입력한 이익이 실현된다면</h2><div class="result-grid"><div><span>12개월 후 계산 가격</span><strong>${money(result.terminalValue,c)}</strong></div><div><span>가격 수익률</span><strong class="${result.totalReturn>=0?'up':'down'}">${pct(result.totalReturn)}</strong></div><div><span>요구수익률로 할인한 가격</span><strong>${money(result.presentValue,c)}</strong></div></div><p class="field-note">연간 EPS ${money(eps,c)} × ${num(input.multiple)}배. 목표주가·매매 추천이 아닌 입력 가정의 계산 결과입니다.</p>${d.basis==='분기 EPS 단순 연환산'?'<p class="assumption-alert">분기 EPS ×4를 사용 중입니다. 이익의 지속성을 확인한 추정치가 아닙니다.</p>':''}</article><section class="sensitivity"><h3>이익과 배수가 함께 달라지면</h3><p class="small-note">입력값의 60~140% · 각 칸은 12개월 가격 수익률 · 시나리오 확률 없음</p><div class="table-scroll" tabindex="0"><table><thead><tr><th>연간 EPS ＼ P/E</th>${grid[0].cells.map(x=>`<th>${num(x.multiple,1)}배</th>`).join('')}</tr></thead><tbody>${grid.map(row=>`<tr><th>${money(row.eps,c)}</th>${row.cells.map(x=>`<td class="${x.totalReturn>=0?'heat-up':'heat-down'}">${pct(x.totalReturn)}</td>`).join('')}</tr>`).join('')}</tbody></table></div></section>`:`<div class="empty eps-empty"><span class="empty-icon">↳</span><h3>${d.eps!==''?'양수의 연간 EPS가 필요합니다':'연간 EPS를 입력하면 비교가 완성됩니다'}</h3><p>지속 가능한 이익을 정한 뒤 가격과 비교합니다. 현재 확인한 사실만으로 임의의 적정가격을 만들지 않았습니다.</p></div>`}`;
   }
-  function evidence() {
-    return (V?.overview(library)||'')+heading('EVIDENCE & REVIEW','무엇을 확인했고,<br><span>무엇이 아직 비어 있습니까?</span>')+(R?.overview(library)||'')+
+  function evidence(compact=false) {
+    return (compact?'':(V?.overview(library)||'')+heading('EVIDENCE & REVIEW','무엇을 확인했고,<br><span>무엇이 아직 비어 있습니까?</span>')+(R?.overview(library)||''))+
       `<section class="section two-col"><div><h2>직전 실적 검토의 범위</h2><p>아래는 보존한 기준선의 한계입니다. 국내 3사의 새 EPS·가격 판단 범위는 위 시나리오와 각 가격 검토 화면에서 확인합니다.</p><ul class="limitations">${data.limitations.map(s=>`<li>${escape(s)}</li>`).join('')}</ul></div><div><h2>검토 이력</h2>${data.review_log.map(x=>`<article class="review-entry"><time>${escape(x.date)}</time><h3>${escape(x.title)}</h3><p>${escape(x.body)}</p></article>`).join('')}</div></section><section class="section"><div class="section-head"><h2>출처 목록</h2><span class="small-note">${data.sources.length}개 · 사실과 편집 판단을 구분</span></div><div class="source-ledger">${data.sources.map(s=>`<article><span class="source-type">${s.kind==='primary'?'회사·공시':'시장가격'}</span><div><a href="${escape(s.url)}" target="_blank" rel="noopener noreferrer">${escape(s.title)} ↗</a><p>${escape(s.note)}</p></div><time>${escape(s.date)}</time></article>`).join('')}</div></section>`;
   }
   function matchesCompany(record,c) {
@@ -118,8 +118,8 @@
     if(['company','valuation'].includes(r.view)&&!c){host.innerHTML='<div class="empty"><h1>등록되지 않은 기업입니다</h1><a href="#desk">워치리스트로 돌아가기 →</a></div>';return;}
     const stamp=`<p class="snapshot-label">검토 ${escape(data.as_of)} · 주가·실적은 각각 표시된 기준일 · 수동 검토 자료</p>`;
     const stale=C.isStale(data.as_of+'T00:00:00+09:00')?`<p class="snapshot-alert">${escape(data.as_of)}에 검토한 자료입니다. 최신 가격과 가설을 다시 확인해야 합니다.</p>`:'';
-    host.innerHTML=stamp+stale+(r.view==='desk'?desk()+researchOverview():r.view==='company'?company(c)+relatedResearch(c):r.view==='valuation'?valuation(c)+relatedResearch(c):evidence());
-    if(r.view==='valuation'){updateValuation(c);V?.mount(c.id,library);}
+    host.innerHTML=stamp+stale+(r.view==='desk'?desk()+researchOverview()+'<details class="section review-history"><summary>근거·검토 이력과 출처</summary>'+evidence(true)+'</details>':['company','valuation'].includes(r.view)?company(c)+'<section id="section-price" class="section merged-valuation">'+valuation(c,true)+'</section>'+relatedResearch(c):evidence());
+    if(['company','valuation'].includes(r.view)){updateValuation(c);V?.mount(c.id,library);}
     document.title=`${c&&r.view==='company'?c.name+' · ':''}${r.view==='valuation'?'가격 검토 · ':''}Market Briefing`;
   }
   window.InvestorDesk={
@@ -136,7 +136,7 @@
     if(event.target.closest('#load-quarter')){const c=data.companies.find(c=>c.id===route().id);if(c?.eps){const d=draft(c);d.eps=c.eps.value*4;d.basis='분기 EPS 단순 연환산';$('#eps').value=d.eps;updateValuation(c);}}
   });
   document.addEventListener('input',event=>{
-    if(!data||current.view!=='valuation'||!event.target.closest('#scenario-form'))return;
+    if(!data||!['company','valuation'].includes(current.view)||!event.target.closest('#scenario-form'))return;
     const c=data.companies.find(c=>c.id===route().id),d=draft(c);d[event.target.name]=event.target.value;
     if(event.target.name==='eps')d.basis='사용자 입력 가정';updateValuation(c);
   });

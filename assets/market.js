@@ -26,9 +26,11 @@
   function navigation() {
     if(!window.InvestorDesk||!config.workspace){$('#tabs').innerHTML=config.tabs.map(t=>`<a href="#${esc(t.id)}" ${t.id===active?'class="active" aria-current="page"':''}>${esc(t.label)}</a>`).join('');return;}
     const ws=config.workspace,label=id=>ws.labels.find(x=>x.id===id)?.label||config.tabs.find(t=>t.id===id)?.label||id;
-    $('#tabs').innerHTML=ws.primary.map(id=>`<a data-nav="${esc(id)}" href="${['company','valuation','dcf'].includes(id)?href(id,id==='dcf'&&!['samsung','hynix','sem'].includes(selectedCompany)?'samsung':selectedCompany):'#'+esc(id)}" ${id===active?'class="active" aria-current="page"':''}>${esc(label(id))}</a>`).join('');
-    // The whole existing library stays visible on every screen, including phones.
-    $('#subtabs').innerHTML=ws.resources.map(id=>`<a data-library-tab="${esc(id)}" href="#${esc(id)}" ${id===active?'class="active" aria-current="page"':''}>${esc(label(id))}</a>`).join('')+'<a href="#archive?section=legacy-tools">이전 브리핑</a>';
+    const merged=['company','valuation','evidence'].includes(active)?'desk':active;
+    const menu=[...new Set(['desk',...ws.resources,'dcf'])];
+    $('#tabs').innerHTML=menu.map(id=>`<a ${ws.resources.includes(id)?'data-library-tab':'data-nav'}="${esc(id)}" href="${id==='dcf'?href('dcf',['samsung','hynix','sem'].includes(selectedCompany)?selectedCompany:'samsung'):'#'+esc(id)}" ${id===merged?'class="active" aria-current="page"':''}>${esc(label(id))}</a>`).join('')+'<a href="#archive?section=legacy-tools">이전 브리핑</a>';
+    $('#subtabs').innerHTML='';
+    $('#subtabs').hidden=true;
   }
   function contextStrip(tab,params) {
     if(!window.InvestorDesk)return '';
@@ -568,7 +570,7 @@
         const results=await Promise.allSettled(names.map(json));if(token!==generation)return;
         if(results[0].status!=='fulfilled')throw results[0].reason;
         const related={config,status};names.slice(1).forEach((name,i)=>{related[name]=results[i+1].status==='fulfilled'?results[i+1].value:null;});
-        investor.mount(results[0].value,{view:tab,id:params.get('id')||selectedCompany},related);await collectorRelated(tab,token);if(token!==generation)return;viewTop();return;
+        investor.mount(results[0].value,{view:tab,id:params.get('id')||selectedCompany},related);await collectorRelated(tab,token);if(token!==generation)return;if(params.get('section'))highlight(params);else viewTop();return;
       }
       if(tab==='collector'&&window.Collector){const result=await window.Collector.page(params);if(token!==generation)return;if(result.canonical){history.replaceState(null,'',result.canonical+location.search+location.hash);return show();}$('#content').className='collector-host';$('#content').innerHTML=result.html;document.title=result.title+' · Market Briefing';viewTop();window.Collector.mount($('#content'),params);return;}
       if(tab==='earnings'&&window.Collector){

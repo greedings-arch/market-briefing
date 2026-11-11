@@ -5,7 +5,7 @@
 - [공개 JSON 전체 목록](https://greedings-arch.github.io/market-briefing/data/catalog.json)
 - [HTML/JSON 탐색](https://greedings-arch.github.io/market-briefing/data.html)
 
-- [투자 판단](https://greedings-arch.github.io/market-briefing/desk.html)
+- [투자 검토](https://greedings-arch.github.io/market-briefing/desk.html)
 - [기업 검증](https://greedings-arch.github.io/market-briefing/company.html)
 - [가격 검토](https://greedings-arch.github.io/market-briefing/valuation.html)
 - [DCF 시나리오](https://greedings-arch.github.io/market-briefing/dcf.html)
