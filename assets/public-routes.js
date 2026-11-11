@@ -1,7 +1,7 @@
 'use strict';
 (() => {
- const known=new Set(['collector','desk','company','valuation','dcf','evidence','summary','telegram','gpu','memory','reports','news','finance','indicators','ai-state','interviews','weekly','temperature','events','archive','sources']);
- function target(raw){if(!raw?.startsWith('#'))return raw;const [tab,q='']=raw.slice(1).split('?');if(!known.has(tab))return raw;const params=new URLSearchParams(q),id=params.get('id');let file=tab+'.html';if(['reports','weekly','company','valuation','dcf','collector'].includes(tab)&&id&&/^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,159}$/.test(id)&&!id.startsWith('naver-')){file=tab+'--'+id+'.html';params.delete('id');}return file+(params.size?'?'+params:'');}
+ const known=new Set(['collector','earnings','desk','company','valuation','dcf','evidence','summary','telegram','gpu','memory','reports','news','finance','indicators','ai-state','interviews','weekly','temperature','events','archive','sources']);
+ function target(raw){if(!raw?.startsWith('#'))return raw;const [tab,q='']=raw.slice(1).split('?');if(!known.has(tab))return raw;const params=new URLSearchParams(q),id=params.get('id');let file=tab+'.html';if(['reports','weekly','company','valuation','dcf','collector','earnings'].includes(tab)&&id&&/^[a-zA-Z0-9][a-zA-Z0-9_.:-]{0,159}$/.test(id)&&!id.startsWith('naver-')){file=tab+'--'+id+'.html';params.delete('id');}return file+(params.size?'?'+params:'');}
  const replace=history.replaceState.bind(history);history.replaceState=(a,b,url)=>replace(a,b,typeof url==='string'?target(url):url);
  function migrate(){const next=target(location.hash);if(next&&next!==location.hash)replace(null,'',next);}
  migrate();

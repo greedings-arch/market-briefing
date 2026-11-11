@@ -11,6 +11,7 @@
 - [DCF 시나리오](https://greedings-arch.github.io/market-briefing/dcf.html)
 - [근거·검토 이력](https://greedings-arch.github.io/market-briefing/evidence.html)
 - [수집 자료](https://greedings-arch.github.io/market-briefing/collector.html)
+- [실적 콜](https://greedings-arch.github.io/market-briefing/earnings.html)
 - [일간 브리핑](https://greedings-arch.github.io/market-briefing/summary.html)
 - [시장 온도](https://greedings-arch.github.io/market-briefing/temperature.html)
 - [뉴스](https://greedings-arch.github.io/market-briefing/news.html)
